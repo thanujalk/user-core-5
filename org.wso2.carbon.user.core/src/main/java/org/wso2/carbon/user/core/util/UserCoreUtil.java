@@ -17,11 +17,11 @@
  */
 package org.wso2.carbon.user.core.util;
 
-import org.apache.axiom.om.util.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
-import org.wso2.carbon.context.CarbonContext;
+//import org.apache.axiom.om.util.Base64;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
+//import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
@@ -30,13 +30,14 @@ import org.wso2.carbon.user.core.common.UserStore;
 import org.wso2.carbon.user.core.dto.RoleDTO;
 import org.wso2.carbon.user.core.jdbc.JDBCRealmConstants;
 import org.wso2.carbon.user.core.service.RealmService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
-import org.wso2.carbon.utils.xml.StringUtils;
+//
 
 import javax.sql.DataSource;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+//import java.security.SecureRando
+//import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+//import org.wso2.carbon.utils.xml.StringUtils;m;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,7 +59,7 @@ public final class UserCoreUtil {
     private static final String DUMMY_VALUE = "dummy";
     private static final String APPLICATION_DOMAIN = "Application";
     private static final String WORKFLOW_DOMAIN = "Workflow";
-    private static Log log = LogFactory.getLog(UserCoreUtil.class);
+//    private static Log log = LogFactory.getLog(UserCoreUtil.class);
     private static Boolean isEmailUserName;
     private static Boolean isCrossTenantUniqueUserName;
     private static RealmService realmService = null;
@@ -196,7 +197,7 @@ public final class UserCoreUtil {
             try {
                 MessageDigest messageDigest = MessageDigest.getInstance(passwordHashMethod);
                 byte[] digestValue = messageDigest.digest(password.getBytes());
-                passwordToStore = "{" + passwordHashMethod + "}" + Base64.encode(digestValue);
+//                passwordToStore = "{" + passwordHashMethod + "}" + Base64.encode(digestValue);
 //				passwordToStore = Base64.encode(digestValue);
             } catch (NoSuchAlgorithmException e) {
                 throw new UserStoreException("Invalid hashMethod", e);
@@ -299,21 +300,21 @@ public final class UserCoreUtil {
         char[] password = new char[length];
         String randomNum = null;
 
-        try {
+//        try {
             // the secure random
-            SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
-            for (int i = 0; i < length; i++) {
-                password[i] = passwordChars.charAt(prng.nextInt(passwordFeed.length()));
-            }
-            randomNum = new Integer(prng.nextInt()).toString();
+//            SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
+//            for (int i = 0; i < length; i++) {
+//                password[i] = passwordChars.charAt(prng.nextInt(passwordFeed.length()));
+//            }
+//            randomNum = new Integer(prng.nextInt()).toString();
 
-        } catch (NoSuchAlgorithmException e) {
-            String errorMessage = "Error while creating the random password for user : " + username;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
-            throw new UserStoreException(errorMessage, e);
-        }
+//        } catch (NoSuchAlgorithmException e) {
+//            String errorMessage = "Error while creating the random password for user : " + username;
+////            if (log.isDebugEnabled()) {
+////                log.debug(errorMessage, e);
+////            }
+//            throw new UserStoreException(errorMessage, e);
+//        }
 
         return new String(password).concat(randomNum);
     }
@@ -366,7 +367,7 @@ public final class UserCoreUtil {
     public static String removeDomainFromName(String name) {
 
         int index;
-        if ((index = name.indexOf(CarbonConstants.DOMAIN_SEPARATOR)) >= 0) {
+        if ((index = name.indexOf("/")) >= 0) {
             // remove domain name if exist
             name = name.substring(index + 1);
         }
@@ -420,10 +421,10 @@ public final class UserCoreUtil {
      */
     public static String addInternalDomainName(String name) {
 
-        if (name.indexOf(CarbonConstants.DOMAIN_SEPARATOR) < 0) {
+        if (name.indexOf("/") < 0) {
             // domain name is not already appended, and if exist in user-mgt.xml, append it..
             // append domain name if exist
-            name = UserCoreConstants.INTERNAL_DOMAIN + CarbonConstants.DOMAIN_SEPARATOR + name;
+            name = UserCoreConstants.INTERNAL_DOMAIN + "/" + name;
         }
         return name;
     }
@@ -434,7 +435,7 @@ public final class UserCoreUtil {
      */
     public static String setDomainToUpperCase(String name) {
 
-        int index = name.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+        int index = name.indexOf("/");
 
         if (index > 0) {
             String domain = name.substring(0, index);
@@ -455,7 +456,7 @@ public final class UserCoreUtil {
             // domain name is not already appended, and if exist in user-mgt.xml, append it..
             if (domainName != null) {
                 // append domain name if exist
-                domainName = domainName.toUpperCase() + CarbonConstants.DOMAIN_SEPARATOR;
+                domainName = domainName.toUpperCase() + "/";
                 name = domainName + name;
             }
         }
@@ -471,14 +472,15 @@ public final class UserCoreUtil {
      */
     public static String addTenantDomainToEntry(String tenantAwareEntry, String tenantDomain) {
 
-        if (StringUtils.isEmpty(tenantAwareEntry)){
-            throw new IllegalArgumentException();
-        } else if (!StringUtils.isEmpty(tenantDomain)) {
-            return tenantAwareEntry + UserCoreConstants.TENANT_DOMAIN_COMBINER + tenantDomain;
-        } else {
-            return tenantAwareEntry + UserCoreConstants.TENANT_DOMAIN_COMBINER + MultitenantConstants
-                    .SUPER_TENANT_DOMAIN_NAME;
-        }
+//        if (StringUtils.isEmpty(tenantAwareEntry)){
+//            throw new IllegalArgumentException();
+//        } else if (!StringUtils.isEmpty(tenantDomain)) {
+//            return tenantAwareEntry + UserCoreConstants.TENANT_DOMAIN_COMBINER + tenantDomain;
+//        } else {
+//            return tenantAwareEntry + UserCoreConstants.TENANT_DOMAIN_COMBINER + MultitenantConstants
+//                    .SUPER_TENANT_DOMAIN_NAME;
+//        }
+        return null;
     }
 
     /**
@@ -595,7 +597,7 @@ public final class UserCoreUtil {
         String myDomain = getDomainName(realmConfig);
 
         if (myDomain != null) {
-            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
+//            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
         }
 
         if (realmConfig.isPrimary()) {
@@ -618,7 +620,7 @@ public final class UserCoreUtil {
         String myDomain = getDomainName(realmConfig);
 
         if (myDomain != null) {
-            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
+//            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
         }
 
         if (realmConfig.isPrimary()) {
@@ -641,7 +643,7 @@ public final class UserCoreUtil {
         String myDomain = UserCoreConstants.INTERNAL_DOMAIN;
 
         if (myDomain != null) {
-            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
+//            myDomain += CarbonConstants.DOMAIN_SEPARATOR;
         }
 
         if (realmConfig.isPrimary() && realmConfig.getEveryOneRoleName() != null
@@ -686,9 +688,9 @@ public final class UserCoreUtil {
      */
     public static boolean isRegistryAnnonymousUser(String userName) {
 
-        if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
-            return true;
-        }
+//        if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
+//            return true;
+//        }
 
         return false;
     }
@@ -700,18 +702,18 @@ public final class UserCoreUtil {
      */
     public static boolean isRegistrySystemUser(String userName) {
 
-        if (CarbonConstants.REGISTRY_SYSTEM_USERNAME.equalsIgnoreCase(userName)) {
-            return true;
-        }
+//        if (CarbonConstants.REGISTRY_SYSTEM_USERNAME.equalsIgnoreCase(userName)) {
+//            return true;
+//        }
 
         return false;
     }
 
     public static String extractDomainFromName(String nameWithDomain) {
         int index;
-        if ((index = nameWithDomain.indexOf(CarbonConstants.DOMAIN_SEPARATOR)) > 0) {
+        if ((index = nameWithDomain.indexOf("/")) > 0) {
             // extract the domain name if exist
-            String names[] = nameWithDomain.split(CarbonConstants.DOMAIN_SEPARATOR);
+            String names[] = nameWithDomain.split("/");
             return names[0];
         }
         return UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME;
@@ -735,16 +737,16 @@ public final class UserCoreUtil {
         } catch (UserStoreException e) {
             String errorMessage =
                     "Error occurred while checking is existing domain : " + domain + " for tenant : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } catch (SQLException e) {
             String errorMessage =
                     "DB error occurred while persisting domain : " + domain + " & tenant id : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection);
@@ -771,16 +773,16 @@ public final class UserCoreUtil {
         } catch (UserStoreException e) {
             String errorMessage =
                     "Error occurred while deleting domain : " + domain + " for tenant : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } catch (SQLException e) {
             String errorMessage =
                     "DB error occurred while deleting domain : " + domain + " & tenant id : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection);
@@ -818,17 +820,17 @@ public final class UserCoreUtil {
             String errorMessage =
                     "Error occurred while updating domain : " + previousDomain + " to new domain : " + newDomain +
                     " for tenant : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } catch (SQLException e) {
             String errorMessage =
                     "DB error occurred while updating domain : " + previousDomain + " to new domain : " + newDomain +
                     " for tenant : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection);
@@ -887,9 +889,9 @@ public final class UserCoreUtil {
         } catch (SQLException e) {
             String errorMessage =
                     "DB error occurred while checking is existing domain : " + domain + " & tenant id : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -920,9 +922,9 @@ public final class UserCoreUtil {
             String errorMessage =
                     "DB error occurred while checking is existing domain id : " + domainId + " & tenant id : " +
                     tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -953,9 +955,9 @@ public final class UserCoreUtil {
             String errorMessage =
                     "DB error occurred while checking is existing system role for : " + roleName + " & tenant id : " +
                     tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -969,6 +971,7 @@ public final class UserCoreUtil {
      * @return
      */
     public static String getTenantShareGroupBase(String tenantOu) {
-        return tenantOu + "=" + CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+//        return tenantOu + "=" + CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
+        return null;
     }
 }

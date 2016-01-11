@@ -2289,7 +2289,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         }
 
         int index;
-//        index = filter.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+        index = filter.indexOf("/");
 
         // Check whether we have a secondary UserStoreManager setup.
         if (index > 0) {
@@ -2332,7 +2332,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                         userList = UserCoreUtil.combineArrays(userList, secondUserList);
                     } catch (UserStoreException ex) {
                         // We can ignore and proceed. Ignore the results from this user store.
-                        log.error(ex);
+//                        log.error(ex);
                     }
                 } else {
                     String[] secondUserList = storeManager.listUsers(filter, maxItemLimit);
@@ -2445,9 +2445,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
 
 
         // anonymous user is only assigned to  anonymous role
-        if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
-            return new String[]{CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME};
-        }
+//        if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
+//            return new String[]{CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME};
+//        }
 
         // Check whether roles exist in cache
         roleNames = getRoleListOfUserFromCache(this.tenantId, userName);
@@ -2514,10 +2514,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             permissions = new org.wso2.carbon.user.api.Permission[0];
         }
         // This happens only once during first startup - adding administrator user/role.
-        if (roleName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) > 0) {
-            roleName = userStore.getDomainFreeName();
-            userList = UserCoreUtil.removeDomainFromNames(userList);
-        }
+//        if (roleName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) > 0) {
+//            roleName = userStore.getDomainFreeName();
+//            userList = UserCoreUtil.removeDomainFromNames(userList);
+//        }
 
 
         // #################### <Listeners> #####################################################
@@ -2604,7 +2604,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         try {
             return realmConfig.isPrimary() && !isReadOnly() && TRUE_VALUE.equalsIgnoreCase(value);
         } catch (UserStoreException e) {
-            log.error(e);
+//            log.error(e);
         }
         return false;
     }
@@ -2749,8 +2749,8 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
      */
     private UserStore getUserStoreInternal(String user) throws UserStoreException {
 
-        int index;
-        index = user.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+        int index = 1;
+//        index = user.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
         UserStore userStore = new UserStore();
         String domainFreeName = null;
 
@@ -2794,7 +2794,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             userStore.setDomainAwareName(user);
             userStore.setDomainFreeName(domainFreeName);
         } else {
-            userStore.setDomainAwareName(domain + CarbonConstants.DOMAIN_SEPARATOR + user);
+//            userStore.setDomainAwareName(domain + CarbonConstants.DOMAIN_SEPARATOR + user);
             userStore.setDomainFreeName(user);
         }
         userStore.setRecurssive(false);
@@ -2995,8 +2995,8 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             roleList = UserCoreUtil.combineArrays(roleList, systemRoles);
         }
 
-        int index;
-        index = filter.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+        int index = 1;
+//        index = filter.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
 
         // Check whether we have a secondary UserStoreManager setup.
         if (index > 0) {
@@ -3053,7 +3053,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                         }
                     } catch (UserStoreException e) {
                         // We can ignore and proceed. Ignore the results from this user store.
-                        log.error(e);
+//                        log.error(e);
                     }
                 } else {
                     roleList = UserCoreUtil.combineArrays(roleList, storeManager.getRoleNames());
@@ -3284,10 +3284,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             Object object = callSecure("checkUserNameValid", new Object[]{userName}, argTypes);
             return (Boolean) object;
         }
-
-        if (userName == null || CarbonConstants.REGISTRY_SYSTEM_USERNAME.equals(userName)) {
-            return false;
-        }
+//
+//        if (userName == null || CarbonConstants.REGISTRY_SYSTEM_USERNAME.equals(userName)) {
+//            return false;
+//        }
 
         userName = userName.trim();
 
@@ -3398,17 +3398,17 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             cacheIdentifier = UserCoreConstants.DEFAULT_CACHE_IDENTIFIER;
         }
 
-        if (userRolesCacheEnabledString != null && !userRolesCacheEnabledString.equals("")) {
-            userRolesCacheEnabled = Boolean.parseBoolean(userRolesCacheEnabledString);
-            if (log.isDebugEnabled()) {
-                log.debug("User Roles Cache is configured to:" + userRolesCacheEnabledString);
-            }
-        } else {
-            if (log.isDebugEnabled()) {
-                log.info("User Roles Cache is not configured. Default value: "
-                        + userRolesCacheEnabled + " is taken.");
-            }
-        }
+//        if (userRolesCacheEnabledString != null && !userRolesCacheEnabledString.equals("")) {
+//            userRolesCacheEnabled = Boolean.parseBoolean(userRolesCacheEnabledString);
+//            if (log.isDebugEnabled()) {
+//                log.debug("User Roles Cache is configured to:" + userRolesCacheEnabledString);
+//            }
+//        } else {
+//            if (log.isDebugEnabled()) {
+//                log.info("User Roles Cache is not configured. Default value: "
+//                        + userRolesCacheEnabled + " is taken.");
+//            }
+//        }
 
         if (userRolesCacheEnabled) {
             int timeOut = UserCoreConstants.USER_ROLE_CACHE_DEFAULT_TIME_OUT;
@@ -3443,19 +3443,19 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
      */
     protected String replaceEscapeCharacters(String userName) {
 
-        if (log.isDebugEnabled()) {
-            log.debug("Replacing escape characters in " + userName);
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("Replacing escape characters in " + userName);
+//        }
         String replaceEscapeCharactersAtUserLoginString = realmConfig
                 .getUserStoreProperty(UserCoreConstants.RealmConfig.PROPERTY_REPLACE_ESCAPE_CHARACTERS_AT_USER_LOGIN);
 
         if (replaceEscapeCharactersAtUserLoginString != null) {
             replaceEscapeCharactersAtUserLogin = Boolean
                     .parseBoolean(replaceEscapeCharactersAtUserLoginString);
-            if (log.isDebugEnabled()) {
-                log.debug("Replace escape characters at userlogin is configured to: "
-                        + replaceEscapeCharactersAtUserLoginString);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Replace escape characters at userlogin is configured to: "
+//                        + replaceEscapeCharactersAtUserLoginString);
+//            }
             if (replaceEscapeCharactersAtUserLogin) {
                 // Currently only '\' & '\\' are identified as escape characters
                 // that needs to be
@@ -3616,17 +3616,17 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
      */
     protected void doInitialUserAdding() throws UserStoreException {
 
-        String systemUser = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME);
-        String systemRole = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME);
+//        String systemUser = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME);
+//        String systemRole = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME);
 
-        if (!systemUserRoleManager.isExistingSystemUser(systemUser)) {
-            systemUserRoleManager.addSystemUser(systemUser,
-                    UserCoreUtil.getPolicyFriendlyRandomPassword(systemUser), null);
-        }
-
-        if (!systemUserRoleManager.isExistingRole(systemRole)) {
-            systemUserRoleManager.addSystemRole(systemRole, new String[]{systemUser});
-        }
+//        if (!systemUserRoleManager.isExistingSystemUser(systemUser)) {
+//            systemUserRoleManager.addSystemUser(systemUser,
+//                    UserCoreUtil.getPolicyFriendlyRandomPassword(systemUser), null);
+//        }
+//
+//        if (!systemUserRoleManager.isExistingRole(systemRole)) {
+//            systemUserRoleManager.addSystemRole(systemRole, new String[]{systemUser});
+//        }
 
         if (!hybridRoleManager.isExistingRole(UserCoreUtil.removeDomainFromName(realmConfig
                 .getEveryOneRoleName()))) {
@@ -3639,16 +3639,16 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
     protected boolean isInitSetupDone() throws UserStoreException {
 
         boolean isInitialSetUp = false;
-        String systemUser = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME);
-        String systemRole = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME);
+//        String systemUser = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME);
+//        String systemRole = UserCoreUtil.removeDomainFromName(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME);
 
-        if (systemUserRoleManager.isExistingSystemUser(systemUser)) {
-            isInitialSetUp = true;
-        }
-
-        if (systemUserRoleManager.isExistingRole(systemRole)) {
-            isInitialSetUp = true;
-        }
+//        if (systemUserRoleManager.isExistingSystemUser(systemUser)) {
+//            isInitialSetUp = true;
+//        }
+//
+//        if (systemUserRoleManager.isExistingRole(systemRole)) {
+//            isInitialSetUp = true;
+//        }
 
         return isInitialSetUp;
     }
@@ -3659,7 +3659,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
     protected void addInitialAdminData(boolean addAdmin, boolean initialSetup) throws UserStoreException {
 
         if (realmConfig.getAdminRoleName() == null || realmConfig.getAdminUserName() == null) {
-            log.error("Admin user name or role name is not valid. Please provide valid values.");
+//            log.error("Admin user name or role name is not valid. Please provide valid values.");
             throw new UserStoreException(
                     "Admin user name or role name is not valid. Please provide valid values.");
         }
@@ -3702,9 +3702,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                         "Please pick a user name which is exist in the primary user store as Admin user";
                 if (initialSetup) {
                     throw new UserStoreException(message);
-                } else if (log.isDebugEnabled()) {
+                } /*else if (log.isDebugEnabled()) {
                     log.error(message);
-                }
+                }*/
             } else if (addAdmin) {
                 try {
                     this.doAddUser(adminUserName, realmConfig.getAdminPassword(),
@@ -3714,9 +3714,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                             "Error occurs while creating Admin user in primary user store.";
                     if (initialSetup) {
                         throw new UserStoreException(message, e);
-                    } else if (log.isDebugEnabled()) {
+                    } /*else if (log.isDebugEnabled()) {
                         log.error(message, e);
-                    }
+                    }*/
                 }
             } else {
                 if (initialSetup) {
@@ -3725,9 +3725,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                             "Please pick a User name which is exist in the primary user store as Admin user";
                     if (initialSetup) {
                         throw new UserStoreException(message);
-                    } else if (log.isDebugEnabled()) {
+                    }/* else if (log.isDebugEnabled()) {
                         log.error(message);
-                    }
+                    }*/
                 }
             }
         }
@@ -3743,9 +3743,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                                 "Error occurs while creating Admin role in primary user store.";
                         if (initialSetup) {
                             throw new UserStoreException(message, e);
-                        } else if (log.isDebugEnabled()) {
+                        } /*else if (log.isDebugEnabled()) {
                             log.error(message, e);
-                        }
+                        }*/
                     }
                 } else {
                     // creates internal role
@@ -3757,9 +3757,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                                 "Error occurs while creating Admin role in primary user store.";
                         if (initialSetup) {
                             throw new UserStoreException(message, e);
-                        } else if (log.isDebugEnabled()) {
+                        } /*else if (log.isDebugEnabled()) {
                             log.error(message, e);
-                        }
+                        }*/
                     }
                 }
             } else {
@@ -3768,9 +3768,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                         "Please pick a Role name which is exist in the primary user store as Admin Role";
                 if (initialSetup) {
                     throw new UserStoreException(message);
-                } else if (log.isDebugEnabled()) {
+                }/* else if (log.isDebugEnabled()) {
                     log.error(message);
-                }
+                }*/
             }
         }
 
@@ -3785,9 +3785,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                             "Error while assignment is done";
                     if (initialSetup) {
                         throw new UserStoreException(message, e);
-                    } else if (log.isDebugEnabled()) {
+                    } /*else if (log.isDebugEnabled()) {
                         log.error(message, e);
-                    }
+                    }*/
                 }
             }
             realmConfig.setAdminRoleName(UserCoreUtil.addInternalDomainName(adminRoleName));
@@ -3802,18 +3802,18 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                                 "Error while assignment is done";
                         if (initialSetup) {
                             throw new UserStoreException(message, e);
-                        } else if (log.isDebugEnabled()) {
+                        } /*else if (log.isDebugEnabled()) {
                             log.error(message, e);
-                        }
+                        }*/
                     }
                 } else {
                     String message = "Admin user can not be assigned to Admin role " +
                             "Add-Admin has been set to false. Please do the assign it in user store level";
                     if (initialSetup) {
                         throw new UserStoreException(message);
-                    } else if (log.isDebugEnabled()) {
-                        log.error(message);
-                    }
+                    } /*else if (log.isDebugEnabled()) {
+//                        log.error(message);
+//                    }*/
                 }
             }
         }
@@ -3891,9 +3891,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
 
     public void deletePersistedDomain(String domain) throws UserStoreException {
         if (domain != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Deleting persisted domain " + domain);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Deleting persisted domain " + domain);
+//            }
             UserCoreUtil.deletePersistedDomain(domain, this.tenantId, this.dataSource);
         }
     }
@@ -3911,9 +3911,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 realmConfigTmp = realmConfigTmp.getSecondaryRealmConfig();
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug("Renaming persisted domain " + oldDomain + " to " + newDomain);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Renaming persisted domain " + oldDomain + " to " + newDomain);
+//            }
             UserCoreUtil.updatePersistedDomain(oldDomain, newDomain, this.tenantId, this.dataSource);
 
         }
@@ -3984,7 +3984,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         String className = realmConfig.getUserStoreClass();
         if (className == null) {
             String errmsg = "Unable to add user store. UserStoreManager class name is null.";
-            log.error(errmsg);
+//            log.error(errmsg);
             throw new UserStoreException(errmsg);
         }
 
@@ -4011,9 +4011,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             Constructor constructor = null;
             Object newObject = null;
 
-            if (log.isDebugEnabled()) {
-                log.debug("Start initializing class with the first option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Start initializing class with the first option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt1);
@@ -4021,29 +4021,29 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 return (UserStoreManager) newObject;
             } catch (NoSuchMethodException e) {
                 // if not found try again.
-                if (log.isDebugEnabled()) {
-                    log.debug("Cannont initialize " + className + " using the option 1");
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Cannont initialize " + className + " using the option 1");
+//                }
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug("End initializing class with the first option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("End initializing class with the first option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt2);
                 newObject = constructor.newInstance(initObjOpt2);
                 return (UserStoreManager) newObject;
             } catch (NoSuchMethodException e) {
-                // if not found try again.
-                if (log.isDebugEnabled()) {
-                    log.debug("Cannot initialize " + className + " using the option 2");
-                }
+//                // if not found try again.
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Cannot initialize " + className + " using the option 2");
+//                }
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug("End initializing class with the second option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("End initializing class with the second option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt3);
@@ -4052,12 +4052,12 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             } catch (NoSuchMethodException e) {
                 // cannot initialize in any of the methods. Throw exception.
                 String message = "Cannot initialize " + className + ". Error " + e.getMessage();
-                log.error(message);
+//                log.error(message);
                 throw new UserStoreException(message);
             }
 
         } catch (Throwable e) {
-            log.error("Cannot create " + className, e);
+//            log.error("Cannot create " + className, e);
             throw new UserStoreException(e.getMessage() + "Type " + e.getClass(), e);
         }
 
@@ -4089,15 +4089,15 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             if (this.getSecondaryUserStoreManager(domainName) != null) {
                 String errmsg = "Could not initialize new user store manager : " + domainName
                         + " Duplicate domain names not allowed.";
-                if (log.isDebugEnabled()) {
-                    log.debug(errmsg);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(errmsg);
+//                }
                 throw new UserStoreException(errmsg);
             } else {
                 boolean isDisabled = Boolean.parseBoolean(userStoreRealmConfig
                         .getUserStoreProperty(UserCoreConstants.RealmConfig.USER_STORE_DISABLED));
                 if (isDisabled) {
-                    log.warn("Secondary user store disabled with domain " + domainName + ".");
+//                    log.warn("Secondary user store disabled with domain " + domainName + ".");
                 } else {
                     // Fulfilled requirements for adding UserStore,
 
@@ -4111,14 +4111,14 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                     // update domainName-USM map to retrieve USM directly by its domain name
                     this.addSecondaryUserStoreManager(domainName.toUpperCase(), tmpUserStoreManager.getSecondaryUserStoreManager());
 
-                    if (log.isDebugEnabled()) {
-                        log.debug("UserStoreManager : " + domainName + "added to the list");
-                    }
+//                    if (log.isDebugEnabled()) {
+//                        log.debug("UserStoreManager : " + domainName + "added to the list");
+//                    }
                 }
             }
         } else {
-            log.warn("Could not initialize new user store manager.  "
-                    + "Domain name is not defined");
+//            log.warn("Could not initialize new user store manager.  "
+//                    + "Domain name is not defined");
         }
     }
 
@@ -4152,9 +4152,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         if (this.userStoreManagerHolder.containsKey(userStoreDomainName.toUpperCase())) {
             isUSMContainsInMap = true;
             this.userStoreManagerHolder.remove(userStoreDomainName.toUpperCase());
-            if (log.isDebugEnabled()) {
-                log.debug("UserStore: " + userStoreDomainName + " removed from map");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("UserStore: " + userStoreDomainName + " removed from map");
+//            }
         }
 
         boolean isUSMConatainsInChain = false;
@@ -4165,7 +4165,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 isUSMConatainsInChain = true;
                 // Omit deleting user store manager from the chain
                 prevUserStoreManager.setSecondaryUserStoreManager(secondaryUSM.getSecondaryUserStoreManager());
-                log.info("User store: " + userStoreDomainName + " of tenant:" + tenantId + " is removed from user store chain.");
+//                log.info("User store: " + userStoreDomainName + " of tenant:" + tenantId + " is removed from user store chain.");
                 return;
             }
             prevUserStoreManager = secondaryUSM;
