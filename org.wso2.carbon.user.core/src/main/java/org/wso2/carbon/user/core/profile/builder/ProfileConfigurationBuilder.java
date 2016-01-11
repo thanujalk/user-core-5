@@ -17,16 +17,16 @@
 */
 package org.wso2.carbon.user.core.profile.builder;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.profile.ProfileConfiguration;
 import org.wso2.carbon.user.core.profile.dao.ProfileConfigDAO;
-import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.sql.DataSource;
 import javax.xml.namespace.QName;
@@ -57,7 +57,7 @@ public class ProfileConfigurationBuilder {
     public static final String LOCAL_NAME_CLAIM_BEHAVIOR = "ClaimBehavior";
     public static final String ATTR_DIALECT_URI = "dialectURI";
     private static final String PROFILE_CONFIG = "profile-config.xml";
-    private static Log log = LogFactory.getLog(ProfileConfigurationBuilder.class);
+//    private static Log log = LogFactory.getLog(ProfileConfigurationBuilder.class);
     private static BundleContext bundleContext;
     int tenantId;
     private InputStream inStream = null;
@@ -77,9 +77,9 @@ public class ProfileConfigurationBuilder {
             Map<String, ProfileConfiguration> profileConfigs = profileDAO.loadProfileConfigs();
             return profileConfigs;
         } catch (UserStoreException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(e.getMessage(), e);
+//            }
             throw new ProfileBuilderException(e.getMessage(), e);
         }
     }
@@ -90,81 +90,81 @@ public class ProfileConfigurationBuilder {
      */
     public Map<String, ProfileConfiguration> buildProfileConfigurationFromConfigFile()
             throws ProfileBuilderException {
-        OMElement element = null;
-        String message = null;
-        Iterator<OMElement> configIterator = null;
+//        OMElement element = null;
+//        String message = null;
+//        Iterator<OMElement> configIterator = null;
         Map<String, ProfileConfiguration> profileConfigs = null;
-
-        try {
-            element = getRootElement();
-        } catch (Exception e) {
-            message = "Error while reading profile configuration";
-            if (log.isDebugEnabled()) {
-                log.debug(message, e);
-            }
-            throw new ProfileBuilderException(message, e);
-        }
-
-        configIterator = element
-                .getChildrenWithLocalName(LOCAL_NAME_PROFILE_CONFIG);
-
-        profileConfigs = new HashMap<String, ProfileConfiguration>();
-
-        while (configIterator.hasNext()) {
-            OMElement profileElem = configIterator.next();
-            String dialectName = null;
-            String profileConfigName = null;
-            Iterator<OMElement> profileIter = null;
-            List<String> hidden = null;
-            List<String> overridden = null;
-            List<String> inherited = null;
-            ProfileConfiguration profileConfiguration = null;
-
-            profileConfigName = profileElem.getAttribute(
-                    new QName(ATTR_PROFILE_CONFIG_NAME)).getAttributeValue();
-            dialectName = profileElem.getAttribute(new QName(ATTR_DIALECT_URI))
-                    .getAttributeValue();
-            profileIter = profileElem.getChildrenWithLocalName(LOCAL_NAME_CLAIM);
-
-            hidden = new ArrayList<String>();
-            overridden = new ArrayList<String>();
-            inherited = new ArrayList<String>();
-
-            while (profileIter.hasNext()) {
-                OMElement claimElem = null;
-                String claimURI = null;
-                String behavior = null;
-
-                claimElem = profileIter.next();
-                claimURI = claimElem.getFirstChildWithName(
-                        new QName(LOCAL_NAME_CLAIM_URI)).getText();
-                behavior = claimElem.getFirstChildWithName(
-                        new QName(LOCAL_NAME_CLAIM_BEHAVIOR)).getText();
-                if (behavior.equals(UserCoreConstants.CLAIM_HIDDEN)) {
-                    hidden.add(claimURI);
-                } else if (behavior.equals(UserCoreConstants.CLAIM_OVERRIDEN)) {
-                    overridden.add(claimURI);
-                } else {
-                    inherited.add(claimURI);
-                }
-            }
-            profileConfiguration = new ProfileConfiguration(profileConfigName, hidden, overridden,
-                    inherited);
-            profileConfiguration.setDialectName(dialectName);
-            profileConfigs.put(profileConfigName, profileConfiguration);
-
-        }
-
-        try {
-            if (inStream != null) {
-                inStream.close();
-            }
-        } catch (IOException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
-            }
-            throw new ProfileBuilderException(e.getMessage(), e);
-        }
+//
+//        try {
+//            element = getRootElement();
+//        } catch (Exception e) {
+//            message = "Error while reading profile configuration";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message, e);
+//            }
+//            throw new ProfileBuilderException(message, e);
+//        }
+//
+//        configIterator = element
+//                .getChildrenWithLocalName(LOCAL_NAME_PROFILE_CONFIG);
+//
+//        profileConfigs = new HashMap<String, ProfileConfiguration>();
+//
+//        while (configIterator.hasNext()) {
+//            OMElement profileElem = configIterator.next();
+//            String dialectName = null;
+//            String profileConfigName = null;
+//            Iterator<OMElement> profileIter = null;
+//            List<String> hidden = null;
+//            List<String> overridden = null;
+//            List<String> inherited = null;
+//            ProfileConfiguration profileConfiguration = null;
+//
+//            profileConfigName = profileElem.getAttribute(
+//                    new QName(ATTR_PROFILE_CONFIG_NAME)).getAttributeValue();
+//            dialectName = profileElem.getAttribute(new QName(ATTR_DIALECT_URI))
+//                    .getAttributeValue();
+//            profileIter = profileElem.getChildrenWithLocalName(LOCAL_NAME_CLAIM);
+//
+//            hidden = new ArrayList<String>();
+//            overridden = new ArrayList<String>();
+//            inherited = new ArrayList<String>();
+//
+//            while (profileIter.hasNext()) {
+//                OMElement claimElem = null;
+//                String claimURI = null;
+//                String behavior = null;
+//
+//                claimElem = profileIter.next();
+//                claimURI = claimElem.getFirstChildWithName(
+//                        new QName(LOCAL_NAME_CLAIM_URI)).getText();
+//                behavior = claimElem.getFirstChildWithName(
+//                        new QName(LOCAL_NAME_CLAIM_BEHAVIOR)).getText();
+//                if (behavior.equals(UserCoreConstants.CLAIM_HIDDEN)) {
+//                    hidden.add(claimURI);
+//                } else if (behavior.equals(UserCoreConstants.CLAIM_OVERRIDEN)) {
+//                    overridden.add(claimURI);
+//                } else {
+//                    inherited.add(claimURI);
+//                }
+//            }
+//            profileConfiguration = new ProfileConfiguration(profileConfigName, hidden, overridden,
+//                    inherited);
+//            profileConfiguration.setDialectName(dialectName);
+//            profileConfigs.put(profileConfigName, profileConfiguration);
+//
+//        }
+//
+//        try {
+//            if (inStream != null) {
+//                inStream.close();
+//            }
+//        } catch (IOException e) {
+//            if (log.isDebugEnabled()) {
+//                log.debug(e.getMessage(), e);
+//            }
+//            throw new ProfileBuilderException(e.getMessage(), e);
+//        }
 
 
         return profileConfigs;
@@ -176,34 +176,34 @@ public class ProfileConfigurationBuilder {
      * @throws IOException
      * @throws ProfileBuilderException
      */
-    private OMElement getRootElement() throws XMLStreamException, IOException,
-            ProfileBuilderException {
-        String carbonHome = null;
-        StAXOMBuilder builder = null;
-
-        File claimConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), PROFILE_CONFIG);
-        if (claimConfigXml.exists()) {
-            inStream = new FileInputStream(claimConfigXml);
-        }
-
-        URL profileConfig;
-        if (inStream == null) {
-            if (bundleContext != null) {
-                profileConfig = getProfileUrl(false);
-                inStream = profileConfig.openStream();
-            } else {
-                profileConfig = getProfileUrl(true);
-
-            }
-
-            inStream = profileConfig.openStream();
-        }
-
-        builder = new StAXOMBuilder(inStream);
-        OMElement documentElement = builder.getDocumentElement();
-
-        return documentElement;
-    }
+//    private OMElement getRootElement() throws XMLStreamException, IOException, ProfileBuilderException {
+//        String carbonHome = null;
+//        StAXOMBuilder builder = null;
+//
+//        File claimConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), PROFILE_CONFIG);
+//        if (claimConfigXml.exists()) {
+//            inStream = new FileInputStream(claimConfigXml);
+//        }
+//
+//        URL profileConfig;
+//        if (inStream == null) {
+//            if (bundleContext != null) {
+//                profileConfig = getProfileUrl(false);
+//                inStream = profileConfig.openStream();
+//            } else {
+//                profileConfig = getProfileUrl(true);
+//
+//            }
+//
+//            inStream = profileConfig.openStream();
+//        }
+//
+//        builder = new StAXOMBuilder(inStream);
+//        OMElement documentElement = builder.getDocumentElement();
+//
+//        return documentElement;
+//
+//    }
 
     private URL getProfileUrl(boolean loadFromThisClassPath)
             throws FileNotFoundException {
@@ -217,7 +217,7 @@ public class ProfileConfigurationBuilder {
 
         if (resourceUrl == null) {
             String message = "Profile configuration not found in " + PROFILE_CONFIG;
-            log.warn(message);
+//            log.warn(message);
             throw new FileNotFoundException(message);
         }
 
