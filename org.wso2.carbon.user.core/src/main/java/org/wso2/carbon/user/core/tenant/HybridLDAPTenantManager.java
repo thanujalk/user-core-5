@@ -18,13 +18,13 @@
 
 package org.wso2.carbon.user.core.tenant;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.wso2.carbon.user.core.UserStoreException;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+//import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -35,12 +35,12 @@ import java.util.Map;
 
 public class HybridLDAPTenantManager extends JDBCTenantManager {
 
-    private static final Log log = LogFactory.getLog(HybridLDAPTenantManager.class);
+//    private static final Log log = LogFactory.getLog(HybridLDAPTenantManager.class);
 
-    public HybridLDAPTenantManager(OMElement omElement, Map<String, Object> properties)
-            throws Exception {
-        super(omElement, properties);
-    }
+//    public HybridLDAPTenantManager(OMElement omElement, Map<String, Object> properties)
+//            throws Exception {
+//        super(omElement, properties);
+//    }
 
     public HybridLDAPTenantManager(DataSource dataSource, String superTenantDomain) {
         super(dataSource, superTenantDomain);
@@ -56,12 +56,12 @@ public class HybridLDAPTenantManager extends JDBCTenantManager {
             Tenant[] existingTenants = getAllTenants();
             LDAPTenantManager ldapTenantManager = getLDAPTenantManager();
             for (Tenant tenant : existingTenants) {
-                if (!tenant.getDomain().equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-                    ldapTenantManager.addPartitionToTenant(tenant);
-                }
+//                if (!tenant.getDomain().equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
+//                    ldapTenantManager.addPartitionToTenant(tenant);
+//                }
             }
         } catch (UserStoreException e) {
-            log.error("Cannot get the existing tenants", e);
+//            log.error("Cannot get the existing tenants", e);
         }
     }
 

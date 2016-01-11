@@ -21,7 +21,7 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.core.internal.UserStoreMgtDSComponent;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
-//
+
 //import javax.cache.Cache;
 //import javax.cache.CacheManager;
 //import javax.cache.CacheStatistics;
@@ -38,7 +38,7 @@ public class AuthorizationCache {
     public static final String AUTHORIZATION_CACHE_MANAGER = "AUTHORIZATION_CACHE_MANAGER";
     public static final String AUTHORIZATION_CACHE_NAME = "AUTHORIZATION_CACHE";
     private static final String CASE_INSENSITIVE_USERNAME = "CaseInsensitiveUsername";
-//    private static Log log = LogFactory.getLog(AuthorizationCache.class);
+    //    private static Log log = LogFactory.getLog(AuthorizationCache.class);
     private static Boolean isEnable = true;
 
     private static AuthorizationCache authorizationCache = new AuthorizationCache();
@@ -107,19 +107,19 @@ public class AuthorizationCache {
     public void addToCache(String serverId, int tenantId, String userName,
                            String resourceId, String action, boolean isAuthorized) {
 
-//        if (!isCaseSensitiveUsername(userName, tenantId)) {
-//            userName = userName.toLowerCase();
-//        }
-//        // Element already in the cache. Remove it first
-//        clearCacheEntry(serverId, tenantId, userName, resourceId, action);
-//
+        if (!isCaseSensitiveUsername(userName, tenantId)) {
+            userName = userName.toLowerCase();
+        }
+        // Element already in the cache. Remove it first
+        clearCacheEntry(serverId, tenantId, userName, resourceId, action);
+
 //        Cache<AuthorizationKey, AuthorizeCacheEntry> cache = this.getAuthorizationCache();
 //        // Check for null
 //        if (isCacheNull(cache)) {
 //            return;
 //        }
-//        AuthorizationKey key = new AuthorizationKey(serverId, tenantId, userName, resourceId, action);
-//        AuthorizeCacheEntry cacheEntry = new AuthorizeCacheEntry(isAuthorized);
+        AuthorizationKey key = new AuthorizationKey(serverId, tenantId, userName, resourceId, action);
+        AuthorizeCacheEntry cacheEntry = new AuthorizeCacheEntry(isAuthorized);
 //        cache.put(key, cacheEntry);
     }
 
@@ -137,8 +137,7 @@ public class AuthorizationCache {
      * authorized. else <code>false</code>.
      * @throws AuthorizationCacheException an entry is not found in the cache.
      */
-    public Boolean isUserAuthorized(String serverId, int tenantId,
-                                    String userName, String resourceId, String action)
+    public Boolean isUserAuthorized(String serverId, int tenantId, String userName, String resourceId, String action)
             throws AuthorizationCacheException {
 
 //        Cache<AuthorizationKey, AuthorizeCacheEntry> cache = this.getAuthorizationCache();
@@ -161,8 +160,10 @@ public class AuthorizationCache {
 //        if (entry != null) {
 //            return entry.isUserAuthorized();
 //        } else {
-            return null;
+//            return null;
 //        }
+
+        throw new AuthorizationCacheException();
     }
 
     /**
