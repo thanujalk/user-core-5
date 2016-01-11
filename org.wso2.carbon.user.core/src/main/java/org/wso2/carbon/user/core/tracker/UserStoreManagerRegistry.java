@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.user.core.tracker;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.wso2.carbon.user.api.Properties;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class UserStoreManagerRegistry extends UserStoreMgtDSComponent {
-    private static Log log = LogFactory.getLog(UserStoreManagerRegistry.class);
+//    private static Log log = LogFactory.getLog(UserStoreManagerRegistry.class);
     private static ServiceTracker userStoreManagerTracker;
     private static Map<String, Properties> userStoreManagers = new HashMap<String, Properties>();
 
@@ -39,13 +39,13 @@ public class UserStoreManagerRegistry extends UserStoreMgtDSComponent {
         try {
             userStoreManagerTracker = new ServiceTracker(bc, UserStoreManager.class.getName(), null);
             userStoreManagerTracker.open();
-            if (log.isDebugEnabled()) {
-                log.debug(userStoreManagerTracker.getServices().length + " User Store Managers registered.");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(userStoreManagerTracker.getServices().length + " User Store Managers registered.");
+//            }
         } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.error("Error" + e.getMessage(), e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.error("Error" + e.getMessage(), e);
+//            }
             throw e;
         }
     }
