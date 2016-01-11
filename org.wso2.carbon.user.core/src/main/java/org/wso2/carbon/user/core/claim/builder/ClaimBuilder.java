@@ -17,16 +17,16 @@
 */
 package org.wso2.carbon.user.core.claim.builder;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.claim.Claim;
 import org.wso2.carbon.user.core.claim.ClaimMapping;
 import org.wso2.carbon.user.core.claim.dao.ClaimDAO;
-import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.sql.DataSource;
 import javax.xml.namespace.QName;
@@ -65,7 +65,7 @@ public class ClaimBuilder {
 
     public static final String ATTR_DIALECT_URI = "dialectURI";
     private static final String CLAIM_CONFIG = "claim-config.xml";
-    private static Log log = LogFactory.getLog(ClaimBuilder.class);
+//    private static Log log = LogFactory.getLog(ClaimBuilder.class);
     private static BundleContext bundleContext;
     InputStream inStream = null;
     int tenantId;
@@ -90,7 +90,7 @@ public class ClaimBuilder {
                 claims.put(uri, cm);
             }
         } catch (UserStoreException e) {
-            log.error(e.getMessage(), e);
+//            log.error(e.getMessage(), e);
         }
         return claims;
     }
@@ -101,123 +101,123 @@ public class ClaimBuilder {
      */
     public Map<String, ClaimMapping> buildClaimMappingsFromConfigFile()
             throws ClaimBuilderException {
-        OMElement element = null;
-        OMElement dialectRoot = null;
-        String message = null;
-        Iterator<OMElement> dialectIterator = null;
+//        OMElement element = null;
+//        OMElement dialectRoot = null;
+//        String message = null;
+//        Iterator<OMElement> dialectIterator = null;
         Map<String, ClaimMapping> claims = null;
 
-        try {
-            element = getRootElement();
-        } catch (Exception e) {
-            message = "Error while reading claim configuration";
-            if (log.isDebugEnabled()) {
-                log.debug(message, e);
-            }
-            throw new ClaimBuilderException(message, e);
-        }
+//        try {
+//            element = getRootElement();
+//        } catch (Exception e) {
+//            message = "Error while reading claim configuration";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message, e);
+//            }
+//            throw new ClaimBuilderException(message, e);
+//        }
+//
+//        dialectRoot = element.getFirstChildWithName(new QName(LOCAL_NAME_DIALECTS));
+//
+//        if (dialectRoot == null) {
+//            message = "In valid schema <Dialects> element not present";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new ClaimBuilderException(message);
+//        }
 
-        dialectRoot = element.getFirstChildWithName(new QName(LOCAL_NAME_DIALECTS));
-
-        if (dialectRoot == null) {
-            message = "In valid schema <Dialects> element not present";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ClaimBuilderException(message);
-        }
-
-        dialectIterator = dialectRoot.getChildrenWithLocalName(LOCAL_NAME_DIALECT);
+//        dialectIterator = dialectRoot.getChildrenWithLocalName(LOCAL_NAME_DIALECT);
 
         claims = new HashMap<String, ClaimMapping>();
 
-        while (dialectIterator.hasNext()) {
-            OMElement dialect = null;
-            String dialectUri = null;
-            Iterator<OMElement> claimIterator = null;
-
-            dialect = dialectIterator.next();
-            dialectUri = dialect.getAttribute(new QName(ATTR_DIALECT_URI)).getAttributeValue();
-            claimIterator = dialect.getChildrenWithLocalName(LOCAL_NAME_CLAIM);
-
-            while (claimIterator.hasNext()) {
-                OMElement claimElement = null;
-                Claim claim = null;
-                ClaimMapping claimMapping = null;
-                String displayName = null;
-                String claimUri = null;
-                String attributeId = null;
-                String description = null;
-                String regEx = null;
-                int displayOrder = 0;
-
-                claimElement = claimIterator.next();
-                validateSchema(claimElement);
-
-                claim = new Claim();
-                claim.setDialectURI(dialectUri);
-
-                claimUri = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CLAIM_URI))
-                        .getText();
-                claim.setClaimUri(claimUri);
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DISPLAY_NAME)) != null) {
-                    displayName = claimElement.getFirstChildWithName(
-                            new QName(LOCAL_NAME_DISPLAY_NAME)).getText();
-                    claim.setDisplayTag(displayName);
-                }
-
-                description = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DESCRIPTION))
-                        .getText();
-                claim.setDescription(description);
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REG_EX)) != null) {
-                    regEx = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REG_EX))
-                            .getText();
-                    claim.setRegEx(regEx);
-                }
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REQUIRED)) != null) {
-                    claim.setRequired(true);
-                }
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_SUPPORTED_BY_DEFAULT)) != null) {
-                    claim.setSupportedByDefault(true);
-                }
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DISPLAY_OREDR)) != null) {
-                    displayOrder = Integer.parseInt(claimElement.getFirstChildWithName(
-                            new QName(LOCAL_NAME_DISPLAY_OREDR)).getText());
-                    claim.setDisplayOrder(displayOrder);
-                }
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_READ_ONLY)) != null) {
-                    claim.setReadOnly(true);
-                }
-
-                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CHECKED_ATTR)) != null) {
-                    claim.setReadOnly(true);
-                }
-
-                attributeId = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_ATTR_ID))
-                        .getText();
-
-                claimMapping = new ClaimMapping(claim, attributeId);
-                claims.put(claimUri, claimMapping);
-            }
-        }
-
-
-        try {
-            if (inStream != null) {
-                inStream.close();
-            }
-        } catch (IOException e) {
-            if (log.isDebugEnabled()) {
-                log.error(e.getMessage(), e);
-            }
-            throw new ClaimBuilderException(e.getMessage(), e);
-        }
+//        while (dialectIterator.hasNext()) {
+//            OMElement dialect = null;
+//            String dialectUri = null;
+//            Iterator<OMElement> claimIterator = null;
+//
+//            dialect = dialectIterator.next();
+//            dialectUri = dialect.getAttribute(new QName(ATTR_DIALECT_URI)).getAttributeValue();
+//            claimIterator = dialect.getChildrenWithLocalName(LOCAL_NAME_CLAIM);
+//
+//            while (claimIterator.hasNext()) {
+//                OMElement claimElement = null;
+//                Claim claim = null;
+//                ClaimMapping claimMapping = null;
+//                String displayName = null;
+//                String claimUri = null;
+//                String attributeId = null;
+//                String description = null;
+//                String regEx = null;
+//                int displayOrder = 0;
+//
+//                claimElement = claimIterator.next();
+//                validateSchema(claimElement);
+//
+//                claim = new Claim();
+//                claim.setDialectURI(dialectUri);
+//
+//                claimUri = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CLAIM_URI))
+//                        .getText();
+//                claim.setClaimUri(claimUri);
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DISPLAY_NAME)) != null) {
+//                    displayName = claimElement.getFirstChildWithName(
+//                            new QName(LOCAL_NAME_DISPLAY_NAME)).getText();
+//                    claim.setDisplayTag(displayName);
+//                }
+//
+//                description = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DESCRIPTION))
+//                        .getText();
+//                claim.setDescription(description);
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REG_EX)) != null) {
+//                    regEx = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REG_EX))
+//                            .getText();
+//                    claim.setRegEx(regEx);
+//                }
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_REQUIRED)) != null) {
+//                    claim.setRequired(true);
+//                }
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_SUPPORTED_BY_DEFAULT)) != null) {
+//                    claim.setSupportedByDefault(true);
+//                }
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DISPLAY_OREDR)) != null) {
+//                    displayOrder = Integer.parseInt(claimElement.getFirstChildWithName(
+//                            new QName(LOCAL_NAME_DISPLAY_OREDR)).getText());
+//                    claim.setDisplayOrder(displayOrder);
+//                }
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_READ_ONLY)) != null) {
+//                    claim.setReadOnly(true);
+//                }
+//
+//                if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CHECKED_ATTR)) != null) {
+//                    claim.setReadOnly(true);
+//                }
+//
+//                attributeId = claimElement.getFirstChildWithName(new QName(LOCAL_NAME_ATTR_ID))
+//                        .getText();
+//
+//                claimMapping = new ClaimMapping(claim, attributeId);
+//                claims.put(claimUri, claimMapping);
+//            }
+//        }
+//
+//
+//        try {
+//            if (inStream != null) {
+//                inStream.close();
+//            }
+//        } catch (IOException e) {
+//            if (log.isDebugEnabled()) {
+//                log.error(e.getMessage(), e);
+//            }
+//            throw new ClaimBuilderException(e.getMessage(), e);
+//        }
 
         return claims;
     }
@@ -226,33 +226,33 @@ public class ClaimBuilder {
      * @param claimElement
      * @throws ClaimBuilderException
      */
-    private void validateSchema(OMElement claimElement) throws ClaimBuilderException {
-        String message = null;
-
-        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CLAIM_URI)) == null) {
-            message = "In valid schema <ClaimUri> element not present";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ClaimBuilderException(message);
-        }
-
-        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DESCRIPTION)) == null) {
-            message = "In valid schema <Description> element not present";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ClaimBuilderException(message);
-        }
-
-        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_ATTR_ID)) == null) {
-            message = "In valid schema <AttributeId> element not present";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ClaimBuilderException(message);
-        }
-    }
+//    private void validateSchema(OMElement claimElement) throws ClaimBuilderException {
+//        String message = null;
+//
+//        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_CLAIM_URI)) == null) {
+//            message = "In valid schema <ClaimUri> element not present";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new ClaimBuilderException(message);
+//        }
+//
+//        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_DESCRIPTION)) == null) {
+//            message = "In valid schema <Description> element not present";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new ClaimBuilderException(message);
+//        }
+//
+//        if (claimElement.getFirstChildWithName(new QName(LOCAL_NAME_ATTR_ID)) == null) {
+//            message = "In valid schema <AttributeId> element not present";
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new ClaimBuilderException(message);
+//        }
+//    }
 
     /**
      * @return
@@ -260,48 +260,47 @@ public class ClaimBuilder {
      * @throws IOException
      * @throws ClaimBuilderException
      */
-    private OMElement getRootElement() throws XMLStreamException, IOException,
-            ClaimBuilderException {
-        StAXOMBuilder builder = null;
-
-        File claimConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), CLAIM_CONFIG);
-        if (claimConfigXml.exists()) {
-            inStream = new FileInputStream(claimConfigXml);
-        }
-
-        String warningMessage = "";
-        if (inStream == null) {
-            URL url;
-            if (bundleContext != null) {
-                if ((url = bundleContext.getBundle().getResource(CLAIM_CONFIG)) != null) {
-                    inStream = url.openStream();
-                } else {
-                    warningMessage = "Bundle context could not find resource " + CLAIM_CONFIG +
-                            " or user does not have sufficient permission to access the resource.";
-                }
-
-            } else {
-
-                if ((url = this.getClass().getClassLoader().getResource(CLAIM_CONFIG)) != null) {
-                    inStream = url.openStream();
-                } else {
-                    warningMessage = "ClaimBuilder could not find resource " + CLAIM_CONFIG +
-                            " or user does not have sufficient permission to access the resource.";
-                }
-            }
-        }
-
-        if (inStream == null) {
-            String message = "Claim configuration not found. Cause - " + warningMessage;
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new FileNotFoundException(message);
-        }
-
-        builder = new StAXOMBuilder(inStream);
-        OMElement documentElement = builder.getDocumentElement();
-
-        return documentElement;
-    }
+//    private OMElement getRootElement() throws XMLStreamException, IOException, ClaimBuilderException {
+//        StAXOMBuilder builder = null;
+//
+//        File claimConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), CLAIM_CONFIG);
+//        if (claimConfigXml.exists()) {
+//            inStream = new FileInputStream(claimConfigXml);
+//        }
+//
+//        String warningMessage = "";
+//        if (inStream == null) {
+//            URL url;
+//            if (bundleContext != null) {
+//                if ((url = bundleContext.getBundle().getResource(CLAIM_CONFIG)) != null) {
+//                    inStream = url.openStream();
+//                } else {
+//                    warningMessage = "Bundle context could not find resource " + CLAIM_CONFIG +
+//                            " or user does not have sufficient permission to access the resource.";
+//                }
+//
+//            } else {
+//
+//                if ((url = this.getClass().getClassLoader().getResource(CLAIM_CONFIG)) != null) {
+//                    inStream = url.openStream();
+//                } else {
+//                    warningMessage = "ClaimBuilder could not find resource " + CLAIM_CONFIG +
+//                            " or user does not have sufficient permission to access the resource.";
+//                }
+//            }
+//        }
+//
+//        if (inStream == null) {
+//            String message = "Claim configuration not found. Cause - " + warningMessage;
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new FileNotFoundException(message);
+//        }
+//
+//        builder = new StAXOMBuilder(inStream);
+//        OMElement documentElement = builder.getDocumentElement();
+//
+//        return documentElement;
+//    }
 }

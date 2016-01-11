@@ -18,11 +18,11 @@
  */
 package org.wso2.carbon.user.core.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.base.api.ServerConfigurationService;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
+//import org.wso2.carbon.base.api.ServerConfigurationService;
+//import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager;
 import org.wso2.carbon.user.core.ldap.ActiveDirectoryUserStoreManager;
@@ -30,7 +30,7 @@ import org.wso2.carbon.user.core.ldap.ReadOnlyLDAPUserStoreManager;
 import org.wso2.carbon.user.core.ldap.ReadWriteLDAPUserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.user.core.tracker.UserStoreManagerRegistry;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+//import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
  * @scr.component name="user.store.mgt.dscomponent" immediate=true
@@ -44,9 +44,9 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  * unbind="unsetServerConfigurationService"
  */
 public class UserStoreMgtDSComponent {
-    private static Log log = LogFactory.getLog(UserStoreMgtDSComponent.class);
+//    private static Log log = LogFactory.getLog(UserStoreMgtDSComponent.class);
     private static RealmService realmService;
-    private static ServerConfigurationService serverConfigurationService = null;
+//    private static ServerConfigurationService serverConfigurationService = null;
 
     public static RealmService getRealmService() {
         return realmService;
@@ -56,21 +56,21 @@ public class UserStoreMgtDSComponent {
         realmService = rlmService;
     }
 
-    public static ServerConfigurationService getServerConfigurationService() {
-        return UserStoreMgtDSComponent.serverConfigurationService;
-    }
+//    public static ServerConfigurationService getServerConfigurationService() {
+//        return UserStoreMgtDSComponent.serverConfigurationService;
+//    }
 
-    protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        UserStoreMgtDSComponent.serverConfigurationService = serverConfigurationService;
-    }
+//    protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+//        UserStoreMgtDSComponent.serverConfigurationService = serverConfigurationService;
+//    }
 
     protected void activate(ComponentContext ctxt) {
         try {
             // We assume this component gets activated by super tenant
-            PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext
-                    .getThreadLocalCarbonContext();
-            carbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-            carbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+//            PrivilegedCarbonContext carbonContext = PrivilegedCarbonContext
+//                    .getThreadLocalCarbonContext();
+//            carbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+//            carbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 
             UserStoreManager jdbcUserStoreManager = new JDBCUserStoreManager();
             ctxt.getBundleContext().registerService(UserStoreManager.class.getName(), jdbcUserStoreManager, null);
@@ -86,27 +86,27 @@ public class UserStoreMgtDSComponent {
 
             UserStoreManagerRegistry.init(ctxt.getBundleContext());
 
-            log.info("Carbon UserStoreMgtDSComponent activated successfully.");
+//            log.info("Carbon UserStoreMgtDSComponent activated successfully.");
         } catch (Exception e) {
-            log.error("Failed to activate Carbon UserStoreMgtDSComponent ", e);
+//            log.error("Failed to activate Carbon UserStoreMgtDSComponent ", e);
         }
     }
 
     protected void deactivate(ComponentContext ctxt) {
-        if (log.isDebugEnabled()) {
-            log.debug("Carbon UserStoreMgtDSComponent is deactivated ");
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("Carbon UserStoreMgtDSComponent is deactivated ");
+//        }
     }
 
     protected void unsetRealmService(RealmService realmService) {
         realmService = null;
     }
 
-    protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        if (log.isDebugEnabled()) {
-            log.debug("Unsetting the ServerConfigurationService");
-        }
-        UserStoreMgtDSComponent.serverConfigurationService = null;
-    }
+//    protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+//        if (log.isDebugEnabled()) {
+//            log.debug("Unsetting the ServerConfigurationService");
+//        }
+//        UserStoreMgtDSComponent.serverConfigurationService = null;
+//    }
 
 }
