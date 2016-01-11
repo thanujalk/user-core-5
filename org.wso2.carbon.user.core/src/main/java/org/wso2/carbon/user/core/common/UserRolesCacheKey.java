@@ -17,7 +17,7 @@
 */
 package org.wso2.carbon.user.core.common;
 
-import org.wso2.carbon.base.MultitenantConstants;
+//import org.wso2.carbon.base.MultitenantConstants;
 
 import java.io.Serializable;
 
@@ -61,10 +61,10 @@ public class UserRolesCacheKey implements Serializable {
     public int getAttributeHashCode() {
 
         if (this.serverId != null) {
-            return ((this.tenantId == MultitenantConstants.SUPER_TENANT_ID ? 0 : tenantId)
+            return ((this.tenantId == -1234 ? 0 : tenantId)
                     + this.userName.toLowerCase().hashCode() * 7) + this.serverId.hashCode() * 11;
         } else {
-            return ((this.tenantId == MultitenantConstants.SUPER_TENANT_ID ? 0 : tenantId)
+            return ((this.tenantId == -1234 ? 0 : tenantId)
                     + this.userName.toLowerCase().hashCode() * 7);
         }
     }
