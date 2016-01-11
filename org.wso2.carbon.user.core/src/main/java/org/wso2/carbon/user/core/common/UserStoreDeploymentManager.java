@@ -17,10 +17,10 @@
 */
 package org.wso2.carbon.user.core.common;
 
-import org.apache.axis2.deployment.DeploymentException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.CarbonContext;
+//import org.apache.axis2.deployment.DeploymentException;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserRealm;
@@ -35,9 +35,10 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class UserStoreDeploymentManager {
-    private static Log log = LogFactory.getLog(UserStoreDeploymentManager.class);
+//    private static Log log = LogFactory.getLog(UserStoreDeploymentManager.class);
 
-    public void deploy(String absoluteFilePath) throws DeploymentException {
+//    public void deploy(String absoluteFilePath) throws DeploymentException {
+    public void deploy(String absoluteFilePath) {
         UserStoreConfigXMLProcessor userStoreXMLProcessor = new UserStoreConfigXMLProcessor(absoluteFilePath);
         RealmConfiguration realmConfiguration;
         File userMgtConfigFile = new File(absoluteFilePath);
@@ -53,11 +54,13 @@ public class UserStoreDeploymentManager {
             if (filePathSegments[filePathSegments.length - 2].equals(UserStoreConfigConstants.USER_STORES)) {
 
                 //clear cached configurations
-                int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+                //int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+                int tenantId = -1234;
                 UserCoreUtil.getRealmService().clearCachedUserRealm(tenantId);
                 TenantCache.getInstance().clearCacheEntry(new TenantIdKey(tenantId));
                 realmConfiguration = userStoreXMLProcessor.buildUserStoreConfigurationFromFile();
-                UserRealm userRealm = (UserRealm) CarbonContext.getThreadLocalCarbonContext().getUserRealm();
+                //UserRealm userRealm = (UserRealm) CarbonContext.getThreadLocalCarbonContext().getUserRealm();
+                UserRealm userRealm = null;
 
 
                 //tenant admin modified secondary user store configuration
@@ -74,17 +77,17 @@ public class UserStoreDeploymentManager {
                     primaryUSM.addSecondaryUserStoreManager(realmConfiguration, userRealm);
                 }
 
-                log.info("Realm configuration of tenant:" + CarbonContext.getThreadLocalCarbonContext().getTenantId() + "  modified with " + absoluteFilePath);
+//                log.info("Realm configuration of tenant:" + CarbonContext.getThreadLocalCarbonContext().getTenantId() + "  modified with " + absoluteFilePath);
             } else {
                 //not a change related to user stores
             }
 
         } catch (Exception ex) {
-            String errorMessage = "The deployment of " + userMgtConfigFile.getName() + " is not valid.";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, ex);
-            }
-            throw new DeploymentException(errorMessage, ex);
+//            String errorMessage = "The deployment of " + userMgtConfigFile.getName() + " is not valid.";
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, ex);
+//            }
+//            throw new DeploymentException(errorMessage, ex);
         }
 
     }
@@ -125,7 +128,8 @@ public class UserStoreDeploymentManager {
      * @param fileName: domain name --> file name
      * @throws org.apache.axis2.deployment.DeploymentException for any errors
      */
-    public void undeploy(String fileName) throws DeploymentException {
+//    public void undeploy(String fileName) throws DeploymentException {
+    public void undeploy(String fileName) {
 
         String pattern = Pattern.quote(System.getProperty("file.separator"));
         String[] fileNames = fileName.split(pattern);
@@ -135,8 +139,10 @@ public class UserStoreDeploymentManager {
         RealmConfiguration secondaryRealm;
         Boolean isDisabled = false;
         try {
-            tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
-            org.wso2.carbon.user.api.UserRealm tenantRealm = CarbonContext.getThreadLocalCarbonContext().getUserRealm();
+//            tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
+            tenantId = -1234;
+//            org.wso2.carbon.user.api.UserRealm tenantRealm = CarbonContext.getThreadLocalCarbonContext().getUserRealm();
+            org.wso2.carbon.user.api.UserRealm tenantRealm = null;
             RealmConfiguration realmConfig = tenantRealm.getRealmConfiguration();
             AbstractUserStoreManager userStoreManager = (AbstractUserStoreManager) tenantRealm.getUserStoreManager();
 
@@ -150,7 +156,7 @@ public class UserStoreDeploymentManager {
                     }
 
                     realmConfig.setSecondaryRealmConfig(secondaryRealm.getSecondaryRealmConfig());
-                    log.info("User store: " + domainName + " of tenant:" + tenantId + " is removed from realm chain.");
+//                    log.info("User store: " + domainName + " of tenant:" + tenantId + " is removed from realm chain.");
                     break;
                 } else {
                     realmConfig = realmConfig.getSecondaryRealmConfig();
@@ -161,12 +167,12 @@ public class UserStoreDeploymentManager {
                 userStoreManager.removeSecondaryUserStoreManager(domainName);
             }
         } catch (Exception ex) {
-            String errorMessage = "Error occurred at undeploying " + domainName + " from tenant:" +
-                                  CarbonContext.getThreadLocalCarbonContext().getTenantId();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, ex);
-            }
-            throw new DeploymentException(errorMessage, ex);
+//            String errorMessage = "Error occurred at undeploying " + domainName + " from tenant:" +
+//                                  CarbonContext.getThreadLocalCarbonContext().getTenantId();
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, ex);
+//            }
+//            throw new DeploymentException(errorMessage, ex);
         }
 
     }
