@@ -15,17 +15,17 @@
  */
 package org.wso2.carbon.user.core.claim;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//
+//import javax.cache.Cache;
+//import javax.cache.CacheManager;
+//import javax.cache.Caching;
 
 public class ClaimInvalidationCache {
     private static final String CLAIM_CACHE_MANAGER = "Claim.Cache.Manager";
     private static final Object lock = new Object();
-    private static Log log = LogFactory.getLog(ClaimInvalidationCache.class);
+//    private static Log log = LogFactory.getLog(ClaimInvalidationCache.class);
     private static ClaimInvalidationCache claimCache;
     private String CLAIM_CACHE_NAME = "Claim.Cache";
     private String INVALIDATE_CACHE_KEY = "Invalidate.Cache.Key";
@@ -46,19 +46,19 @@ public class ClaimInvalidationCache {
         return claimCache;
     }
 
-    private Cache<String, Integer> getClaimCache() {
-        CacheManager manager = Caching.getCacheManagerFactory().getCacheManager(CLAIM_CACHE_MANAGER);
-        Cache<String, Integer> cache = manager.getCache(CLAIM_CACHE_NAME);
-        return cache;
-    }
+//    private Cache<String, Integer> getClaimCache() {
+//        CacheManager manager = Caching.getCacheManagerFactory().getCacheManager(CLAIM_CACHE_MANAGER);
+//        Cache<String, Integer> cache = manager.getCache(CLAIM_CACHE_NAME);
+//        return cache;
+//    }
 
     public boolean isInvalid() {
         Integer hashCode = getValueFromCache(INVALIDATE_CACHE_KEY);
         if (hashCode != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("My Hash code of Claim cache is : " + myHashCode);
-                log.debug("Shared Hash code of Claim cache is : " + hashCode);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("My Hash code of Claim cache is : " + myHashCode);
+//                log.debug("Shared Hash code of Claim cache is : " + hashCode);
+//            }
             if (hashCode > myHashCode) {
                 myHashCode = hashCode;
                 return true;
@@ -70,9 +70,9 @@ public class ClaimInvalidationCache {
     public void invalidateCache() {
         myHashCode++;
         addToCache(INVALIDATE_CACHE_KEY, myHashCode);
-        if (log.isDebugEnabled()) {
-            log.debug("My Hash code of Claim cache is : " + myHashCode);
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("My Hash code of Claim cache is : " + myHashCode);
+//        }
     }
 
     /**
@@ -85,10 +85,10 @@ public class ClaimInvalidationCache {
         // Element already in the cache. Remove it first
         clearCacheEntry(key);
 
-        Cache<String, Integer> cache = getClaimCache();
-        if (cache != null) {
-            cache.put(key, entry);
-        }
+//        Cache<String, Integer> cache = getClaimCache();
+//        if (cache != null) {
+//            cache.put(key, entry);
+//        }
     }
 
     /**
@@ -98,10 +98,10 @@ public class ClaimInvalidationCache {
      * @return Cached entry.
      */
     private Integer getValueFromCache(String key) {
-        Cache<String, Integer> cache = getClaimCache();
-        if (cache != null) {
-            return cache.get(key);
-        }
+//        Cache<String, Integer> cache = getClaimCache();
+//        if (cache != null) {
+//            return cache.get(key);
+//        }
         return null;
     }
 
@@ -111,10 +111,10 @@ public class ClaimInvalidationCache {
      * @param key Key to clear cache.
      */
     private void clearCacheEntry(String key) {
-        Cache<String, Integer> cache = getClaimCache();
-        if (cache != null) {
-            cache.remove(key);
-        }
+//        Cache<String, Integer> cache = getClaimCache();
+//        if (cache != null) {
+//            cache.remove(key);
+//        }
     }
 }
 
