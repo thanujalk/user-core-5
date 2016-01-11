@@ -1728,9 +1728,9 @@ public class ReadWriteLDAPUserStoreManager extends ReadOnlyLDAPUserStoreManager 
                     roleNameWithDomain, newRoleNameWithDomain);
         } catch (NamingException e) {
             String errorMessage = "Error occurred while modifying the name of role: " + roleName;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             JNDIUtil.closeNamingEnumeration(groupSearchResults);
@@ -1880,7 +1880,7 @@ public class ReadWriteLDAPUserStoreManager extends ReadOnlyLDAPUserStoreManager 
 //            if (log.isDebugEnabled()) {
 //                log.debug(errorMessage, e);
 //            }
-            throw new UserStoreException(errorMessage, e);
+//            throw new UserStoreException(errorMessage, e);
         }
 
         return groupSearchResults;
