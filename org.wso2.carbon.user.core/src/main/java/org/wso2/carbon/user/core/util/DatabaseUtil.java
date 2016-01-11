@@ -17,10 +17,10 @@
 */
 package org.wso2.carbon.user.core.util;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
+//import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.jdbc.JDBCRealmConstants;
@@ -43,7 +43,7 @@ public class DatabaseUtil {
     private static final int DEFAULT_MAX_WAIT = 1000 * 60;
     private static final int DEFAULT_MIN_IDLE = 5;
     private static final int DEFAULT_MAX_IDLE = 6;
-    private static Log log = LogFactory.getLog(DatabaseUtil.class);
+//    private static Log log = LogFactory.getLog(DatabaseUtil.class);
     private static DataSource dataSource = null;
     private static final String VALIDATION_INTERVAL = "validationInterval";
     private static final long DEFAULT_VALIDATION_INTERVAL = 30000;
@@ -72,10 +72,10 @@ public class DatabaseUtil {
      * Close all database connections in the pool.
      */
     public static synchronized void closeDatabasePoolConnection() {
-        if (dataSource != null && dataSource instanceof org.apache.tomcat.jdbc.pool.DataSource) {
-            ((org.apache.tomcat.jdbc.pool.DataSource) dataSource).close();
-            dataSource = null;
-        }
+//        if (dataSource != null && dataSource instanceof org.apache.tomcat.jdbc.pool.DataSource) {
+//            ((org.apache.tomcat.jdbc.pool.DataSource) dataSource).close();
+//            dataSource = null;
+//        }
     }
 
     private static DataSource lookupDataSource(String dataSourceName) {
@@ -87,157 +87,158 @@ public class DatabaseUtil {
     }
 
     public static DataSource createUserStoreDataSource(RealmConfiguration realmConfig) {
-        String dataSourceName = realmConfig.getUserStoreProperty(JDBCRealmConstants.DATASOURCE);
-        if (dataSourceName != null) {
-            return lookupDataSource(dataSourceName);
-        }
-        PoolProperties poolProperties = new PoolProperties();
-        poolProperties.setDriverClassName(realmConfig.getUserStoreProperty(JDBCRealmConstants.DRIVER_NAME));
-        if (poolProperties.getDriverClassName() == null) {
-            return null;
-        }
-        poolProperties.setUrl(realmConfig.getUserStoreProperty(JDBCRealmConstants.URL));
-        poolProperties.setUsername(realmConfig.getUserStoreProperty(JDBCRealmConstants.USER_NAME));
-        poolProperties.setPassword(realmConfig.getUserStoreProperty(JDBCRealmConstants.PASSWORD));
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_ACTIVE) != null &&
-                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_ACTIVE).trim().equals("")) {
-            poolProperties.setMaxActive(Integer.parseInt(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.MAX_ACTIVE)));
-        } else {
-            poolProperties.setMaxActive(DEFAULT_MAX_ACTIVE);
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_IDLE) != null &&
-                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_IDLE).trim().equals("")) {
-            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.MIN_IDLE)));
-        } else {
-            poolProperties.setMinIdle(DEFAULT_MIN_IDLE);
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_IDLE) != null &&
-                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_IDLE).trim().equals("")) {
-            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.MAX_IDLE)));
-        } else {
-            poolProperties.setMinIdle(DEFAULT_MAX_IDLE);
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_WAIT) != null &&
-                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_WAIT).trim().equals("")) {
-            poolProperties.setMaxWait(Integer.parseInt(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.MAX_WAIT)));
-        } else {
-            poolProperties.setMaxWait(DEFAULT_MAX_WAIT);
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.TEST_WHILE_IDLE) != null &&
-                !realmConfig.getUserStoreProperty(JDBCRealmConstants.TEST_WHILE_IDLE).trim().equals("")) {
-            poolProperties.setTestWhileIdle(Boolean.parseBoolean(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.TEST_WHILE_IDLE)));
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS) != null &&
-                !realmConfig.getUserStoreProperty(
-                        JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS).trim().equals("")) {
-            poolProperties.setTimeBetweenEvictionRunsMillis(Integer.parseInt(
-                    realmConfig.getUserStoreProperty(
-                            JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS) != null &&
-                !realmConfig.getUserStoreProperty(
-                        JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS).trim().equals("")) {
-            poolProperties.setMinEvictableIdleTimeMillis(Integer.parseInt(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS)));
-        }
-
-        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.VALIDATION_QUERY) != null) {
-            poolProperties.setValidationQuery(realmConfig.getUserStoreProperty(
-                    JDBCRealmConstants.VALIDATION_QUERY));
-            poolProperties.setTestOnBorrow(true);
-        }
-        if (StringUtils.isNotEmpty(realmConfig.getUserStoreProperty(VALIDATION_INTERVAL)) &&
-            StringUtils.isNumeric(realmConfig.getUserStoreProperty(VALIDATION_INTERVAL))) {
-            poolProperties.setValidationInterval(Long.parseLong(realmConfig.getUserStoreProperty(
-                    VALIDATION_INTERVAL)));
-        } else {
-            poolProperties.setValidationInterval(DEFAULT_VALIDATION_INTERVAL);
-        }
-        return new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
+//        String dataSourceName = realmConfig.getUserStoreProperty(JDBCRealmConstants.DATASOURCE);
+//        if (dataSourceName != null) {
+//            return lookupDataSource(dataSourceName);
+//        }
+//        PoolProperties poolProperties = new PoolProperties();
+//        poolProperties.setDriverClassName(realmConfig.getUserStoreProperty(JDBCRealmConstants.DRIVER_NAME));
+//        if (poolProperties.getDriverClassName() == null) {
+//            return null;
+//        }
+//        poolProperties.setUrl(realmConfig.getUserStoreProperty(JDBCRealmConstants.URL));
+//        poolProperties.setUsername(realmConfig.getUserStoreProperty(JDBCRealmConstants.USER_NAME));
+//        poolProperties.setPassword(realmConfig.getUserStoreProperty(JDBCRealmConstants.PASSWORD));
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_ACTIVE) != null &&
+//                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_ACTIVE).trim().equals("")) {
+//            poolProperties.setMaxActive(Integer.parseInt(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.MAX_ACTIVE)));
+//        } else {
+//            poolProperties.setMaxActive(DEFAULT_MAX_ACTIVE);
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_IDLE) != null &&
+//                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_IDLE).trim().equals("")) {
+//            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.MIN_IDLE)));
+//        } else {
+//            poolProperties.setMinIdle(DEFAULT_MIN_IDLE);
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_IDLE) != null &&
+//                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_IDLE).trim().equals("")) {
+//            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.MAX_IDLE)));
+//        } else {
+//            poolProperties.setMinIdle(DEFAULT_MAX_IDLE);
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_WAIT) != null &&
+//                !realmConfig.getUserStoreProperty(JDBCRealmConstants.MAX_WAIT).trim().equals("")) {
+//            poolProperties.setMaxWait(Integer.parseInt(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.MAX_WAIT)));
+//        } else {
+//            poolProperties.setMaxWait(DEFAULT_MAX_WAIT);
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.TEST_WHILE_IDLE) != null &&
+//                !realmConfig.getUserStoreProperty(JDBCRealmConstants.TEST_WHILE_IDLE).trim().equals("")) {
+//            poolProperties.setTestWhileIdle(Boolean.parseBoolean(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.TEST_WHILE_IDLE)));
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS) != null &&
+//                !realmConfig.getUserStoreProperty(
+//                        JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS).trim().equals("")) {
+//            poolProperties.setTimeBetweenEvictionRunsMillis(Integer.parseInt(
+//                    realmConfig.getUserStoreProperty(
+//                            JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS) != null &&
+//                !realmConfig.getUserStoreProperty(
+//                        JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS).trim().equals("")) {
+//            poolProperties.setMinEvictableIdleTimeMillis(Integer.parseInt(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS)));
+//        }
+//
+//        if (realmConfig.getUserStoreProperty(JDBCRealmConstants.VALIDATION_QUERY) != null) {
+//            poolProperties.setValidationQuery(realmConfig.getUserStoreProperty(
+//                    JDBCRealmConstants.VALIDATION_QUERY));
+//            poolProperties.setTestOnBorrow(true);
+//        }
+//        if (StringUtils.isNotEmpty(realmConfig.getUserStoreProperty(VALIDATION_INTERVAL)) &&
+//            StringUtils.isNumeric(realmConfig.getUserStoreProperty(VALIDATION_INTERVAL))) {
+//            poolProperties.setValidationInterval(Long.parseLong(realmConfig.getUserStoreProperty(
+//                    VALIDATION_INTERVAL)));
+//        } else {
+//            poolProperties.setValidationInterval(DEFAULT_VALIDATION_INTERVAL);
+//        }
+//        return new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
+        return null;
     }
 
     private static DataSource createRealmDataSource(RealmConfiguration realmConfig) {
-        String dataSourceName = realmConfig.getRealmProperty(JDBCRealmConstants.DATASOURCE);
-        if (dataSourceName != null) {
-            return lookupDataSource(dataSourceName);
-        }
-        PoolProperties poolProperties = new PoolProperties();
-        poolProperties.setDriverClassName(realmConfig.getRealmProperty(JDBCRealmConstants.DRIVER_NAME));
-        poolProperties.setUrl(realmConfig.getRealmProperty(JDBCRealmConstants.URL));
-        poolProperties.setUsername(realmConfig.getRealmProperty(JDBCRealmConstants.USER_NAME));
-        poolProperties.setPassword(realmConfig.getRealmProperty(JDBCRealmConstants.PASSWORD));
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_ACTIVE) != null &&
-                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_ACTIVE).trim().equals("")) {
-            poolProperties.setMaxActive(Integer.parseInt(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.MAX_ACTIVE)));
-        } else {
-            poolProperties.setMaxActive(DEFAULT_MAX_ACTIVE);
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.MIN_IDLE) != null &&
-                !realmConfig.getRealmProperty(JDBCRealmConstants.MIN_IDLE).trim().equals("")) {
-            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.MIN_IDLE)));
-        } else {
-            poolProperties.setMinIdle(DEFAULT_MIN_IDLE);
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_IDLE) != null &&
-                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_IDLE).trim().equals("")) {
-            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.MAX_IDLE)));
-        } else {
-            poolProperties.setMinIdle(DEFAULT_MAX_IDLE);
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_WAIT) != null &&
-                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_WAIT).trim().equals("")) {
-            poolProperties.setMaxWait(Integer.parseInt(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.MAX_WAIT)));
-        } else {
-            poolProperties.setMaxWait(DEFAULT_MAX_WAIT);
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.TEST_WHILE_IDLE) != null &&
-                !realmConfig.getRealmProperty(JDBCRealmConstants.TEST_WHILE_IDLE).trim().equals("")) {
-            poolProperties.setTestWhileIdle(Boolean.parseBoolean(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.TEST_WHILE_IDLE)));
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS) != null &&
-                !realmConfig.getRealmProperty(
-                        JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS).trim().equals("")) {
-            poolProperties.setTimeBetweenEvictionRunsMillis(Integer.parseInt(
-                    realmConfig.getRealmProperty(
-                            JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS) != null &&
-                !realmConfig.getRealmProperty(
-                        JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS).trim().equals("")) {
-            poolProperties.setMinEvictableIdleTimeMillis(Integer.parseInt(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS)));
-        }
-
-        if (realmConfig.getRealmProperty(JDBCRealmConstants.VALIDATION_QUERY) != null) {
-            poolProperties.setValidationQuery(realmConfig.getRealmProperty(
-                    JDBCRealmConstants.VALIDATION_QUERY));
-        }
-
-        dataSource = new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
+//        String dataSourceName = realmConfig.getRealmProperty(JDBCRealmConstants.DATASOURCE);
+//        if (dataSourceName != null) {
+//            return lookupDataSource(dataSourceName);
+//        }
+//        PoolProperties poolProperties = new PoolProperties();
+//        poolProperties.setDriverClassName(realmConfig.getRealmProperty(JDBCRealmConstants.DRIVER_NAME));
+//        poolProperties.setUrl(realmConfig.getRealmProperty(JDBCRealmConstants.URL));
+//        poolProperties.setUsername(realmConfig.getRealmProperty(JDBCRealmConstants.USER_NAME));
+//        poolProperties.setPassword(realmConfig.getRealmProperty(JDBCRealmConstants.PASSWORD));
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_ACTIVE) != null &&
+//                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_ACTIVE).trim().equals("")) {
+//            poolProperties.setMaxActive(Integer.parseInt(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.MAX_ACTIVE)));
+//        } else {
+//            poolProperties.setMaxActive(DEFAULT_MAX_ACTIVE);
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.MIN_IDLE) != null &&
+//                !realmConfig.getRealmProperty(JDBCRealmConstants.MIN_IDLE).trim().equals("")) {
+//            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.MIN_IDLE)));
+//        } else {
+//            poolProperties.setMinIdle(DEFAULT_MIN_IDLE);
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_IDLE) != null &&
+//                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_IDLE).trim().equals("")) {
+//            poolProperties.setMinIdle(Integer.parseInt(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.MAX_IDLE)));
+//        } else {
+//            poolProperties.setMinIdle(DEFAULT_MAX_IDLE);
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.MAX_WAIT) != null &&
+//                !realmConfig.getRealmProperty(JDBCRealmConstants.MAX_WAIT).trim().equals("")) {
+//            poolProperties.setMaxWait(Integer.parseInt(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.MAX_WAIT)));
+//        } else {
+//            poolProperties.setMaxWait(DEFAULT_MAX_WAIT);
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.TEST_WHILE_IDLE) != null &&
+//                !realmConfig.getRealmProperty(JDBCRealmConstants.TEST_WHILE_IDLE).trim().equals("")) {
+//            poolProperties.setTestWhileIdle(Boolean.parseBoolean(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.TEST_WHILE_IDLE)));
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS) != null &&
+//                !realmConfig.getRealmProperty(
+//                        JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS).trim().equals("")) {
+//            poolProperties.setTimeBetweenEvictionRunsMillis(Integer.parseInt(
+//                    realmConfig.getRealmProperty(
+//                            JDBCRealmConstants.TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS) != null &&
+//                !realmConfig.getRealmProperty(
+//                        JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS).trim().equals("")) {
+//            poolProperties.setMinEvictableIdleTimeMillis(Integer.parseInt(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.MIN_EVIC_TABLE_IDLE_TIME_MILLIS)));
+//        }
+//
+//        if (realmConfig.getRealmProperty(JDBCRealmConstants.VALIDATION_QUERY) != null) {
+//            poolProperties.setValidationQuery(realmConfig.getRealmProperty(
+//                    JDBCRealmConstants.VALIDATION_QUERY));
+//        }
+//
+//        dataSource = new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
         return dataSource;
     }
 
@@ -274,9 +275,9 @@ public class DatabaseUtil {
             return values;
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, rs, prepStmt);
@@ -319,9 +320,9 @@ public class DatabaseUtil {
             return values;
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, rs, prepStmt);
@@ -354,9 +355,9 @@ public class DatabaseUtil {
             return value;
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, rs, prepStmt);
@@ -406,18 +407,18 @@ public class DatabaseUtil {
             }
 
             int[] count = prepStmt.executeBatch();
-            if (log.isDebugEnabled()) {
-                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is"
-                        + Arrays.toString(count));
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is"
+//                        + Arrays.toString(count));
+//            }
             if (localConnection) {
                 dbConnection.commit();
             }
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             if (localConnection) {
@@ -452,18 +453,18 @@ public class DatabaseUtil {
             }
 
             int[] cnt = ps.executeBatch();
-            if (log.isDebugEnabled()) {
-                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is" +
-                        Arrays.toString(cnt));
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is" +
+//                        Arrays.toString(cnt));
+//            }
             if (localConnection) {
                 dbConnection.commit();
             }
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             if (localConnection) {
@@ -503,18 +504,18 @@ public class DatabaseUtil {
             }
 
             int[] count = prepStmt.executeBatch();
-            if (log.isDebugEnabled()) {
-                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is"
-                        + Arrays.toString(count));
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Executed a batch update. Query is : " + sqlStmt + ": and result is"
+//                        + Arrays.toString(count));
+//            }
             if (localConnection) {
                 dbConnection.commit();
             }
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             if (localConnection) {
@@ -552,9 +553,9 @@ public class DatabaseUtil {
             prepStmt.executeUpdate();
         } catch (SQLException e) {
             String errorMessage = "Using sql : " + sqlStmt + " " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -576,7 +577,7 @@ public class DatabaseUtil {
             try {
                 dbConnection.close();
             } catch (SQLException e) {
-                log.error("Database error. Could not close statement. Continuing with others. - " + e.getMessage(), e);
+//                log.error("Database error. Could not close statement. Continuing with others. - " + e.getMessage(), e);
             }
         }
     }
@@ -587,7 +588,7 @@ public class DatabaseUtil {
             try {
                 rs.close();
             } catch (SQLException e) {
-                log.error("Database error. Could not close result set  - " + e.getMessage(), e);
+//                log.error("Database error. Could not close result set  - " + e.getMessage(), e);
             }
         }
 
@@ -599,7 +600,7 @@ public class DatabaseUtil {
             try {
                 preparedStatement.close();
             } catch (SQLException e) {
-                log.error("Database error. Could not close statement. Continuing with others. - " + e.getMessage(), e);
+//                log.error("Database error. Could not close statement. Continuing with others. - " + e.getMessage(), e);
             }
         }
 
@@ -642,7 +643,7 @@ public class DatabaseUtil {
                 dbConnection.rollback();
             }
         } catch (SQLException e1) {
-            log.error("An error occurred while rolling back transactions. ", e1);
+//            log.error("An error occurred while rolling back transactions. ", e1);
         }
     }
 }
