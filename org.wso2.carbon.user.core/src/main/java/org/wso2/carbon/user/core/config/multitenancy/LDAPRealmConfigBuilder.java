@@ -18,10 +18,10 @@
 
 package org.wso2.carbon.user.core.config.multitenancy;
 
-import org.apache.axiom.util.UIDGenerator;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.axiom.util.UIDGenerator;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class LDAPRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
 
-    private static Log log = LogFactory.getLog(LDAPRealmConfigBuilder.class);
+//    private static Log log = LogFactory.getLog(LDAPRealmConfigBuilder.class);
 
     public RealmConfiguration getRealmConfigForTenantToCreateRealm(RealmConfiguration
                                                                            bootStrapConfig, RealmConfiguration persistedConfig, int tenantId)
@@ -64,13 +64,15 @@ public class LDAPRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
         try {
             ldapRealmConfig = bootStrapConfig.cloneRealmConfiguration();
             //TODO: Random password generation. 
-            ldapRealmConfig.setAdminPassword(UIDGenerator.generateUID());
+//            ldapRealmConfig.setAdminPassword(UIDGenerator.generateUID());
+            ldapRealmConfig.setAdminPassword(null);
             ldapRealmConfig.setAdminUserName(tenantInfo.getAdminName());
             ldapRealmConfig.setTenantId(tenantId);
 
             Map<String, String> authz = ldapRealmConfig.getAuthzProperties();
-            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
-                    CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
+//            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
+//                      CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
+            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION, null);
 
             Map<String, String> userStoreProperties = ldapRealmConfig.getUserStoreProperties();
 
@@ -87,9 +89,9 @@ public class LDAPRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
 
         } catch (Exception e) {
             String errorMessage = "Tenant specific realm config could not be created.";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
 
