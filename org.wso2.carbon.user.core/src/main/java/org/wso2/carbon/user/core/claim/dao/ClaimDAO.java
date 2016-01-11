@@ -17,14 +17,14 @@
  */
 package org.wso2.carbon.user.core.claim.dao;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.claim.Claim;
 import org.wso2.carbon.user.core.claim.ClaimMapping;
 import org.wso2.carbon.user.core.util.DatabaseUtil;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+//import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -39,11 +39,12 @@ import java.util.Map;
 
 public class ClaimDAO {
 
-    private static Log log = LogFactory.getLog(DatabaseUtil.class);
+//    private static Log log = LogFactory.getLog(DatabaseUtil.class);
 
     private DataSource dataSource = null;
 
-    private int tenantId = MultitenantConstants.INVALID_TENANT_ID;
+//    private int tenantId = MultitenantConstants.INVALID_TENANT_ID;
+    private int tenantId = -12345;
 
     public ClaimDAO(DataSource dataSource, int tenantId) {
         this.dataSource = dataSource;
@@ -58,7 +59,7 @@ public class ClaimDAO {
             this.addClaimMapping(dbConnection, claim);
             dbConnection.commit();
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -73,7 +74,7 @@ public class ClaimDAO {
             this.updateClaimMapping(dbConnection, claim);
             dbConnection.commit();
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -89,7 +90,7 @@ public class ClaimDAO {
                     .getDialectURI());
             dbConnection.commit();
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -124,7 +125,7 @@ public class ClaimDAO {
 
             dbConnection.commit();
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -141,7 +142,7 @@ public class ClaimDAO {
             }
             dbConnection.commit();
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -164,7 +165,7 @@ public class ClaimDAO {
                 count = rs.getInt(1);
             }
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -259,7 +260,7 @@ public class ClaimDAO {
                 }
             }
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -348,7 +349,7 @@ public class ClaimDAO {
             }
 
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -399,7 +400,7 @@ public class ClaimDAO {
             prepStmt.close();
 
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -424,7 +425,7 @@ public class ClaimDAO {
                 dialectId = rs.getInt(1);
             }
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(null, rs, prepStmt);
@@ -443,7 +444,7 @@ public class ClaimDAO {
             prepStmt.close();
             dialectId = getDialect(dbConnection, uri);
         } catch (SQLException e) {
-            log.error("Database Error - " + e.getMessage(), e);
+//            log.error("Database Error - " + e.getMessage(), e);
             throw new UserStoreException("Database Error - " + e.getMessage(), e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
