@@ -18,18 +18,19 @@
  */
 package org.wso2.carbon.user.core.tenant;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.commons.io.FileUtils;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleContext;
-import org.wso2.carbon.CarbonException;
+//import org.wso2.carbon.CarbonException;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.config.RealmConfigXMLProcessor;
 import org.wso2.carbon.user.core.ldap.LDAPConnectionContext;
-import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -45,9 +46,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Store the realm configuration of tenant to file system and rest in database
  */
 public class FileSystemTenantManager extends CommonHybridLDAPTenantManager {
-    private static Log log = LogFactory.getLog(TenantManager.class);
-    private final String CarbonHome = CarbonUtils.getCarbonHome();
-    private String filePath = CarbonHome + "/repository/tenants/";
+//    private static Log log = LogFactory.getLog(TenantManager.class);
+//    private final String CarbonHome = CarbonUtils.getCarbonHome();
+//    private String filePath = CarbonHome + "/repository/tenants/";
     private final String userMgtXml = "user-mgt.xml";
     protected BundleContext bundleContext;
     protected TenantCache tenantCacheManager = TenantCache.getInstance();
@@ -67,9 +68,9 @@ public class FileSystemTenantManager extends CommonHybridLDAPTenantManager {
     private RealmConfiguration realmConfig = null;
 
 
-    public FileSystemTenantManager(OMElement omElement, Map<String, Object> properties) throws Exception {
-        super(omElement, properties);
-    }
+//    public FileSystemTenantManager(OMElement omElement, Map<String, Object> properties) throws Exception {
+//        super(omElement, properties);
+//    }
 
     public FileSystemTenantManager(DataSource dataSource, String superTenantDomain) {
         super(dataSource, superTenantDomain);
@@ -87,23 +88,23 @@ public class FileSystemTenantManager extends CommonHybridLDAPTenantManager {
 
         RealmConfiguration tenantRealmConfig = tenant.getRealmConfig();
         tenantRealmConfig.setSecondaryRealmConfig(null);
-        String realmConfigString = RealmConfigXMLProcessor.serialize(
-                tenantRealmConfig).toString();
-        saveConfigToFileSystem(tenantID, realmConfigString);
+//        String realmConfigString = RealmConfigXMLProcessor.serialize(
+//                tenantRealmConfig).toString();
+//        saveConfigToFileSystem(tenantID, realmConfigString);
 
         return tenantID;
     }
 
     private void saveConfigToFileSystem(int id, String realmConfigString) {
-        File tenantFolder = new File(filePath + id + File.separator + "user-mgt.xml");
-        if (!tenantFolder.exists()) {
-            new File(filePath + id).mkdir();
-        }
-        try {
-            FileUtils.writeStringToFile(tenantFolder, realmConfigString);
-        } catch (IOException e) {
-            log.error("Error in saving realm configuration of tenant:" + id + ".");
-        }
+//        File tenantFolder = new File(filePath + id + File.separator + "user-mgt.xml");
+//        if (!tenantFolder.exists()) {
+//            new File(filePath + id).mkdir();
+//        }
+//        try {
+//            FileUtils.writeStringToFile(tenantFolder, realmConfigString);
+//        } catch (IOException e) {
+//            log.error("Error in saving realm configuration of tenant:" + id + ".");
+//        }
     }
 
 
@@ -120,15 +121,15 @@ public class FileSystemTenantManager extends CommonHybridLDAPTenantManager {
         InputStream inStream;
         try {
 
-            inStream = new FileInputStream(filePath + tenantId + File.separator + userMgtXml);
+            inStream = new FileInputStream(/*filePath + */tenantId + File.separator + userMgtXml);
 
-            if (inStream == null) {
-                String message = "Configuration file could not be read in.";
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-            }
-            inStream = CarbonUtils.replaceSystemVariablesInXml(inStream);
+//            if (inStream == null) {
+//                String message = "Configuration file could not be read in.";
+//                if (log.isDebugEnabled()) {
+//                    log.debug(message);
+//                }
+//            }
+//            inStream = CarbonUtils.replaceSystemVariablesInXml(inStream);
             RealmConfigXMLProcessor processor = new RealmConfigXMLProcessor();
             RealmConfiguration realmConfig = processor.buildRealmConfiguration(inStream);
 
@@ -144,14 +145,14 @@ public class FileSystemTenantManager extends CommonHybridLDAPTenantManager {
             tenant.setAdminName(realmConfig.getAdminUserName());
             tenantCacheManager.addToCache(new TenantIdKey(tenantId), new TenantCacheEntry<Tenant>(tenant));
 
-        } catch (CarbonException e) {
-            String errorMessage = "Error occurred while getting tenant from tenant id : " + tenant;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
-            throw new UserStoreException(errorMessage, e);
+//        } catch (CarbonException e) {
+//            String errorMessage = "Error occurred while getting tenant from tenant id : " + tenant;
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
+//            throw new UserStoreException(errorMessage, e);
         } catch (FileNotFoundException e) {
-            log.error("Realm configuration file 'user-mgt.xml',does not exist for tenant:" + tenantId);
+//            log.error("Realm configuration file 'user-mgt.xml',does not exist for tenant:" + tenantId);
         }
 
         return tenant;
