@@ -17,8 +17,8 @@
 */
 package org.wso2.carbon.user.core.profile.dao;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.profile.ProfileConfiguration;
@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class ProfileConfigDAO {
 
-    private static Log log = LogFactory.getLog(DatabaseUtil.class);
+//    private static Log log = LogFactory.getLog(DatabaseUtil.class);
 
     private DataSource dataSource = null;
 
@@ -56,9 +56,9 @@ public class ProfileConfigDAO {
             dbConnection.commit();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -76,9 +76,9 @@ public class ProfileConfigDAO {
             dbConnection.commit();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -95,9 +95,9 @@ public class ProfileConfigDAO {
             dbConnection.commit();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -114,9 +114,9 @@ public class ProfileConfigDAO {
             dbConnection.commit();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeConnection(dbConnection);
@@ -161,9 +161,9 @@ public class ProfileConfigDAO {
             }
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -222,9 +222,9 @@ public class ProfileConfigDAO {
             prepStmt.executeBatch();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -244,9 +244,9 @@ public class ProfileConfigDAO {
             prepStmt.setInt(5, tenantId);
             int ival = prepStmt.executeUpdate();
 
-            if (log.isDebugEnabled()) {
-                log.debug("Deleted claim behavior numbers :: " + ival);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Deleted claim behavior numbers :: " + ival);
+//            }
 
             prepStmt.close();
             prepStmt = dbConnection
@@ -257,16 +257,16 @@ public class ProfileConfigDAO {
             prepStmt.setInt(4, tenantId);
             ival = prepStmt.executeUpdate();
 
-            if (log.isDebugEnabled()) {
-                log.debug("Deleted profile names :: " + ival);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Deleted profile names :: " + ival);
+//            }
 
             prepStmt.close();
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -287,9 +287,9 @@ public class ProfileConfigDAO {
             }
         } catch (SQLException e) {
             String errorMessage = "Database Error - " + e.getMessage();
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
