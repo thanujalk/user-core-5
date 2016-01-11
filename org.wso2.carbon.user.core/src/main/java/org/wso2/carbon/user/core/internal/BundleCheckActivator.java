@@ -16,8 +16,8 @@
 
 package org.wso2.carbon.user.core.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public abstract class BundleCheckActivator implements BundleActivator {
 
-    private static final Log log = LogFactory.getLog(BundleCheckActivator.class);
+//    private static final Log log = LogFactory.getLog(BundleCheckActivator.class);
 
     private String DEPLOY_BEFORE = "DeployBefore";
 
@@ -72,7 +72,7 @@ public abstract class BundleCheckActivator implements BundleActivator {
                                 try {
                                     startDeploy(bundleContext);
                                 } catch (Exception e) {
-                                    log.error("Can not start the bundle ", e);
+//                                    log.error("Can not start the bundle ", e);
                                 }
                             }
                         }
