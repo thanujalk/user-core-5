@@ -17,10 +17,10 @@
 package org.wso2.carbon.user.core.authorization;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
-import org.wso2.carbon.registry.api.GhostResource;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
+//import org.wso2.carbon.registry.api.GhostResource;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.UserStoreManager;
@@ -28,9 +28,9 @@ import org.wso2.carbon.user.core.internal.UserStoreMgtDSComponent;
 import org.wso2.carbon.user.core.util.DatabaseUtil;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
 
-import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
+//import javax.cache.Cache;
+//import javax.cache.CacheManager;
+//import javax.cache.Caching;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,7 +48,7 @@ public class PermissionTree {
     private static final String PERMISSION_CACHE_MANAGER = "PERMISSION_CACHE_MANAGER";
     private static final String PERMISSION_CACHE = "PERMISSION_CACHE";
     private static final String CASE_INSENSITIVE_USERNAME = "CaseInsensitiveUsername";
-    private static Log log = LogFactory.getLog(PermissionTree.class);
+//    private static Log log = LogFactory.getLog(PermissionTree.class);
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock read = readWriteLock.readLock();
     private final Lock write = readWriteLock.writeLock();
@@ -84,12 +84,12 @@ public class PermissionTree {
      * Getting existing cache if the cache available, else returns a newly created cache.
      * This logic handles by javax.cache implementation
      */
-    private Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> getPermissionTreeCache() {
-        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> cache = null;
-        CacheManager cacheManager = Caching.getCacheManagerFactory().getCacheManager(PERMISSION_CACHE_MANAGER);
-        cache = cacheManager.getCache(PERMISSION_CACHE);
-        return cache;
-    }
+//    private Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> getPermissionTreeCache() {
+//        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> cache = null;
+//        CacheManager cacheManager = Caching.getCacheManagerFactory().getCacheManager(PERMISSION_CACHE_MANAGER);
+//        cache = cacheManager.getCache(PERMISSION_CACHE);
+//        return cache;
+//    }
 
     void authorizeUserInTree(String userName, String resourceId, String action, boolean updateCache) throws UserStoreException {
         if (!isCaseSensitiveUsername(userName, tenantId)) {
@@ -678,7 +678,8 @@ public class PermissionTree {
             throw new UserStoreException("Invalid Permission root path provided");
         }
 
-        TreeNode permissionNode = root.getChild(CarbonConstants.UI_PERMISSION_NAME);
+//        TreeNode permissionNode = root.getChild(CarbonConstants.UI_PERMISSION_NAME);
+        TreeNode permissionNode = root.getChild(null);
 
         if (permissionNode == null) {
             throw new UserStoreException("Invalid Permission root path provided");
@@ -691,7 +692,8 @@ public class PermissionTree {
         getUIResourcesForRoles(roles,
                 resources,
                 "", /* The old code has this. So use the same thing*/
-                PermissionTreeUtil.actionToPermission(CarbonConstants.UI_PERMISSION_ACTION),
+//                PermissionTreeUtil.actionToPermission(CarbonConstants.UI_PERMISSION_ACTION),
+                PermissionTreeUtil.actionToPermission(null),
                 permissionNode);
     }
 
@@ -919,19 +921,19 @@ public class PermissionTree {
      * Clears all permission information in current node.
      */
     void clear() {
-        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
-        if (permissionCache != null) {
-            write.lock();
-            try {
-                this.root.clearNodes();
-                this.hashValueOfRootNode = -1;
-                PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
-                // TODO Is this clear all?
-                permissionCache.remove(cacheKey);
-            } finally {
-                write.unlock();
-            }
-        }
+//        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
+//        if (permissionCache != null) {
+//            write.lock();
+//            try {
+//                this.root.clearNodes();
+//                this.hashValueOfRootNode = -1;
+//                PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
+//                // TODO Is this clear all?
+//                permissionCache.remove(cacheKey);
+//            } finally {
+//                write.unlock();
+//            }
+//        }
 
     }
 
@@ -941,42 +943,42 @@ public class PermissionTree {
      * @throws org.wso2.carbon.user.core.UserStoreException throws if fail to update permission tree from DB
      */
     void updatePermissionTree() throws UserStoreException {
-        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
-        if (permissionCache != null) {
-            PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
-            GhostResource<TreeNode> cacheEntry = (GhostResource<TreeNode>) permissionCache.get(cacheKey);
-            if (permissionCache.containsKey(cacheKey) && cacheEntry != null) {
-                if (cacheEntry.getResource() == null) {
-                    synchronized (this) {
-                        cacheEntry = (GhostResource<TreeNode>) permissionCache.get(cacheKey);
-                        if (cacheEntry.getResource() == null) {
-                            updatePermissionTreeFromDB();
-                            cacheEntry.setResource(root);
-                            if (log.isDebugEnabled()) {
-                                log.debug("Set resource to true");
-                            }
-                        }
-                    }
-                }
-            } else {
-                synchronized (this) {
-                    updatePermissionTreeFromDB();
-                    cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
-                    cacheEntry = new GhostResource<TreeNode>(root);
-                    permissionCache.put(cacheKey, cacheEntry);
-                    if (log.isDebugEnabled()) {
-                        log.debug("Loaded from database");
-                    }
-                }
-            }
-        }
+//        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
+//        if (permissionCache != null) {
+//            PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
+//            GhostResource<TreeNode> cacheEntry = (GhostResource<TreeNode>) permissionCache.get(cacheKey);
+//            if (permissionCache.containsKey(cacheKey) && cacheEntry != null) {
+//                if (cacheEntry.getResource() == null) {
+//                    synchronized (this) {
+//                        cacheEntry = (GhostResource<TreeNode>) permissionCache.get(cacheKey);
+//                        if (cacheEntry.getResource() == null) {
+//                            updatePermissionTreeFromDB();
+//                            cacheEntry.setResource(root);
+//                            if (log.isDebugEnabled()) {
+//                                log.debug("Set resource to true");
+//                            }
+//                        }
+//                    }
+//                }
+//            } else {
+//                synchronized (this) {
+//                    updatePermissionTreeFromDB();
+//                    cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
+//                    cacheEntry = new GhostResource<TreeNode>(root);
+//                    permissionCache.put(cacheKey, cacheEntry);
+//                    if (log.isDebugEnabled()) {
+//                        log.debug("Loaded from database");
+//                    }
+//                }
+//            }
+//        }
     }
 
     private void invalidateCache(TreeNode root) throws UserStoreException {
-        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
-        if (permissionCache != null) {
-            PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
-            permissionCache.remove(cacheKey);
+//        Cache<PermissionTreeCacheKey, GhostResource<TreeNode>> permissionCache = this.getPermissionTreeCache();
+//        if (permissionCache != null) {
+//            PermissionTreeCacheKey cacheKey = new PermissionTreeCacheKey(cacheIdentifier, tenantId);
+//            permissionCache.remove(cacheKey);
             //sending cluster message
 //			CacheInvalidator invalidator = UMListenerServiceComponent.getCacheInvalidator();
 //			try {
@@ -994,7 +996,7 @@ public class PermissionTree {
 //	            // TODO Auto-generated catch block
 //	            e.printStackTrace();
 //	        }
-        }
+//        }
 
     }
 //////////////////////////////////////// private methods follows //////////////////////////////////////////////////
@@ -1117,9 +1119,9 @@ public class PermissionTree {
                     return !Boolean.parseBoolean(isUsernameCaseInsensitiveString);
                 }
             } catch (org.wso2.carbon.user.api.UserStoreException e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Error while reading user store property CaseInsensitiveUsername. Considering as false.");
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Error while reading user store property CaseInsensitiveUsername. Considering as false.");
+//                }
             }
         }
         return true;
