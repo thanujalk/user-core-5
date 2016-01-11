@@ -212,7 +212,7 @@
                 <configuration>
                     <fork>true</fork>
                     <compilerArguments>
-                        <Xmaxerrs>200</Xmaxerrs>
+                        <Xmaxerrs>1000</Xmaxerrs>
                     </compilerArguments>
                 </configuration>
             </plugin>
