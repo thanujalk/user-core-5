@@ -17,9 +17,9 @@
 */
 package org.wso2.carbon.user.core.tenant;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -55,28 +55,28 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
     //TODO move the following configurations and constants to relevant files.
     private static final String SN_ATTRIBUTE_NAME = "sn";
     private static final String CN_ATTRIBUTE_NAME = "cn";
-    private static Log logger = LogFactory.getLog(CommonHybridLDAPTenantManager.class);
+    //private static Log logger = LogFactory.getLog(CommonHybridLDAPTenantManager.class);
     private LDAPConnectionContext ldapConnectionSource;
     private TenantMgtConfiguration tenantMgtConfig = null;
     private RealmConfiguration realmConfig = null;
 
-    public CommonHybridLDAPTenantManager(OMElement omElement, Map<String, Object> properties)
-            throws Exception {
-        super(omElement, properties);
-
-        tenantMgtConfig = (TenantMgtConfiguration) properties.get(
-                UserCoreConstants.TENANT_MGT_CONFIGURATION);
-
-        realmConfig = (RealmConfiguration) properties.get(UserCoreConstants.REALM_CONFIGURATION);
-        if (realmConfig == null) {
-            throw new UserStoreException("Tenant Manager can not function without a bootstrap realm config");
-        }
-
-        if (ldapConnectionSource == null) {
-            ldapConnectionSource = new LDAPConnectionContext(realmConfig);
-        }
-
-    }
+//    public CommonHybridLDAPTenantManager(OMElement omElement, Map<String, Object> properties)
+//            throws Exception {
+//        super(omElement, properties);
+//
+//        tenantMgtConfig = (TenantMgtConfiguration) properties.get(
+//                UserCoreConstants.TENANT_MGT_CONFIGURATION);
+//
+//        realmConfig = (RealmConfiguration) properties.get(UserCoreConstants.REALM_CONFIGURATION);
+//        if (realmConfig == null) {
+//            throw new UserStoreException("Tenant Manager can not function without a bootstrap realm config");
+//        }
+//
+//        if (ldapConnectionSource == null) {
+//            ldapConnectionSource = new LDAPConnectionContext(realmConfig);
+//        }
+//
+//    }
 
     public CommonHybridLDAPTenantManager(DataSource dataSource, String superTenantDomain) {
         super(dataSource, superTenantDomain);
@@ -102,7 +102,7 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
                 createOrganizationalUnit(tenant.getDomain(), (Tenant) tenant, initialDirContext);
                 addSharedGroupForTenant((Tenant) tenant, initialDirContext);
             } else {
-                logger.warn("Organizational unit for tenant domain:" + tenant.getDomain() + " is already created.");
+                //logger.warn("Organizational unit for tenant domain:" + tenant.getDomain() + " is already created.");
             }
         } finally {
             closeContext(initialDirContext);
@@ -140,9 +140,9 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
             return userSearchResults.hasMore();
         } catch (NamingException e) {
             String errorMessage = "Error occurred while searching in root partition for organization : " + orgName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
     }
@@ -223,23 +223,23 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
             contextAttributes.put(organization);
             //construct organization rdn.
             String rdnOfOrganizationalContext = organizationalNameAttribute + "=" + orgName;
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding sub context: " + rdnOfOrganizationalContext + " under " +
-                        rootDN + " ...");
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Adding sub context: " + rdnOfOrganizationalContext + " under " +
+//                        rootDN + " ...");
+//            }
             //create organization sub context
             organizationalContext = subContext.createSubcontext(rdnOfOrganizationalContext, contextAttributes);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Sub context: " + rdnOfOrganizationalContext + " was added under "
-                        + rootDN + " successfully.");
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Sub context: " + rdnOfOrganizationalContext + " was added under "
+//                        + rootDN + " successfully.");
+//            }
 
         } catch (NamingException e) {
             String errorMsg = "Error occurred while adding the organizational unit " +
                     "sub context.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMsg, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMsg, e);
+//            }
             throw new UserStoreException(errorMsg, e);
         } finally {
             closeContext(organizationalContext);
@@ -252,7 +252,7 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
             try {
                 ldapContext.close();
             } catch (NamingException e) {
-                logger.error("Error closing sub context.", e);
+//                logger.error("Error closing sub context.", e);
             }
         }
     }
@@ -294,23 +294,23 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
             //construct the rdn of org sub context
             String rdnOfOrganizationalContext = orgSubUnitAttributeName + "=" +
                     nameOfCurrentContext;
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding sub context: " + rdnOfOrganizationalContext + " under " +
-                        dnOfParentContext + " ...");
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Adding sub context: " + rdnOfOrganizationalContext + " under " +
+//                        dnOfParentContext + " ...");
+//            }
             //create sub context
             organizationalContext = subContext.createSubcontext(rdnOfOrganizationalContext, contextAttributes);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Sub context: " + rdnOfOrganizationalContext + " was added under "
-                        + dnOfParentContext + " successfully.");
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Sub context: " + rdnOfOrganizationalContext + " was added under "
+//                        + dnOfParentContext + " successfully.");
+//            }
 
         } catch (NamingException e) {
             String errorMsg = "Error occurred while adding the organizational unit " +
                     "sub context.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMsg, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMsg, e);
+//            }
             throw new UserStoreException(errorMsg, e);
         } finally {
             closeContext(organizationalContext);
@@ -389,9 +389,9 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
             //return (userRDN + dnOfUserContext);
         } catch (NamingException e) {
             String errorMsg = "Error occurred while creating Admin entry";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMsg, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMsg, e);
+//            }
             throw new UserStoreException(errorMsg, e);
         } finally {
             closeContext(organizationalUsersContext);
@@ -434,9 +434,9 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
 
         } catch (NamingException e) {
             String errorMessage = "Error occurred while creating the admin group.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             closeContext(groupContext);
@@ -483,9 +483,9 @@ public class CommonHybridLDAPTenantManager extends JDBCTenantManager {
 
         } catch (Exception e) {
             String errorMsg = "Shared tenant: " + domainName + "could not be added.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMsg, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMsg, e);
+//            }
             throw new UserStoreException(errorMsg, e);
         } finally {
             JNDIUtil.closeContext(groupContext);
