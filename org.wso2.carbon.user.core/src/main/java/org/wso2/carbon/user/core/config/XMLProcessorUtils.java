@@ -17,9 +17,9 @@
  */
 package org.wso2.carbon.user.core.config;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.CarbonContext;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.user.api.Property;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class XMLProcessorUtils {
-    private static final Log log = LogFactory.getLog(XMLProcessorUtils.class);
+//    private static final Log log = LogFactory.getLog(XMLProcessorUtils.class);
 
     /**
      * Get a List of existing domain names
@@ -39,8 +39,9 @@ public class XMLProcessorUtils {
     public ArrayList<String> getDomainNames() throws UserStoreException {
         ArrayList<String> domains = new ArrayList<String>();
 
-        org.wso2.carbon.user.api.RealmConfiguration realmConfiguration =
-                CarbonContext.getThreadLocalCarbonContext().getUserRealm().getRealmConfiguration();
+//        org.wso2.carbon.user.api.RealmConfiguration realmConfiguration =
+//                CarbonContext.getThreadLocalCarbonContext().getUserRealm().getRealmConfiguration();
+        org.wso2.carbon.user.api.RealmConfiguration realmConfiguration = null;
 
         // For primary
         String domain = realmConfiguration.getUserStoreProperty(UserCoreConstants.RealmConfig.PROPERTY_DOMAIN_NAME);
@@ -92,7 +93,7 @@ public class XMLProcessorUtils {
 
         for (int j = 0; j < mandatories.length; j++) {
             if (!definedProperties.containsKey(mandatories[j].getName())) {
-                log.error("Required mandatory property " + mandatories[j].getName() + " is not defined!");
+//                log.error("Required mandatory property " + mandatories[j].getName() + " is not defined!");
                 return false;
             } else {
 
