@@ -17,8 +17,8 @@
 */
 package org.wso2.carbon.user.core.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.core.UserStoreException;
 
 import javax.naming.NamingEnumeration;
@@ -27,7 +27,7 @@ import javax.naming.directory.DirContext;
 
 public class JNDIUtil {
 
-    private static Log log = LogFactory.getLog(JNDIUtil.class);
+//    private static Log log = LogFactory.getLog(JNDIUtil.class);
 
     public static void closeContext(DirContext dirContext) throws UserStoreException {
         try {
@@ -36,7 +36,7 @@ public class JNDIUtil {
             }
         } catch (NamingException e) {
             String errorMessage = "Error in closing connection context.";
-            log.error(errorMessage, e);
+//            log.error(errorMessage, e);
         }
     }
 
@@ -52,7 +52,7 @@ public class JNDIUtil {
                 namingEnumeration.close();
             } catch (NamingException e) {
                 String errorMessage = "Error in closing NamingEnumeration.";
-                log.error(errorMessage, e);
+//                log.error(errorMessage, e);
             }
         }
 
