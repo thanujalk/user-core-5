@@ -17,14 +17,14 @@
  */
 package org.wso2.carbon.user.core.ldap;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
-import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
@@ -43,7 +43,7 @@ import java.util.TreeMap;
 
 public class LDAPConnectionContext {
 
-    private static Log log = LogFactory.getLog(LDAPConnectionContext.class);
+//    private static Log log = LogFactory.getLog(LDAPConnectionContext.class);
     @SuppressWarnings("rawtypes")
     private Hashtable environment;
     private SortedMap<Integer, SRVRecord> dcMap;
@@ -90,7 +90,7 @@ public class LDAPConnectionContext {
 
             // if the port contains a template string that refers to carbon.xml
             if ((portInfo.contains("${")) && (portInfo.contains("}"))) {
-                port = Integer.toString(CarbonUtils.getPortFromServerConfig(portInfo));
+//                port = Integer.toString(CarbonUtils.getPortFromServerConfig(portInfo));
             }
 
             if (port != null) {
@@ -105,9 +105,9 @@ public class LDAPConnectionContext {
         String connectionPassword = realmConfig
                 .getUserStoreProperty(LDAPConstants.CONNECTION_PASSWORD);
 
-        if (log.isDebugEnabled()) {
-            log.debug("Connection Name :: " + connectionName + ", Connection URL :: " + connectionURL);
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("Connection Name :: " + connectionName + ", Connection URL :: " + connectionURL);
+//        }
 
         environment = new Hashtable();
 
@@ -118,7 +118,7 @@ public class LDAPConnectionContext {
          * In carbon JNDI context we need to by pass specific tenant context and we need the base
          * context for LDAP operations.
          */
-        environment.put(CarbonConstants.REQUEST_BASE_CONTEXT, "true");
+//        environment.put(CarbonConstants.REQUEST_BASE_CONTEXT, "true");
 
         if (connectionName != null) {
             environment.put(Context.SECURITY_PRINCIPAL, connectionName);
@@ -163,9 +163,9 @@ public class LDAPConnectionContext {
             environment.put("com.sun.jndi.ldap.connect.timeout", "5000");
         }
 
-        if(StringUtils.isNotEmpty(readTimeout)){
-            environment.put("com.sun.jndi.ldap.read.timeout",readTimeout);
-        }
+//        if(StringUtils.isNotEmpty(readTimeout)){
+//            environment.put("com.sun.jndi.ldap.read.timeout",readTimeout);
+//        }
     }
 
     public DirContext getContext() throws UserStoreException {
@@ -176,13 +176,13 @@ public class LDAPConnectionContext {
                 context = new InitialDirContext(environment);
 
             } catch (NamingException e) {
-                log.error("Error obtaining connection. " + e.getMessage(), e);
-                log.error("Trying again to get connection.");
+//                log.error("Error obtaining connection. " + e.getMessage(), e);
+//                log.error("Trying again to get connection.");
 
                 try {
                     context = new InitialDirContext(environment);
                 } catch (Exception e1) {
-                    log.error("Error obtaining connection for the second time" + e.getMessage(), e);
+//                    log.error("Error obtaining connection for the second time" + e.getMessage(), e);
                     throw new UserStoreException("Error obtaining connection. " + e.getMessage(), e);
                 }
 
@@ -197,8 +197,8 @@ public class LDAPConnectionContext {
                 context = new InitialDirContext(environment);
 
             } catch (NamingException e) {
-                log.error("Error obtaining connection to first Domain Controller." + e.getMessage(), e);
-                log.info("Trying to connect with other Domain Controllers");
+//                log.error("Error obtaining connection to first Domain Controller." + e.getMessage(), e);
+//                log.info("Trying to connect with other Domain Controllers");
 
                 for (Integer integer : dcMap.keySet()) {
                     try {
@@ -208,8 +208,8 @@ public class LDAPConnectionContext {
                         break;
                     } catch (NamingException e1) {
                         if (integer == (dcMap.lastKey())) {
-                            log.error("Error obtaining connection for all " + integer + " Domain Controllers."
-                                    + e.getMessage(), e);
+//                            log.error("Error obtaining connection for all " + integer + " Domain Controllers."
+//                                    + e.getMessage(), e);
                             throw new UserStoreException("Error obtaining connection. " + e.getMessage(), e);
                         }
                     }
@@ -285,7 +285,7 @@ public class LDAPConnectionContext {
                 srvRecord.setHostIP((String) hostRecord.get());
             }
         } catch (NamingException e) {
-            log.error("Error obtaining information from DNS Server" + e.getMessage(), e);
+//            log.error("Error obtaining information from DNS Server" + e.getMessage(), e);
             throw new UserStoreException("Error obtaining information from DNS Server " + e.getMessage(), e);
         }
     }
@@ -335,8 +335,8 @@ public class LDAPConnectionContext {
             } catch (TimeLimitExceededException e) {
                 throw new UserStoreException("TimeLimitExceeded : LDAP Read Timed Out");
             }catch (NamingException e) {
-                log.error("Error obtaining connection to first Domain Controller." + e.getMessage(), e);
-                log.info("Trying to connect with other Domain Controllers");
+//                log.error("Error obtaining connection to first Domain Controller." + e.getMessage(), e);
+//                log.info("Trying to connect with other Domain Controllers");
 
                 for (Integer integer : dcMap.keySet()) {
                     try {
@@ -348,8 +348,8 @@ public class LDAPConnectionContext {
                         throw e2;
                     } catch (NamingException e1) {
                         if (integer == (dcMap.lastKey())) {
-                            log.error("Error obtaining connection for all " + integer + " Domain Controllers."
-                                    + e1.getMessage(), e1);
+//                            log.error("Error obtaining connection for all " + integer + " Domain Controllers."
+//                                    + e1.getMessage(), e1);
                             throw new UserStoreException("Error obtaining connection. " + e1.getMessage(), e1);
                         }
                     }
