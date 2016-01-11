@@ -17,9 +17,9 @@
  */
 package org.wso2.carbon.user.core.ldap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.Properties;
 import org.wso2.carbon.user.api.Property;
 import org.wso2.carbon.user.api.RealmConfiguration;
@@ -58,7 +58,7 @@ import java.util.StringTokenizer;
  */
 public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManager {
 
-    private static Log logger = LogFactory.getLog(ActiveDirectoryUserStoreManager.class);
+//    private static Log logger = LogFactory.getLog(ActiveDirectoryUserStoreManager.class);
     private boolean isADLDSRole = false;
     private boolean isSSLConnection = false;
     private String userAccountControl = "512";
@@ -157,7 +157,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
 
 			/* reset the password and enable the account */
             if (!isSSLConnection) {
-                logger.warn("Unsecured connection is being used. Enabling user account operation will fail");
+//                logger.warn("Unsecured connection is being used. Enabling user account operation will fail");
             }
 
             ModificationItem[] mods = new ModificationItem[2];
@@ -226,10 +226,10 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
 
                 claim = new BasicAttribute(attributeName);
                 claim.add(claims.get(entry.getKey()));
-                if (logger.isDebugEnabled()) {
-                    logger.debug("AttributeName: " + attributeName + " AttributeValue: " +
-                            claims.get(entry.getKey()));
-                }
+//                if (logger.isDebugEnabled()) {
+//                    logger.debug("AttributeName: " + attributeName + " AttributeValue: " +
+//                            claims.get(entry.getKey()));
+//                }
                 basicAttributes.put(claim);
             }
         }
@@ -242,7 +242,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
             throws UserStoreException {
 
         if (!isSSLConnection) {
-            logger.warn("Unsecured connection is being used. Password operations will fail");
+//            logger.warn("Unsecured connection is being used. Password operations will fail");
         }
 
         DirContext dirContext = this.connectionSource.getContext();
@@ -303,9 +303,9 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
 
         } catch (NamingException e) {
             String error = "Can not access the directory service for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(error, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(error, e);
+//            }
             throw new UserStoreException(error, e);
         } finally {
             JNDIUtil.closeNamingEnumeration(searchResults);
@@ -319,7 +319,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
     public void doUpdateCredentialByAdmin(String userName, Object newCredential)
             throws UserStoreException {
         if (!isSSLConnection) {
-            logger.warn("Unsecured connection is being used. Password operations will fail");
+//            logger.warn("Unsecured connection is being used. Password operations will fail");
         }
 
         DirContext dirContext = this.connectionSource.getContext();
@@ -370,9 +370,9 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
 
         } catch (NamingException e) {
             String error = "Can not access the directory service for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(error, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(error, e);
+//            }
             throw new UserStoreException(error, e);
         } finally {
             JNDIUtil.closeNamingEnumeration(searchResults);
@@ -388,7 +388,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
             throws UserStoreException {
         super.doUpdateCredentialsValidityChecks(userName, newCredential);
         if (!isSSLConnection) {
-            logger.warn("Unsecured connection is being used. Password operations will fail");
+//            logger.warn("Unsecured connection is being used. Password operations will fail");
         }
     }
 
@@ -421,7 +421,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         if (array[0].equals("ldaps")) {
             this.isSSLConnection = true;
         } else {
-            logger.warn("Connection to the Active Directory is not secure. Passowrd involved operations such as update credentials and adduser operations will fail");
+//            logger.warn("Connection to the Active Directory is not secure. Passowrd involved operations such as update credentials and adduser operations will fail");
         }
     }
 
@@ -435,7 +435,7 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         try {
             encodedPwd = newQuotedPassword.getBytes("UTF-16LE");
         } catch (UnsupportedEncodingException e) {
-            logger.error("Error while encoding the given password", e);
+//            logger.error("Error while encoding the given password", e);
         }
         return encodedPwd;
     }
@@ -460,7 +460,8 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         String userSearchFilter = realmConfig
                 .getUserStoreProperty(LDAPConstants.USER_NAME_SEARCH_FILTER);
         // if user name contains domain name, remove domain name
-        String[] userNames = userName.split(CarbonConstants.DOMAIN_SEPARATOR);
+        //String[] userNames = userName.split(CarbonConstants.DOMAIN_SEPARATOR);
+        String[] userNames = userName.split("");
         if (userNames.length > 1) {
             userName = userNames[1];
         }
@@ -485,9 +486,9 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
 
         } catch (NamingException e) {
             String errorMessage = "Results could not be retrieved from the directory context for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             JNDIUtil.closeNamingEnumeration(returnedResultList);
@@ -605,9 +606,9 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
             returnedUserEntry = returnedResultList.next().getName();
         } catch (NamingException e) {
             String errorMessage = "Results could not be retrieved from the directory context for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             JNDIUtil.closeNamingEnumeration(returnedResultList);
@@ -682,35 +683,35 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         if (e instanceof InvalidAttributeValueException) {
             String errorMessage = "One or more attribute values provided are incompatible for user : " + userName
                                   + "Please check and try again.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } else if (e instanceof InvalidAttributeIdentifierException) {
             String errorMessage = "One or more attributes you are trying to add/update are not "
                                   + "supported by underlying LDAP for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } else if (e instanceof NoSuchAttributeException) {
             String errorMessage = "One or more attributes you are trying to add/update are not "
                                   + "supported by underlying LDAP for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } else if (e instanceof NamingException) {
             String errorMessage = "Profile information could not be updated in LDAP user store for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } else if (e instanceof org.wso2.carbon.user.api.UserStoreException) {
             String errorMessage = "Error in obtaining claim mapping for user : " + userName;
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
     }
@@ -729,10 +730,10 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         if (replaceEscapeCharactersAtUserLoginString != null) {
             replaceEscapeCharacters = Boolean
                     .parseBoolean(replaceEscapeCharactersAtUserLoginString);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Replace escape characters configured to: "
-                        + replaceEscapeCharactersAtUserLoginString);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Replace escape characters configured to: "
+//                        + replaceEscapeCharactersAtUserLoginString);
+//            }
         }
         //TODO: implement character escaping for *
 
@@ -780,10 +781,10 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         if (replaceEscapeCharactersAtUserLoginString != null) {
             replaceEscapeCharacters = Boolean
                     .parseBoolean(replaceEscapeCharactersAtUserLoginString);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Replace escape characters configured to: "
-                        + replaceEscapeCharactersAtUserLoginString);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Replace escape characters configured to: "
+//                        + replaceEscapeCharactersAtUserLoginString);
+//            }
         }
 
         if(replaceEscapeCharacters) {
@@ -822,9 +823,9 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
             if ((text.length() > 1) && (text.charAt(text.length() - 1) == ' ')) {
                 sb.insert(sb.length() - 1, '\\'); // add the trailing backslash if needed
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("value after escaping special characters in " + text + " : " + sb.toString());
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("value after escaping special characters in " + text + " : " + sb.toString());
+//            }
             return sb.toString();
         } else {
             return text;
@@ -847,10 +848,10 @@ public class ActiveDirectoryUserStoreManager extends ReadWriteLDAPUserStoreManag
         if (replaceEscapeCharactersAtUserLoginString != null) {
             replaceEscapeCharacters = Boolean
                     .parseBoolean(replaceEscapeCharactersAtUserLoginString);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Replace escape characters configured to: "
-                        + replaceEscapeCharactersAtUserLoginString);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Replace escape characters configured to: "
+//                        + replaceEscapeCharactersAtUserLoginString);
+//            }
         }
         if (replaceEscapeCharacters) {
             return dn.replace("\\\\", "\\\\\\").replace("\\\"", "\\\\\"");
