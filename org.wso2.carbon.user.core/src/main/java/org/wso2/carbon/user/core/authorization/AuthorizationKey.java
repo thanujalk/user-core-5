@@ -16,7 +16,7 @@
 
 package org.wso2.carbon.user.core.authorization;
 
-import org.wso2.carbon.base.MultitenantConstants;
+//import org.wso2.carbon.base.MultitenantConstants;
 
 import java.io.Serializable;
 
@@ -97,9 +97,11 @@ public class AuthorizationKey implements Serializable {
     private int getHashCodeForAttributes(String severId, int tenantId, String userName,
                                          String resourceId, String action) {
 
-        if ((tenantId != MultitenantConstants.INVALID_TENANT_ID) && userName != null &&
+        //if ((tenantId != MultitenantConstants.INVALID_TENANT_ID) && userName != null &&
+        if ((tenantId != -1) && userName != null &&
                 severId != null) {
-            if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
+//            if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
+            if (tenantId == -1) {
                 tenantId = 0;
             }
             return tenantId + userName.toLowerCase().hashCode() * 5 + severId.hashCode() * 7 +
