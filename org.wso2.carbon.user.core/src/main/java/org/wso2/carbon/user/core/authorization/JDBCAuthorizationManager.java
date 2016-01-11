@@ -16,9 +16,9 @@
 
 package org.wso2.carbon.user.core.authorization;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.AuthorizationManager;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -53,8 +53,8 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
     /**
      * The root node of the tree
      */
-    private static Log log = LogFactory.getLog(JDBCAuthorizationManager.class);
-    private static boolean debug = log.isDebugEnabled();
+//    private static Log log = LogFactory.getLog(JDBCAuthorizationManager.class);
+//    private static boolean debug = log.isDebugEnabled();
     private final String GET_ALL_ROLES_OF_USER_ENABLED = "GetAllRolesOfUserEnabled";
     private DataSource dataSource = null;
     private PermissionTree permissionTree = null;
@@ -107,10 +107,10 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         this.realmConfig = realmConfig;
         this.userRealm = realm;
         this.tenantId = tenantId;
-        if (log.isDebugEnabled()) {
-            log.debug("The jdbcDataSource being used by JDBCAuthorizationManager :: "
-                    + dataSource.hashCode());
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("The jdbcDataSource being used by JDBCAuthorizationManager :: "
+//                    + dataSource.hashCode());
+//        }
         this.populatePermissionTreeFromDB();
         this.addInitialData();
     }
@@ -130,11 +130,11 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
                 .toComponenets(resourceId));
 
 
-        if (log.isDebugEnabled()) {
-            if (!sr.getLastNodeAllowedAccess()) {
-                log.debug(roleName + " role is not Authorized to perform " + action + " on " + resourceId);
-            }
-        }
+//        if (log.isDebugEnabled()) {
+//            if (!sr.getLastNodeAllowedAccess()) {
+//                log.debug(roleName + " role is not Authorized to perform " + action + " on " + resourceId);
+//            }
+//        }
 
         return sr.getLastNodeAllowedAccess();
     }
@@ -142,9 +142,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
     public boolean isUserAuthorized(String userName, String resourceId, String action)
             throws UserStoreException {
 
-        if (CarbonConstants.REGISTRY_SYSTEM_USERNAME.equals(userName)) {
-            return true;
-        }
+//        if (CarbonConstants.REGISTRY_SYSTEM_USERNAME.equals(userName)) {
+//            return true;
+//        }
 
         for (AuthorizationManagerListener listener : UMListenerServiceComponent
                 .getAuthorizationManagerListeners()) {
@@ -156,13 +156,13 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         try {
             Boolean userAllowed = authorizationCache.isUserAuthorized(cacheIdentifier,
                     tenantId, userName, resourceId, action);
-            if (log.isDebugEnabled()) {
-                if (userAllowed != null && !userAllowed) {
-                    log.debug("Authorization cache hit. " +
-                            userName + " user is not Authorized to perform " + action +
-                            " on " + resourceId);
-                }
-            }
+//            if (log.isDebugEnabled()) {
+//                if (userAllowed != null && !userAllowed) {
+//                    log.debug("Authorization cache hit. " +
+//                            userName + " user is not Authorized to perform " + action +
+//                            " on " + resourceId);
+//                }
+//            }
 
             if (userAllowed != null) {
                 return userAllowed;
@@ -172,10 +172,10 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             // Entry not found in the cache. Just continue.
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Authorization cache miss for username : " + userName + " resource " + resourceId
-                    + " action : " + action);
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("Authorization cache miss for username : " + userName + " resource " + resourceId
+//                    + " action : " + action);
+//        }
 
         permissionTree.updatePermissionTree();
 
@@ -196,21 +196,21 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
 
 
         if (allowedRoles != null && allowedRoles.length > 0) {
-            if (log.isDebugEnabled()) {
-                log.debug("Roles which have permission for resource : " + resourceId + " action : " + action);
-                for (String allowedRole : allowedRoles) {
-                    log.debug("Role :  " + allowedRole);
-                }
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Roles which have permission for resource : " + resourceId + " action : " + action);
+//                for (String allowedRole : allowedRoles) {
+//                    log.debug("Role :  " + allowedRole);
+//                }
+//            }
 
             if (verifyByRetrievingAllUserRoles) {
                 String[] roles = null;
                 try {
                     roles = userRealm.getUserStoreManager().getRoleListOfUser(userName);
                 } catch (UserStoreException e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Error getting role list of user : " + userName, e);
-                    }
+//                    if (log.isDebugEnabled()) {
+//                        log.debug("Error getting role list of user : " + userName, e);
+//                    }
                 }
 
                 if (roles == null || roles.length == 0) {
@@ -228,47 +228,47 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
                     }
                 }
 
-                if (log.isDebugEnabled()) {
-                    log.debug(userName + " user has permitted resource :  " + resourceId + ", action :" + action);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(userName + " user has permitted resource :  " + resourceId + ", action :" + action);
+//                }
 
             } else {
                 AbstractUserStoreManager manager = (AbstractUserStoreManager) userRealm.getUserStoreManager();
                 for (String role : allowedRoles) {
                     try {
                         if (manager.isUserInRole(userName, role)) {
-                            if (log.isDebugEnabled()) {
-                                log.debug(userName + " user is in role :  " + role);
-                            }
+//                            if (log.isDebugEnabled()) {
+//                                log.debug(userName + " user is in role :  " + role);
+//                            }
                             userAllowed = true;
                             break;
                         } else {
-                            if (log.isDebugEnabled()) {
-                                log.debug(userName + " user is not in role :  " + role);
-                            }
+//                            if (log.isDebugEnabled()) {
+//                                log.debug(userName + " user is not in role :  " + role);
+//                            }
                         }
                     } catch (UserStoreException e) {
-                        if (log.isDebugEnabled()) {
-                            log.debug(userName + " user is not in role :  " + role, e);
-                        }
+//                        if (log.isDebugEnabled()) {
+//                            log.debug(userName + " user is not in role :  " + role, e);
+//                        }
                     }
                 }
             }
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("No roles have permission for resource : " + resourceId + " action : " + action);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("No roles have permission for resource : " + resourceId + " action : " + action);
+//            }
         }
 
         //need to add the authorization decision taken by role based permission
         authorizationCache.addToCache(cacheIdentifier, this.tenantId, userName, resourceId, action,
                 userAllowed);
 
-        if (log.isDebugEnabled()) {
-            if (!userAllowed) {
-                log.debug(userName + " user is not Authorized to perform " + action + " on " + resourceId);
-            }
-        }
+//        if (log.isDebugEnabled()) {
+//            if (!userAllowed) {
+//                log.debug(userName + " user is not Authorized to perform " + action + " on " + resourceId);
+//            }
+//        }
 
         return userAllowed;
     }
@@ -284,13 +284,13 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
                         permission,
                         PermissionTreeUtil.toComponenets(resourceId));
 
-        if (debug) {
-            log.debug("Allowed roles for the ResourceID: " + resourceId + " Action: " + action);
-            String[] roles = sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
-            for (String role : roles) {
-                log.debug("role: " + role);
-            }
-        }
+//        if (debug) {
+//            log.debug("Allowed roles for the ResourceID: " + resourceId + " Action: " + action);
+//            String[] roles = sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
+//            for (String role : roles) {
+//                log.debug("role: " + role);
+//            }
+//        }
 
         return sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
     }
@@ -306,13 +306,13 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
                         permission,
                         PermissionTreeUtil.toComponenets(resourceId));
 
-        if (debug) {
-            log.debug("Explicitly allowed roles for the ResourceID: " + resourceId + " Action: " + action);
-            String[] roles = sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
-            for (String role : roles) {
-                log.debug("role: " + role);
-            }
-        }
+//        if (debug) {
+//            log.debug("Explicitly allowed roles for the ResourceID: " + resourceId + " Action: " + action);
+//            String[] roles = sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
+//            for (String role : roles) {
+//                log.debug("role: " + role);
+//            }
+//        }
 
         return sr.getAllowedEntities().toArray(new String[sr.getAllowedEntities().size()]);
     }
@@ -361,28 +361,28 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             List<String> resourceIds = getUIPermissionId();
             if (resourceIds != null) {
                 for (String resourceId : resourceIds) {
-                    if (isUserAuthorized(userName, resourceId, CarbonConstants.UI_PERMISSION_ACTION)) {
-                        if (permissionRootPath == null) {
-                            lstPermissions.add(resourceId);
-                        } else {
-                            if (resourceId.contains(permissionRootPath)) {
-                                lstPermissions.add(resourceId);
-                            }
-                        }
-                    }//authorization check up
+//                    if (isUserAuthorized(userName, resourceId, CarbonConstants.UI_PERMISSION_ACTION)) {
+//                        if (permissionRootPath == null) {
+//                            lstPermissions.add(resourceId);
+//                        } else {
+//                            if (resourceId.contains(permissionRootPath)) {
+//                                lstPermissions.add(resourceId);
+//                            }
+//                        }
+//                    }//authorization check up
                 }//loop over resource list
             }//resource ID checkup
 
             String[] permissions = lstPermissions.toArray(new String[lstPermissions.size()]);
             String[] optimizedList = UserCoreUtil.optimizePermissions(permissions);
 
-            if (debug) {
-                log.debug("Allowed UI Resources for User: " + userName + " in permissionRootPath: " +
-                        permissionRootPath);
-                for (String resource : optimizedList) {
-                    log.debug("Resource: " + resource);
-                }
-            }
+//            if (debug) {
+//                log.debug("Allowed UI Resources for User: " + userName + " in permissionRootPath: " +
+//                        permissionRootPath);
+//                for (String resource : optimizedList) {
+//                    log.debug("Resource: " + resource);
+//                }
+//            }
 
             return optimizedList;
         }
@@ -399,7 +399,7 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         }
 
         if (resourceId == null || action == null) {
-            log.error("Invalid data provided at authorization code");
+//            log.error("Invalid data provided at authorization code");
             throw new UserStoreException("Invalid data provided");
         }
         addAuthorizationForRole(roleName, resourceId, action, UserCoreConstants.ALLOW, true);
@@ -416,7 +416,7 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         }
 
         if (resourceId == null || action == null) {
-            log.error("Invalid data provided at authorization code");
+//            log.error("Invalid data provided at authorization code");
             throw new UserStoreException("Invalid data provided");
         }
         addAuthorizationForRole(roleName, resourceId, action, UserCoreConstants.DENY, true);
@@ -433,7 +433,7 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         }
 
         if (resourceId == null || action == null) {
-            log.error("Invalid data provided at authorization code");
+//            log.error("Invalid data provided at authorization code");
             throw new UserStoreException("Invalid data provided");
         }
         addAuthorizationForUser(userName, resourceId, action, UserCoreConstants.ALLOW, true);
@@ -450,7 +450,7 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         }
 
         if (resourceId == null || action == null) {
-            log.error("Invalid data provided at authorization code");
+//            log.error("Invalid data provided at authorization code");
             throw new UserStoreException("Invalid data provided");
         }
 
@@ -486,9 +486,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         } catch (SQLException e) {
             String errorMessage =
                     "Error occurred while clearing resource authorizations for resource id : " + resourceId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection);
@@ -524,9 +524,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String errorMessage =
                     "Error occurred while clearing role authorizations for role : " + roleName + " & resource id : " +
                     resourceId + " & action : " + action;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection);
@@ -562,9 +562,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String errorMessage =
                     "Error occurred while clearing role authorizations for user : " + userName + " & resource id : " +
                     resourceId + " & action : " + action;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -602,9 +602,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String errorMessage =
                     "Error occurred while clearing role action on all resources for role : " + roleName +
                     " & action : " + action;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -640,9 +640,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         } catch (SQLException e) {
             String errorMessage =
                     "Error occurred while clearing role authorizations for role : " + roleName;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -671,9 +671,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         } catch (SQLException e) {
             String errorMessage =
                     "Error occurred while clearing user authorizations for user : " + userName;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -716,9 +716,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String errorMessage =
                     "Error occurred while resetting permission on update role : " + roleName + " & to new role : " +
                     newRoleName;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -799,11 +799,11 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
 
             if (!isRolePermissionExisting) {
 
-                if (log.isDebugEnabled()) {
-                    log.debug("Adding permission Id: " + permissionId + " to the role: "
-                            + UserCoreUtil.removeDomainFromName(roleName) + " of tenant: " + tenantId
-                            + " of domain: " + domain + " to resource: " + resourceId);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Adding permission Id: " + permissionId + " to the role: "
+//                            + UserCoreUtil.removeDomainFromName(roleName) + " of tenant: " + tenantId
+//                            + " of domain: " + domain + " to resource: " + resourceId);
+//                }
 
                 DatabaseUtil.updateDatabase(dbConnection, DBConstants.ADD_ROLE_PERMISSION_SQL, permissionId,
                         UserCoreUtil.removeDomainFromName(roleName), allow, tenantId, tenantId,
@@ -831,16 +831,16 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             } catch (SQLException e1) {
                 throw new UserStoreException("Error in connection rollback ", e1);
             }
-            if (log.isDebugEnabled()) {
-                log.debug("Error! " + e.getMessage(), e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Error! " + e.getMessage(), e);
+//            }
             throw new UserStoreException("Error! " + e.getMessage(), e);
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
-                    log.error("Closing result set failed when adding role permission", e);
+//                    log.error("Closing result set failed when adding role permission", e);
                 }
             }
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -890,11 +890,11 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
 
             if (!isUserPermissionExisting) {
 
-                if (log.isDebugEnabled()) {
-                    log.debug("Adding permission Id: " + permissionId + " to the user: "
-                            + userName + " of tenant: " + tenantId
-                            + " to resource: " + resourceId);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Adding permission Id: " + permissionId + " to the user: "
+//                            + userName + " of tenant: " + tenantId
+//                            + " to resource: " + resourceId);
+//                }
                 DatabaseUtil.updateDatabase(dbConnection, DBConstants.ADD_USER_PERMISSION_SQL,
                         permissionId, userName, allow, tenantId);
             }
@@ -921,16 +921,16 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             } catch (SQLException e1) {
                 throw new UserStoreException("Error in connection rollback ", e1);
             }
-            if (log.isDebugEnabled()) {
-                log.debug("Error! " + e.getMessage(), e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Error! " + e.getMessage(), e);
+//            }
             throw new UserStoreException("Error! " + e.getMessage(), e);
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
-                    log.error("Closing result set failed when adding user permission", e);
+//                    log.error("Closing result set failed when adding user permission", e);
                 }
             }
             DatabaseUtil.closeAllConnections(dbConnection, prepStmt);
@@ -946,7 +946,7 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
         try {
             dbConnection = getDBConnection();
             prepStmt = dbConnection.prepareStatement(DBConstants.GET_PERMISSION_SQL);
-            prepStmt.setString(1, CarbonConstants.UI_PERMISSION_ACTION);
+//            prepStmt.setString(1, CarbonConstants.UI_PERMISSION_ACTION);
             prepStmt.setInt(2, tenantId);
 
             rs = prepStmt.executeQuery();
@@ -958,9 +958,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             return resourceIds;
         } catch (SQLException e) {
             String errorMessage = "Error occurred while getting UI permission ID";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(dbConnection, rs, prepStmt);
@@ -988,9 +988,9 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String errorMessage =
                     "Error occurred while getting UI permission ID for resource id : " + resourceId + " & action : " +
                     action;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, rs, prepStmt);
@@ -1006,17 +1006,17 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             prepStmt.setString(2, action);
             prepStmt.setInt(3, tenantId);
             int count = prepStmt.executeUpdate();
-            if (log.isDebugEnabled()) {
-                log.debug("Executed query is " + DBConstants.ADD_PERMISSION_SQL
-                        + " and number of updated rows :: " + count);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Executed query is " + DBConstants.ADD_PERMISSION_SQL
+//                        + " and number of updated rows :: " + count);
+//            }
         } catch (SQLException e) {
             String errorMessage =
                     "Error occurred while adding UI permission ID for resource id : " + resourceId + " & action : " +
                     action;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         } finally {
             DatabaseUtil.closeAllConnections(null, prepStmt);
@@ -1053,11 +1053,11 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String everyoneRole = realmConfig.getEveryOneRoleName();
             String[] resourceIds = mgtPermissions.split(",");
             for (String resourceId : resourceIds) {
-                if (!this.isRoleAuthorized(everyoneRole, resourceId,
-                        CarbonConstants.UI_PERMISSION_ACTION)) {
-                    this.authorizeRole(everyoneRole, resourceId,
-                            CarbonConstants.UI_PERMISSION_ACTION);
-                }
+//                if (!this.isRoleAuthorized(everyoneRole, resourceId,
+//                        CarbonConstants.UI_PERMISSION_ACTION)) {
+//                    this.authorizeRole(everyoneRole, resourceId,
+//                            CarbonConstants.UI_PERMISSION_ACTION);
+//                }
             }
         }
 
@@ -1067,37 +1067,36 @@ public class JDBCAuthorizationManager implements AuthorizationManager {
             String[] resourceIds = mgtPermissions.split(",");
             String adminRole = realmConfig.getAdminRoleName();
             for (String resourceId : resourceIds) {
-                if (!this.isRoleAuthorized(adminRole, resourceId,
-                        CarbonConstants.UI_PERMISSION_ACTION)) {
-                    /* check whether admin role created in primary user store or as a hybrid role.
-                     * if primary user store, & if not read only &/or if read ldap groups false,
-                     * it is a hybrid role.
-                     */
-                    // as internal roles are created, role name must be appended with internal domain name
-                    if (userRealm.getUserStoreManager().isReadOnly()) {
-                        String readLDAPGroups = realmConfig.getUserStoreProperties().get(
-                                LDAPConstants.READ_LDAP_GROUPS);
-                        if (readLDAPGroups != null) {
-                            if (!(Boolean.parseBoolean(readLDAPGroups))) {
-                                this.authorizeRole(UserCoreConstants.INTERNAL_DOMAIN +
-                                                CarbonConstants.DOMAIN_SEPARATOR +
-                                                UserCoreUtil.removeDomainFromName(adminRole),
-                                        resourceId, CarbonConstants.UI_PERMISSION_ACTION);
-                                return;
-                            }
-                        } else {
-                            this.authorizeRole(UserCoreConstants.INTERNAL_DOMAIN +
-                                            CarbonConstants.DOMAIN_SEPARATOR +
-                                            UserCoreUtil.removeDomainFromName(adminRole),
-                                    resourceId, CarbonConstants.UI_PERMISSION_ACTION);
-                            return;
-                        }
-                    }
-                    //if role is in external primary user store, prefix admin role with domain name
-                    adminRole = UserCoreUtil.addDomainToName(adminRole, realmConfig.getUserStoreProperty(
-                            UserCoreConstants.RealmConfig.PROPERTY_DOMAIN_NAME));
-                    this.authorizeRole(adminRole, resourceId, CarbonConstants.UI_PERMISSION_ACTION);
-                }
+//                if (!this.isRoleAuthorized(adminRole, resourceId, CarbonConstants.UI_PERMISSION_ACTION)) {
+//                    /* check whether admin role created in primary user store or as a hybrid role.
+//                     * if primary user store, & if not read only &/or if read ldap groups false,
+//                     * it is a hybrid role.
+//                     */
+//                    // as internal roles are created, role name must be appended with internal domain name
+//                    if (userRealm.getUserStoreManager().isReadOnly()) {
+//                        String readLDAPGroups = realmConfig.getUserStoreProperties().get(
+//                                LDAPConstants.READ_LDAP_GROUPS);
+//                        if (readLDAPGroups != null) {
+//                            if (!(Boolean.parseBoolean(readLDAPGroups))) {
+//                                this.authorizeRole(UserCoreConstants.INTERNAL_DOMAIN +
+//                                                CarbonConstants.DOMAIN_SEPARATOR +
+//                                                UserCoreUtil.removeDomainFromName(adminRole),
+//                                        resourceId, CarbonConstants.UI_PERMISSION_ACTION);
+//                                return;
+//                            }
+//                        } else {
+//                            this.authorizeRole(UserCoreConstants.INTERNAL_DOMAIN +
+//                                            CarbonConstants.DOMAIN_SEPARATOR +
+//                                            UserCoreUtil.removeDomainFromName(adminRole),
+//                                    resourceId, CarbonConstants.UI_PERMISSION_ACTION);
+//                            return;
+//                        }
+//                    }
+//                    //if role is in external primary user store, prefix admin role with domain name
+//                    adminRole = UserCoreUtil.addDomainToName(adminRole, realmConfig.getUserStoreProperty(
+//                            UserCoreConstants.RealmConfig.PROPERTY_DOMAIN_NAME));
+//                    this.authorizeRole(adminRole, resourceId, CarbonConstants.UI_PERMISSION_ACTION);
+//                }
             }
         }
     }
