@@ -18,12 +18,12 @@
  */
 package org.wso2.carbon.user.core.common;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
-import org.wso2.carbon.CarbonException;
+//import org.wso2.carbon.CarbonException;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.Tenant;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
@@ -38,9 +38,9 @@ import org.wso2.carbon.user.core.profile.builder.ProfileConfigurationBuilder;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.user.core.tenant.TenantManager;
 import org.wso2.carbon.user.core.util.DatabaseUtil;
-import org.wso2.carbon.utils.CarbonUtils;
-import org.wso2.carbon.utils.dbcreator.DatabaseCreator;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+//import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.dbcreator.DatabaseCreator;
+//import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.sql.DataSource;
 import javax.xml.namespace.QName;
@@ -59,7 +59,7 @@ import java.util.Map;
 
 public class DefaultRealmService implements RealmService {
 
-    private static final Log log = LogFactory.getLog(DefaultRealmService.class);
+//    private static final Log log = LogFactory.getLog(DefaultRealmService.class);
     private static final String PRIMARY_TENANT_REALM = "primary";
     private static final String DB_CHECK_SQL = "select * from UM_USER";
     //to track whether this is the first time initialization of the pack.
@@ -69,7 +69,7 @@ public class DefaultRealmService implements RealmService {
     private RealmConfiguration bootstrapRealmConfig;
     private TenantMgtConfiguration tenantMgtConfiguration;
     private DataSource dataSource;
-    private OMElement parentElement;
+//    private OMElement parentElement;
     private TenantManager tenantManager;
     private UserRealm bootstrapRealm;
     private MultiTenantRealmConfigBuilder multiTenantBuilder = null;
@@ -96,7 +96,7 @@ public class DefaultRealmService implements RealmService {
         this.tenantManager.initializeExistingPartitions();
         // initializing the bootstrapRealm
         this.bc = bc;
-        bootstrapRealm = initializeRealm(bootstrapRealmConfig, MultitenantConstants.SUPER_TENANT_ID);
+//        bootstrapRealm = initializeRealm(bootstrapRealmConfig, MultitenantConstants.SUPER_TENANT_ID);
         Dictionary<String, String> dictionary = new Hashtable<String, String>();
         dictionary.put(UserCoreConstants.REALM_GENRE, UserCoreConstants.DELEGATING_REALM);
         if (bc != null) {
@@ -123,16 +123,16 @@ public class DefaultRealmService implements RealmService {
         this.tenantMgtConfiguration = buildTenantMgtConfig(bc,
                 this.bootstrapRealmConfig.getUserStoreProperty(UserCoreConstants.TenantMgtConfig.LOCAL_NAME_TENANT_MANAGER));
         this.tenantManager = tenantManager;
-        bootstrapRealm = initializeRealm(bootstrapRealmConfig, MultitenantConstants.SUPER_TENANT_ID);
+//        bootstrapRealm = initializeRealm(bootstrapRealmConfig, MultitenantConstants.SUPER_TENANT_ID);
     }
 
     private RealmConfiguration buildBootStrapRealmConfig() throws UserStoreException {
-        this.parentElement = getConfigurationElement();
-        OMElement realmElement = parentElement.getFirstChildWithName(new QName(
-                UserCoreConstants.RealmConfig.LOCAL_NAME_REALM));
-        RealmConfigXMLProcessor rmProcessor = new RealmConfigXMLProcessor();
-        rmProcessor.setSecretResolver(parentElement);
-        return rmProcessor.buildRealmConfiguration(realmElement);
+//        this.parentElement = getConfigurationElement();
+//        OMElement realmElement = parentElement.getFirstChildWithName(new QName(
+//                UserCoreConstants.RealmConfig.LOCAL_NAME_REALM));
+//        RealmConfigXMLProcessor rmProcessor = new RealmConfigXMLProcessor();
+//        rmProcessor.setSecretResolver(parentElement);
+        return null;
     }
 
     private TenantMgtConfiguration buildTenantMgtConfig(BundleContext bc, String tenantManagerClass)
@@ -160,7 +160,7 @@ public class DefaultRealmService implements RealmService {
 
     private org.wso2.carbon.user.api.UserRealm getTenantUserRealmInternal(int tenantId)
             throws org.wso2.carbon.user.api.UserStoreException {
-        if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
+        if (tenantId == -1234) {
             return bootstrapRealm;
         }
 
@@ -187,9 +187,9 @@ public class DefaultRealmService implements RealmService {
 
         } catch (Exception e) {
             String errorMessage = "Error occurred while getting tenant user realm for tenant id : " + tenantId;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
         return userRealm;
@@ -223,7 +223,7 @@ public class DefaultRealmService implements RealmService {
     private UserRealm getUserRealmInternal(RealmConfiguration tenantRealmConfig) throws UserStoreException {
         UserRealm userRealm = null;
         int tenantId = tenantRealmConfig.getTenantId();
-        if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
+        if (tenantId == -1234) {
             return bootstrapRealm;
         }
         userRealm = (UserRealm) realmCache.getUserRealm(tenantId, PRIMARY_TENANT_REALM);
@@ -263,12 +263,12 @@ public class DefaultRealmService implements RealmService {
         } catch (Exception e) {
             if (!realmConfig.isPrimary()) {
                 String msg = "Cannot initialize the realm.";
-                log.warn(msg, e);
+//                log.warn(msg, e);
             } else {
                 String msg = "Cannot initialize the realm.";
-                if (log.isDebugEnabled()) {
-                    log.debug(msg, e);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(msg, e);
+//                }
                 throw new UserStoreException(msg, e);
             }
         }
@@ -277,67 +277,67 @@ public class DefaultRealmService implements RealmService {
 
     // TODO : Move this into RealmConfigXMLProcessor
 
-    private OMElement getConfigurationElement() throws UserStoreException {
-        try {
-            String userMgt = CarbonUtils.getUserMgtXMLPath();
-            InputStream inStream = null;
-            if (userMgt != null) {
-                File userMgtXml = new File(userMgt);
-                if (!userMgtXml.exists()) {
-                    String msg = "Instance of a WSO2 User Manager has not been created. user-mgt.xml is not found.";
-                    throw new FileNotFoundException(msg);
-                }
-                inStream = new FileInputStream(userMgtXml);
-            } else {
-                inStream = this.getClass().getClassLoader()
-                        .getResourceAsStream("repository/conf/user-mgt.xml");
-                if (inStream == null) {
-                    String msg = "Instance of a WSO2 User Manager has not been created. user-mgt.xml is not found. Please set the carbon.home";
-                    throw new FileNotFoundException(msg);
-                }
-            }
-
-            StAXOMBuilder builder = new StAXOMBuilder(CarbonUtils.replaceSystemVariablesInXml(inStream));
-            return builder.getDocumentElement();
-        } catch (FileNotFoundException e) {
-            //e.getMessage() contains meaningful message
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
-            }
-            throw new UserStoreException(e.getMessage(), e);
-        } catch (XMLStreamException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
-            }
-            throw new UserStoreException(e.getMessage(), e);
-        } catch (CarbonException e) {
-            String errorMessage = "Error occurred while replacing System variables in XML";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
-            throw new UserStoreException(errorMessage, e);
-        }
-    }
+//    private OMElement getConfigurationElement() throws UserStoreException {
+//        try {
+//            String userMgt = CarbonUtils.getUserMgtXMLPath();
+//            InputStream inStream = null;
+//            if (userMgt != null) {
+//                File userMgtXml = new File(userMgt);
+//                if (!userMgtXml.exists()) {
+//                    String msg = "Instance of a WSO2 User Manager has not been created. user-mgt.xml is not found.";
+//                    throw new FileNotFoundException(msg);
+//                }
+//                inStream = new FileInputStream(userMgtXml);
+//            } else {
+//                inStream = this.getClass().getClassLoader()
+//                        .getResourceAsStream("repository/conf/user-mgt.xml");
+//                if (inStream == null) {
+//                    String msg = "Instance of a WSO2 User Manager has not been created. user-mgt.xml is not found. Please set the carbon.home";
+//                    throw new FileNotFoundException(msg);
+//                }
+//            }
+//
+//            StAXOMBuilder builder = new StAXOMBuilder(CarbonUtils.replaceSystemVariablesInXml(inStream));
+//            return builder.getDocumentElement();
+//        } catch (FileNotFoundException e) {
+//            //e.getMessage() contains meaningful message
+//            if (log.isDebugEnabled()) {
+//                log.debug(e.getMessage(), e);
+//            }
+//            throw new UserStoreException(e.getMessage(), e);
+//        } catch (XMLStreamException e) {
+//            if (log.isDebugEnabled()) {
+//                log.debug(e.getMessage(), e);
+//            }
+//            throw new UserStoreException(e.getMessage(), e);
+//        } catch (CarbonException e) {
+//            String errorMessage = "Error occurred while replacing System variables in XML";
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
+//            throw new UserStoreException(errorMessage, e);
+//        }
+//    }
 
     private void initializeDatabase(DataSource ds) throws Exception {
-        String value = System.getProperty("setup");
-        if (value != null) {
-            DatabaseCreator databaseCreator = new DatabaseCreator(ds);
-            try {
-                if (!databaseCreator.isDatabaseStructureCreated(DB_CHECK_SQL)) {
-                    databaseCreator.createRegistryDatabase();
-                } else {
-                    isFirstInitialization = false;
-                    log.info("Database already exists. Not creating a new database.");
-                }
-            } catch (Exception e) {
-                String msg = "Error in creating the database";
-                if (log.isDebugEnabled()) {
-                    log.debug(msg, e);
-                }
-                throw new Exception(msg, e);
-            }
-        }
+//        String value = System.getProperty("setup");
+//        if (value != null) {
+//            DatabaseCreator databaseCreator = new DatabaseCreator(ds);
+//            try {
+//                if (!databaseCreator.isDatabaseStructureCreated(DB_CHECK_SQL)) {
+//                    databaseCreator.createRegistryDatabase();
+//                } else {
+//                    isFirstInitialization = false;
+//                    log.info("Database already exists. Not creating a new database.");
+//                }
+//            } catch (Exception e) {
+//                String msg = "Error in creating the database";
+//                if (log.isDebugEnabled()) {
+//                    log.debug(msg, e);
+//                }
+//                throw new Exception(msg, e);
+//            }
+//        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -349,15 +349,15 @@ public class DefaultRealmService implements RealmService {
         String className = tenantMgtConfiguration.getTenantManagerClass();
         Class clazz = Class.forName(className);
 
-        Constructor constructor = clazz.getConstructor(OMElement.class, Map.class);
+//        Constructor constructor = clazz.getConstructor(OMElement.class, Map.class);
         /*put the tenantMgtConfiguration and realm configuration inside the property map that is
         passed to tenant manager constructor. These are mainly used by LDAPTenantManager*/
         properties.put(UserCoreConstants.TENANT_MGT_CONFIGURATION, tenantMgtConfiguration);
         properties.put(UserCoreConstants.REALM_CONFIGURATION, bootstrapRealmConfig);
 
         //tenant config OMElement passed to the constructor is not used anymore. Hence passing a null.
-        Object newObject = constructor.newInstance(null, properties);
-        tenantManager = (TenantManager) newObject;
+//        Object newObject = constructor.newInstance(null, properties);
+//        tenantManager = (TenantManager) newObject;
 
         return tenantManager;
     }
@@ -428,9 +428,9 @@ public class DefaultRealmService implements RealmService {
 
     private void errorEncountered(Exception e) throws UserStoreException {
         String msg = "Exception while creating multi tenant builder " + e.getMessage();
-        if (log.isDebugEnabled()) {
-            log.debug(msg, e);
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug(msg, e);
+//        }
         throw new UserStoreException(msg, e);
     }
 }
