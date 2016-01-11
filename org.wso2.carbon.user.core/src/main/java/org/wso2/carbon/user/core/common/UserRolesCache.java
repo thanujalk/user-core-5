@@ -17,24 +17,24 @@
 */
 package org.wso2.carbon.user.core.common;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.core.internal.UserStoreMgtDSComponent;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
 
-import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
+//import javax.cache.Cache;
+//import javax.cache.CacheManager;
+//import javax.cache.Caching;
 
 public class UserRolesCache {
 
     private static final String USER_ROLES_CACHE_MANAGER = "USER_ROLES_CACHE_MANAGER";
     private static final String USER_ROLES_CACHE = "USER_ROLES_CACHE";
     private static final String CASE_INSENSITIVE_USERNAME = "CaseInsensitiveUsername";
-    private static Log log = LogFactory.getLog(UserRolesCache.class);
+//    private static Log log = LogFactory.getLog(UserRolesCache.class);
     private static UserRolesCache userRolesCache = new UserRolesCache();
 
     private int timeOut = UserCoreConstants.USER_ROLE_CACHE_DEFAULT_TIME_OUT;
@@ -57,69 +57,69 @@ public class UserRolesCache {
      * Getting existing cache if the cache available, else returns a newly created cache.
      * This logic handles by javax.cache implementation
      */
-    private Cache<UserRolesCacheKey, UserRolesCacheEntry> getUserRolesCache() {
-        CacheManager cacheManager = Caching.getCacheManagerFactory().getCacheManager(USER_ROLES_CACHE_MANAGER);
-//        cacheManager.<UserRolesCacheKey, UserRolesCacheEntry>createCacheBuilder(USER_ROLES_CACHE).  //  TODO time out not working
-//                setExpiry(CacheConfiguration.ExpiryType.MODIFIED, new CacheConfiguration.Duration(TimeUnit.MINUTES, timeOut)).
-//                setStoreByValue(false);
-        return cacheManager.getCache(USER_ROLES_CACHE);
-    }
+//    private Cache<UserRolesCacheKey, UserRolesCacheEntry> getUserRolesCache() {
+//        CacheManager cacheManager = Caching.getCacheManagerFactory().getCacheManager(USER_ROLES_CACHE_MANAGER);
+////        cacheManager.<UserRolesCacheKey, UserRolesCacheEntry>createCacheBuilder(USER_ROLES_CACHE).  //  TODO time out not working
+////                setExpiry(CacheConfiguration.ExpiryType.MODIFIED, new CacheConfiguration.Duration(TimeUnit.MINUTES, timeOut)).
+////                setStoreByValue(false);
+//        return cacheManager.getCache(USER_ROLES_CACHE);
+//    }
 
     /**
      * Avoiding NullPointerException when the cache is null
      *
      * @return boolean whether given cache is null
      */
-    private boolean isCacheNull(Cache<UserRolesCacheKey, UserRolesCacheEntry> cache) {
-        if (cache == null) {
-            if (log.isDebugEnabled()) {
-                StackTraceElement[] elemets = Thread.currentThread().getStackTrace();
-                String traceString = "";
-                for (int i = 1; i < elemets.length; ++i) {
-                    traceString += elemets[i] + System.getProperty("line.separator");
-                }
-                log.debug("USER_ROLES_CACHE doesn't exist in CacheManager:\n" + traceString);
-            }
-            return true;
-        }
-        return false;
-    }
+//    private boolean isCacheNull(Cache<UserRolesCacheKey, UserRolesCacheEntry> cache) {
+//        if (cache == null) {
+//            if (log.isDebugEnabled()) {
+//                StackTraceElement[] elemets = Thread.currentThread().getStackTrace();
+//                String traceString = "";
+//                for (int i = 1; i < elemets.length; ++i) {
+//                    traceString += elemets[i] + System.getProperty("line.separator");
+//                }
+//                log.debug("USER_ROLES_CACHE doesn't exist in CacheManager:\n" + traceString);
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     //add to cache
     public void addToCache(String serverId, int tenantId, String userName, String[] userRoleList) {
 
-        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
-        //check for null
-        if (isCacheNull(cache)) {
-            return;
-        }
-        if (!isCaseSensitiveUsername(userName, tenantId)) {
-            userName = userName.toLowerCase();
-        }
-        //create cache key
-        UserRolesCacheKey userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId, userName);
-        //create cache entry
-        UserRolesCacheEntry userRolesCacheEntry = new UserRolesCacheEntry(userRoleList);
-        //add to cache
-        cache.put(userRolesCacheKey, userRolesCacheEntry);
+//        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
+//        //check for null
+//        if (isCacheNull(cache)) {
+//            return;
+//        }
+//        if (!isCaseSensitiveUsername(userName, tenantId)) {
+//            userName = userName.toLowerCase();
+//        }
+//        //create cache key
+//        UserRolesCacheKey userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId, userName);
+//        //create cache entry
+//        UserRolesCacheEntry userRolesCacheEntry = new UserRolesCacheEntry(userRoleList);
+//        //add to cache
+//        cache.put(userRolesCacheKey, userRolesCacheEntry);
 
     }
 
     //get roles list of user
     public String[] getRolesListOfUser(String serverId, int tenantId, String userName) {
 
-        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
-        //check for null
-        if (isCacheNull(cache)) {
-            return new String[0];
-        }
+//        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
+//        //check for null
+//        if (isCacheNull(cache)) {
+//            return new String[0];
+//        }
         if (!isCaseSensitiveUsername(userName, tenantId)) {
             userName = userName.toLowerCase();
         }
         //create cache key
         UserRolesCacheKey userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId, userName);
         //search cache and get cache entry
-        UserRolesCacheEntry userRolesCacheEntry = cache.get(userRolesCacheKey);
+        UserRolesCacheEntry userRolesCacheEntry =null;
 
         if (userRolesCacheEntry == null) {
             return new String[0];
@@ -135,31 +135,31 @@ public class UserRolesCache {
     // lear userRolesCache by tenantId
     public void clearCacheByTenant(int tenantId) {
 
-        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
-        cache.removeAll();
+//        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = this.getUserRolesCache();
+//        cache.removeAll();
     }
 
     // Clear userRolesCache by serverId, tenant and user name
     public void clearCacheEntry(String serverId, int tenantId, String userName) {
 
-        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = getUserRolesCache();
-        // Check for null
-        if (isCacheNull(cache)) {
-            return;
-        }
-        if (!isCaseSensitiveUsername(userName, tenantId)) {
-            userName = userName.toLowerCase();
-        }
-        UserRolesCacheKey userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId, userName);
-        if (cache.containsKey(userRolesCacheKey)) {
-            cache.remove(userRolesCacheKey);
-        }
-        // creating new key for isUserHasRole cache.
-        userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId,
-                UserCoreConstants.IS_USER_IN_ROLE_CACHE_IDENTIFIER + userName);
-        if (cache.containsKey(userRolesCacheKey)) {
-            cache.remove(userRolesCacheKey);
-        }
+//        Cache<UserRolesCacheKey, UserRolesCacheEntry> cache = getUserRolesCache();
+//        // Check for null
+//        if (isCacheNull(cache)) {
+//            return;
+//        }
+//        if (!isCaseSensitiveUsername(userName, tenantId)) {
+//            userName = userName.toLowerCase();
+//        }
+//        UserRolesCacheKey userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId, userName);
+//        if (cache.containsKey(userRolesCacheKey)) {
+//            cache.remove(userRolesCacheKey);
+//        }
+//        // creating new key for isUserHasRole cache.
+//        userRolesCacheKey = new UserRolesCacheKey(serverId, tenantId,
+//                UserCoreConstants.IS_USER_IN_ROLE_CACHE_IDENTIFIER + userName);
+//        if (cache.containsKey(userRolesCacheKey)) {
+//            cache.remove(userRolesCacheKey);
+//        }
     }
 
 
@@ -181,9 +181,9 @@ public class UserRolesCache {
                 }
 
             } catch (UserStoreException e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Error while reading user store property CaseInsensitiveUsername. Considering as false.");
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Error while reading user store property CaseInsensitiveUsername. Considering as false.");
+//                }
             }
         }
         return true;

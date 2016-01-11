@@ -17,11 +17,11 @@
  */
 package org.wso2.carbon.user.core.common;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
-import org.wso2.carbon.context.CarbonContext;
+//import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
+//import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.Permission;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -45,7 +45,7 @@ import org.wso2.carbon.user.core.profile.ProfileConfigurationManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.user.core.system.SystemUserRoleManager;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
-import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
+//import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
@@ -94,7 +94,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
     private static final String ADMIN_USER = "AdminUser";
     private static final String INVALID_PASSWORD = "PasswordInvalid";
     private static final String PROPERTY_PASSWORD_ERROR_MSG = "PasswordJavaRegExViolationErrorMsg";
-    private static Log log = LogFactory.getLog(AbstractUserStoreManager.class);
+//    private static Log log = LogFactory.getLog(AbstractUserStoreManager.class);
     protected int tenantId;
     protected DataSource dataSource = null;
     protected RealmConfiguration realmConfig = null;
@@ -137,10 +137,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             method = clazz.getDeclaredMethod(methodName, argTypes);
 
         } catch (NoSuchMethodException e) {
-            log.error("Error occurred when calling method " + methodName, e);
+//            log.error("Error occurred when calling method " + methodName, e);
             throw new UserStoreException(e);
         } catch (ClassNotFoundException e) {
-            log.error("Error occurred when calling class " + methodName, e);
+//            log.error("Error occurred when calling class " + methodName, e);
             throw new UserStoreException(e);
         }
 
@@ -159,7 +159,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
 
             } else {
                 String msg = "Error occurred while accessing Java Security Manager Privilege Block";
-                log.error(msg);
+//                log.error(msg);
                 throw new UserStoreException(msg, e);
             }
         } finally {
@@ -346,7 +346,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 userName = map.get(userNameAttribute);
             }
         }
-        log.debug("Retrieving internal roles for user name :  " + userName + " and search filter " + filter);
+//        log.debug("Retrieving internal roles for user name :  " + userName + " and search filter " + filter);
         return hybridRoleManager.getHybridRoleListOfUser(userName, filter);
     }
 
@@ -433,10 +433,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 @Override
                 public Boolean run() throws Exception {
                     if (userName == null || credential == null) {
-                        log.error("Authentication failure. Either Username or Password is null");
+//                        log.error("Authentication failure. Either Username or Password is null");
                         return false;
                     }
-                    int index = userName != null ? userName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) : -1;
+                    int index = userName != null ? userName.indexOf("") : -1;
                     boolean domainProvided = index > 0;
                     return authenticate(userName, credential, domainProvided);
                 }
@@ -506,7 +506,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                 boolean tenantActive = realmService.getTenantManager().isTenantActive(tenantId);
 
                 if (!tenantActive) {
-                    log.warn("Tenant has been deactivated. TenantID : " + tenantId);
+//                    log.warn("Tenant has been deactivated. TenantID : " + tenantId);
                     return false;
                 }
             }
@@ -523,7 +523,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             authenticated = doAuthenticate(userName, credential);
         } catch (Exception e) {
             // We can ignore and proceed. Ignore the results from this user store.
-            log.error(e);
+//            log.error(e);
             authenticated = false;
         }
 
@@ -550,11 +550,11 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             }
         }
 
-        if (log.isDebugEnabled()) {
-            if (!authenticated) {
-                log.debug("Authentication failure. Wrong username or password is provided.");
-            }
-        }
+//        if (log.isDebugEnabled()) {
+//            if (!authenticated) {
+//                log.debug("Authentication failure. Wrong username or password is provided.");
+//            }
+//        }
 
         return authenticated;
     }
@@ -736,9 +736,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         //extracting the domain from claimValue. Not introducing a new method due to carbon patch process..
         String extractedDomain = null;
         int index;
-        index = claimValue.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+        index = claimValue.indexOf("/");
         if (index > 0) {
-            String names[] = claimValue.split(CarbonConstants.DOMAIN_SEPARATOR);
+            String names[] = claimValue.split("/");
             extractedDomain = names[0].trim();
         } else {
             extractedDomain = UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME;
@@ -764,11 +764,11 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                         extractedDomain + " and claim " + claim);
             }
             if (property == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Could not find matching property for\n" +
-                            "claim :" + claim +
-                            "domain :" + extractedDomain);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Could not find matching property for\n" +
+//                            "claim :" + claim +
+//                            "domain :" + extractedDomain);
+//                }
                 return new String[0];
             }
             if (getSecondaryUserStoreManager(extractedDomain) instanceof AbstractUserStoreManager) {
@@ -783,9 +783,9 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         List<String> usersFromAllStoresList = new LinkedList<String>();
         if (this instanceof AbstractUserStoreManager) {
             AbstractUserStoreManager currentUserStoreManager = this;
-            if (log.isDebugEnabled()) {
-                log.debug("No domain name found in claim value. Searching through all user stores for possible matches");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("No domain name found in claim value. Searching through all user stores for possible matches");
+//            }
             do {
                 String currentDomain = currentUserStoreManager.getMyDomainName();
                 try {
@@ -795,18 +795,18 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                             currentDomain + " and claim " + claim);
                 }
                 if (property == null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Could not find matching property for\n" +
-                                "claim :" + claim +
-                                "domain :" + currentDomain);
-                    }
+//                    if (log.isDebugEnabled()) {
+//                        log.debug("Could not find matching property for\n" +
+//                                "claim :" + claim +
+//                                "domain :" + currentDomain);
+//                    }
                     continue; // continue look in other stores
                 }
                 String[] userArray2 = currentUserStoreManager.getUserListFromProperties(property, claimValue, profileName);
-                if (log.isDebugEnabled()) {
-                    log.debug("searching the property :" + property + "in user store" + currentDomain +
-                            "for given claim value : " + claimValue);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("searching the property :" + property + "in user store" + currentDomain +
+//                            "for given claim value : " + claimValue);
+//                }
                 String[] userWithDomainArray = UserCoreUtil.addDomainToNames(userArray2, currentDomain);
                 usersFromAllStoresList.addAll(Arrays.asList(userWithDomainArray));
             } while ((currentUserStoreManager.getSecondaryUserStoreManager() instanceof AbstractUserStoreManager) &&
@@ -1035,25 +1035,25 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             return;
         }
 
-        String loggedInUser = CarbonContext.getThreadLocalCarbonContext().getUsername();
-        if (loggedInUser != null) {
-            loggedInUser = UserCoreUtil.addDomainToName(loggedInUser, UserCoreUtil.getDomainFromThreadLocal());
-            if ((loggedInUser.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
-                loggedInUser = UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME +
-                        CarbonConstants.DOMAIN_SEPARATOR + loggedInUser;
-            }
-        }
-
-        String deletingUser = UserCoreUtil.addDomainToName(userName, getMyDomainName());
-        if ((deletingUser.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
-            deletingUser = UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME +
-                    CarbonConstants.DOMAIN_SEPARATOR + deletingUser;
-        }
-
-        if (loggedInUser != null && loggedInUser.equals(deletingUser)) {
-            log.debug("User " + loggedInUser + " tried to delete him/her self");
-            throw new UserStoreException(LOGGED_IN_USER + " Cannot delete logged in user");
-        }
+//        String loggedInUser = CarbonContext.getThreadLocalCarbonContext().getUsername();
+//        if (loggedInUser != null) {
+//            loggedInUser = UserCoreUtil.addDomainToName(loggedInUser, UserCoreUtil.getDomainFromThreadLocal());
+//            if ((loggedInUser.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
+//                loggedInUser = UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME +
+//                        CarbonConstants.DOMAIN_SEPARATOR + loggedInUser;
+//            }
+//        }
+//
+//        String deletingUser = UserCoreUtil.addDomainToName(userName, getMyDomainName());
+//        if ((deletingUser.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
+//            deletingUser = UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME +
+//                    CarbonConstants.DOMAIN_SEPARATOR + deletingUser;
+//        }
+//
+//        if (loggedInUser != null && loggedInUser.equals(deletingUser)) {
+//            log.debug("User " + loggedInUser + " tried to delete him/her self");
+//            throw new UserStoreException(LOGGED_IN_USER + " Cannot delete logged in user");
+//        }
 
         UserStore userStore = getUserStore(userName);
         if (userStore.isRecurssive()) {
@@ -1348,10 +1348,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         }
 
         // This happens only once during first startup - adding administrator user/role.
-        if (userName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) > 0) {
-            userName = userStore.getDomainFreeName();
-            roleList = UserCoreUtil.removeDomainFromNames(roleList);
-        }
+//        if (userName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) > 0) {
+//            userName = userStore.getDomainFreeName();
+//            roleList = UserCoreUtil.removeDomainFromNames(roleList);
+//        }
         if (roleList == null) {
             roleList = new String[0];
         }
@@ -1412,7 +1412,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         if (roleList != null) {
             for (String role : roleList) {
                 if (role != null && role.trim().length() > 0) {
-                    index = role.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+                    index = role.indexOf("/");
                     if (index > 0) {
                         String domain = role.substring(0, index);
                         if (UserCoreConstants.INTERNAL_DOMAIN.equalsIgnoreCase(domain)) {
@@ -1521,7 +1521,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
 
         String primaryDomain = getMyDomainName();
         if (primaryDomain != null) {
-            primaryDomain += CarbonConstants.DOMAIN_SEPARATOR;
+//            primaryDomain += CarbonConstants.DOMAIN_SEPARATOR;
         }
 
         if (deletedUsers != null && deletedUsers.length > 0) {
@@ -1640,7 +1640,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         String primaryDomain = realmConfig
                 .getUserStoreProperty(UserCoreConstants.RealmConfig.PROPERTY_DOMAIN_NAME);
         if (primaryDomain != null) {
-            primaryDomain += CarbonConstants.DOMAIN_SEPARATOR;
+//            primaryDomain += CarbonConstants.DOMAIN_SEPARATOR;
         }
 
         if (deletedRoles != null && deletedRoles.length > 0) {
@@ -1679,7 +1679,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             newRoles = new String[0];
         }
         // This happens only once during first startup - adding administrator user/role.
-        if (userName.indexOf(CarbonConstants.DOMAIN_SEPARATOR) > 0) {
+        if (userName.indexOf("/") > 0) {
             userName = userStore.getDomainFreeName();
             deletedRoles = UserCoreUtil.removeDomainFromNames(deletedRoles);
             newRoles = UserCoreUtil.removeDomainFromNames(newRoles);
@@ -1697,7 +1697,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                     throw new UserStoreException("Everyone role cannot be updated");
                 }
                 String domain = null;
-                int index1 = deleteRole.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+                int index1 = deleteRole.indexOf("/");
                 if (index1 > 0) {
                     domain = deleteRole.substring(0, index1);
                 }
@@ -1719,7 +1719,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                     throw new UserStoreException("Everyone role cannot be updated");
                 }
                 String domain = null;
-                int index2 = newRole.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+                int index2 = newRole.indexOf("/");
                 if (index2 > 0) {
                     domain = newRole.substring(0, index2);
                 }
@@ -2128,17 +2128,17 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         }
 
         // anonymous user is always assigned to  anonymous role
-        if (CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME.equalsIgnoreCase(roleName) &&
-                CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
-            return true;
-        }
-
-        if (!CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName) &&
-                realmConfig.getEveryOneRoleName().equalsIgnoreCase(roleName) &&
-                !systemUserRoleManager.isExistingSystemUser(UserCoreUtil.
-                        removeDomainFromName(userName))) {
-            return true;
-        }
+//        if (CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME.equalsIgnoreCase(roleName) &&
+//                CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
+//            return true;
+//        }
+//
+//        if (!CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName) &&
+//                realmConfig.getEveryOneRoleName().equalsIgnoreCase(roleName) &&
+//                !systemUserRoleManager.isExistingSystemUser(UserCoreUtil.
+//                        removeDomainFromName(userName))) {
+//            return true;
+//        }
 
 
         String[] roles = null;
@@ -2289,7 +2289,7 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
         }
 
         int index;
-        index = filter.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
+//        index = filter.indexOf(CarbonConstants.DOMAIN_SEPARATOR);
 
         // Check whether we have a secondary UserStoreManager setup.
         if (index > 0) {
