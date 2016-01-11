@@ -17,15 +17,15 @@
 */
 package org.wso2.carbon.user.core.config;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.axiom.om.OMElement;
+//import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.UserStoreException;
-import org.wso2.carbon.utils.CarbonUtils;
+//import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -46,7 +46,7 @@ import java.util.Map;
 public class TenantMgtXMLProcessor {
 
     private static final String TENANT_MGT_XML = "tenant-mgt.xml";
-    private static Log log = LogFactory.getLog(TenantMgtXMLProcessor.class);
+//    private static Log log = LogFactory.getLog(TenantMgtXMLProcessor.class);
     private BundleContext bundleContext;
 
     public void setBundleContext(BundleContext bundleContext) {
@@ -62,22 +62,23 @@ public class TenantMgtXMLProcessor {
     public TenantMgtConfiguration buildTenantMgtConfigFromFile(String tenantManagerClass)
             throws UserStoreException {
 
-        try {
-            OMElement tenantMgtConfigElement = getTenantMgtConfigElement();
-            return buildTenantMgtConfiguration(tenantMgtConfigElement, tenantManagerClass);
-        } catch (XMLStreamException e) {
-            String error_Message = "Error in reading tenant-mgt.xml";
-            if (log.isDebugEnabled()) {
-                log.debug(error_Message, e);
-            }
-            throw new UserStoreException(error_Message);
-        } catch (IOException e) {
-            String error_Message = "Error in reading tenant-mgt.xml file.";
-            if (log.isDebugEnabled()) {
-                log.debug(error_Message, e);
-            }
-            throw new UserStoreException(error_Message);
-        }
+//        try {
+//            OMElement tenantMgtConfigElement = getTenantMgtConfigElement();
+//            return buildTenantMgtConfiguration(tenantMgtConfigElement, tenantManagerClass);
+//        } catch (XMLStreamException e) {
+//            String error_Message = "Error in reading tenant-mgt.xml";
+//            if (log.isDebugEnabled()) {
+//                log.debug(error_Message, e);
+//            }
+//            throw new UserStoreException(error_Message);
+//        } catch (IOException e) {
+//            String error_Message = "Error in reading tenant-mgt.xml file.";
+//            if (log.isDebugEnabled()) {
+//                log.debug(error_Message, e);
+//            }
+//            throw new UserStoreException(error_Message);
+//        }
+        return null;
     }
 
     /**
@@ -87,95 +88,95 @@ public class TenantMgtXMLProcessor {
      * @return
      * @throws UserStoreException
      */
-    public TenantMgtConfiguration buildTenantMgtConfiguration(OMElement tenantMgtConfigElement, String tenantManagerClass)
-            throws UserStoreException {
-        Map<String, String> tenantMgtProperties = null;
-        TenantMgtConfiguration tenantMgtConfiguration = new TenantMgtConfiguration();
+//    public TenantMgtConfiguration buildTenantMgtConfiguration(OMElement tenantMgtConfigElement, String tenantManagerClass)
+//            throws UserStoreException {
+//        Map<String, String> tenantMgtProperties = null;
+//        TenantMgtConfiguration tenantMgtConfiguration = new TenantMgtConfiguration();
+//
+//        Iterator<OMElement> iterator = tenantMgtConfigElement.getChildrenWithName(
+//                new QName(UserCoreConstants.TenantMgtConfig.LOCAL_NAME_TENANT_MANAGER));
+//
+//        for (; iterator.hasNext(); ) {
+//            OMElement tenantManager = iterator.next();
+//
+//            if (tenantManagerClass != null && tenantManagerClass.equals(tenantManager.getAttributeValue(new QName(
+//                    UserCoreConstants.TenantMgtConfig.ATTRIBUTE_NAME_CLASS)))) {
+//
+//                tenantMgtProperties = readChildPropertyElements(tenantManager);
+//
+//                tenantMgtConfiguration.setTenantManagerClass(tenantManagerClass);
+//                tenantMgtConfiguration.setTenantStoreProperties(tenantMgtProperties);
+//
+//                return tenantMgtConfiguration;
+//            }
+//        }
+//        String errorMessage = "Error in locating TenantManager compatible with PrimaryUserStore."
+//                + " Required a TenantManager using " + tenantManagerClass + " in tenant-mgt.xml.";
+//        if (log.isDebugEnabled()) {
+//            log.debug(errorMessage);
+//        }
+//        throw new UserStoreException(errorMessage);
+//    }
 
-        Iterator<OMElement> iterator = tenantMgtConfigElement.getChildrenWithName(
-                new QName(UserCoreConstants.TenantMgtConfig.LOCAL_NAME_TENANT_MANAGER));
+//    private Map<String, String> readChildPropertyElements(OMElement parentElement) {
+//
+//        Map<String, String> tenantMgtConfigProperties = new HashMap<String, String>();
+//        Iterator ite = parentElement.getChildrenWithName(new QName(
+//                UserCoreConstants.TenantMgtConfig.LOCAL_NAME_PROPERTY));
+//        while (ite.hasNext()) {
+//            OMElement propertyElement = (OMElement) ite.next();
+//            String propertyName = propertyElement.getAttributeValue(new QName(
+//                    UserCoreConstants.TenantMgtConfig.ATTR_NAME_PROPERTY_NAME));
+//            String propertyValue = propertyElement.getText();
+//            tenantMgtConfigProperties.put(propertyName, propertyValue);
+//        }
+//        return tenantMgtConfigProperties;
+//    }
 
-        for (; iterator.hasNext(); ) {
-            OMElement tenantManager = iterator.next();
-
-            if (tenantManagerClass != null && tenantManagerClass.equals(tenantManager.getAttributeValue(new QName(
-                    UserCoreConstants.TenantMgtConfig.ATTRIBUTE_NAME_CLASS)))) {
-
-                tenantMgtProperties = readChildPropertyElements(tenantManager);
-
-                tenantMgtConfiguration.setTenantManagerClass(tenantManagerClass);
-                tenantMgtConfiguration.setTenantStoreProperties(tenantMgtProperties);
-
-                return tenantMgtConfiguration;
-            }
-        }
-        String errorMessage = "Error in locating TenantManager compatible with PrimaryUserStore."
-                + " Required a TenantManager using " + tenantManagerClass + " in tenant-mgt.xml.";
-        if (log.isDebugEnabled()) {
-            log.debug(errorMessage);
-        }
-        throw new UserStoreException(errorMessage);
-    }
-
-    private Map<String, String> readChildPropertyElements(OMElement parentElement) {
-
-        Map<String, String> tenantMgtConfigProperties = new HashMap<String, String>();
-        Iterator ite = parentElement.getChildrenWithName(new QName(
-                UserCoreConstants.TenantMgtConfig.LOCAL_NAME_PROPERTY));
-        while (ite.hasNext()) {
-            OMElement propertyElement = (OMElement) ite.next();
-            String propertyName = propertyElement.getAttributeValue(new QName(
-                    UserCoreConstants.TenantMgtConfig.ATTR_NAME_PROPERTY_NAME));
-            String propertyValue = propertyElement.getText();
-            tenantMgtConfigProperties.put(propertyName, propertyValue);
-        }
-        return tenantMgtConfigProperties;
-    }
-
-    private OMElement getTenantMgtConfigElement() throws IOException, XMLStreamException {
-        InputStream inStream = null;
-        File tenantConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), TENANT_MGT_XML);
-        if (tenantConfigXml.exists()) {
-            inStream = new FileInputStream(tenantConfigXml);
-        }
-
-        String warningMessage = "";
-        if (inStream == null) {
-            URL url;
-            if (bundleContext != null) {
-                if ((url = bundleContext.getBundle().getResource(TENANT_MGT_XML)) != null) {
-                    inStream = url.openStream();
-                } else {
-                    warningMessage = "Bundle context could not find resource "
-                            + TENANT_MGT_XML
-                            + " or user does not have sufficient permission to access the resource.";
-                }
-            } else {
-                if ((url = this.getClass().getClassLoader().getResource(TENANT_MGT_XML)) != null) {
-                    inStream = url.openStream();
-                } else {
-                    warningMessage = "Could not find resource "
-                            + TENANT_MGT_XML
-                            + " or user does not have sufficient permission to access the resource.";
-                }
-            }
-        }
-
-        if (inStream == null) {
-            String message = "Tenant configuration not found. Cause - " + warningMessage;
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new FileNotFoundException(message);
-        }
-
-        StAXOMBuilder builder = new StAXOMBuilder(inStream);
-        OMElement documentElement = builder.getDocumentElement();
-
-        if (inStream != null) {
-            inStream.close();
-        }
-
-        return documentElement;
-    }
+//    private OMElement getTenantMgtConfigElement() throws IOException, XMLStreamException {
+//        InputStream inStream = null;
+//        File tenantConfigXml = new File(CarbonUtils.getCarbonConfigDirPath(), TENANT_MGT_XML);
+//        if (tenantConfigXml.exists()) {
+//            inStream = new FileInputStream(tenantConfigXml);
+//        }
+//
+//        String warningMessage = "";
+//        if (inStream == null) {
+//            URL url;
+//            if (bundleContext != null) {
+//                if ((url = bundleContext.getBundle().getResource(TENANT_MGT_XML)) != null) {
+//                    inStream = url.openStream();
+//                } else {
+//                    warningMessage = "Bundle context could not find resource "
+//                            + TENANT_MGT_XML
+//                            + " or user does not have sufficient permission to access the resource.";
+//                }
+//            } else {
+//                if ((url = this.getClass().getClassLoader().getResource(TENANT_MGT_XML)) != null) {
+//                    inStream = url.openStream();
+//                } else {
+//                    warningMessage = "Could not find resource "
+//                            + TENANT_MGT_XML
+//                            + " or user does not have sufficient permission to access the resource.";
+//                }
+//            }
+//        }
+//
+//        if (inStream == null) {
+//            String message = "Tenant configuration not found. Cause - " + warningMessage;
+//            if (log.isDebugEnabled()) {
+//                log.debug(message);
+//            }
+//            throw new FileNotFoundException(message);
+//        }
+//
+//        StAXOMBuilder builder = new StAXOMBuilder(inStream);
+//        OMElement documentElement = builder.getDocumentElement();
+//
+//        if (inStream != null) {
+//            inStream.close();
+//        }
+//
+//        return documentElement;
+//    }
 }

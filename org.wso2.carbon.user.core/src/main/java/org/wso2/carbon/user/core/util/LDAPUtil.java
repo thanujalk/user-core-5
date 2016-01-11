@@ -1,7 +1,7 @@
 package org.wso2.carbon.user.core.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -11,7 +11,7 @@ import javax.naming.directory.SearchResult;
 
 public class LDAPUtil {
 
-    private static Log log = LogFactory.getLog(LDAPUtil.class);
+//    private static Log log = LogFactory.getLog(LDAPUtil.class);
 
     /**
      * @param ctx
@@ -36,7 +36,7 @@ public class LDAPUtil {
 
             // make sure there is not another item available, there should be only 1 match
             if (results.hasMoreElements()) {
-                log.error("Matched multiple groups for the group with SID: " + sid);
+//                log.error("Matched multiple groups for the group with SID: " + sid);
                 return null;
             } else {
                 return (String) searchResult.getAttributes().get(userAttribute).get();
