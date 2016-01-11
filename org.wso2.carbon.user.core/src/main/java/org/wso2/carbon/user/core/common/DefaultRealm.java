@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.user.core.common;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.AuthorizationManager;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class DefaultRealm implements UserRealm {
 
-    private static Log log = LogFactory.getLog(DefaultRealm.class);
+//    private static Log log = LogFactory.getLog(DefaultRealm.class);
 
     private ClaimManager claimMan = null;
     private DataSource dataSource = null;
@@ -115,7 +115,7 @@ public class DefaultRealm implements UserRealm {
     public void addSecondaryUserStoreManager(RealmConfiguration userStoreRealmConfig) throws UserStoreException {
         String value = userStoreRealmConfig.getUserStoreClass();
         if (value == null) {
-            log.error("Unable to add user store. UserStoreManager class name is null.");
+//            log.error("Unable to add user store. UserStoreManager class name is null.");
         } else {
             try {
                 UserStoreManager manager = (UserStoreManager) createObjectWithOptions(
@@ -126,8 +126,8 @@ public class DefaultRealm implements UserRealm {
 
                 if (domainName != null) {
                     if (isDuplicateDomain(domainName)) {
-                        log.error("Could not initialize new user store manager."
-                                + "Duplicate domain names not allowed.");
+//                        log.error("Could not initialize new user store manager."
+//                                + "Duplicate domain names not allowed.");
                         return;
                     } else {
                         // Fulfilled requirements for adding UserStore,
@@ -143,9 +143,9 @@ public class DefaultRealm implements UserRealm {
                         this.userStoreManager.addSecondaryUserStoreManager(domainName,
                                 tmpUserStoreManager.getSecondaryUserStoreManager());
 
-                        if (log.isDebugEnabled()) {
-                            log.debug("UserStoreManager : " + domainName + "added to the list");
-                        }
+//                        if (log.isDebugEnabled()) {
+//                            log.debug("UserStoreManager : " + domainName + "added to the list");
+//                        }
 
                         Boolean isDisabled = false;
                         if (userStoreRealmConfig
@@ -154,20 +154,19 @@ public class DefaultRealm implements UserRealm {
                                     .parseBoolean(realmConfig
                                             .getUserStoreProperty(UserCoreConstants.RealmConfig.USER_STORE_DISABLED));
                             if (isDisabled) {
-                                log.warn("Secondary user store disabled with domain " + domainName
-                                        + ".");
+//                                log.warn("Secondary user store disabled with domain " + domainName + ".");
                             }
                         }
                     }
                 } else {
-                    log.warn("Could not initialize new user store manager.  "
-                            + "Domain name is not defined");
+//                    log.warn("Could not initialize new user store manager.  "
+//                            + "Domain name is not defined");
                 }
             } catch (Exception e) {
                 String errorMessage = "Could not initialize secondary user store manager";
-                if (log.isDebugEnabled()) {
-                    log.debug(errorMessage, e);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(errorMessage, e);
+//                }
                 throw new UserStoreException(errorMessage, e);
             }
         }
@@ -198,7 +197,7 @@ public class DefaultRealm implements UserRealm {
 
             String value = realmConfig.getUserStoreClass();
             if (value == null) {
-                log.info("System is functioning without user store writing ability. User add/edit/delete will not work");
+//                log.info("System is functioning without user store writing ability. User add/edit/delete will not work");
             } else {
                 this.userStoreManager = (UserStoreManager) createObjectWithOptions(value,
                         realmConfig, properties);
@@ -219,14 +218,14 @@ public class DefaultRealm implements UserRealm {
                 isDisabled = Boolean.parseBoolean(realmConfig
                         .getUserStoreProperty(UserCoreConstants.RealmConfig.USER_STORE_DISABLED));
                 if (isDisabled) {
-                    log.warn("You cannot disable the primary user store.");
+//                    log.warn("You cannot disable the primary user store.");
                 }
             }
 
             while (tmpRealmConfig != null) {
                 value = tmpRealmConfig.getUserStoreClass();
                 if (value == null) {
-                    log.info("System is functioning without user store writing ability. User add/edit/delete will not work");
+//                    log.info("System is functioning without user store writing ability. User add/edit/delete will not work");
                 } else {
                     try {
                         UserStoreManager manager = (UserStoreManager) createObjectWithOptions(
@@ -237,8 +236,8 @@ public class DefaultRealm implements UserRealm {
 
                         if (domainName != null) {
                             if (userStoreManager.getSecondaryUserStoreManager(domainName) != null) {
-                                log.warn("Could not initialize secondary user store manager."
-                                        + "Duplicate domain names not allowed.");
+//                                log.warn("Could not initialize secondary user store manager."
+//                                        + "Duplicate domain names not allowed.");
                                 tmpRealmConfig = tmpRealmConfig.getSecondaryRealmConfig();
                                 continue;
                             } else {
@@ -250,8 +249,8 @@ public class DefaultRealm implements UserRealm {
                                             .parseBoolean(tmpRealmConfig
                                                     .getUserStoreProperty(UserCoreConstants.RealmConfig.USER_STORE_DISABLED));
                                     if (isDisabled) {
-                                        log.warn("Secondary user store disabled with domain " + domainName
-                                                + ".");
+//                                        log.warn("Secondary user store disabled with domain " + domainName
+//                                                + ".");
                                         tmpRealmConfig = tmpRealmConfig.getSecondaryRealmConfig();
                                         continue;
                                     }
@@ -262,8 +261,8 @@ public class DefaultRealm implements UserRealm {
                                         tmpUserStoreManager.getSecondaryUserStoreManager());
                             }
                         } else {
-                            log.warn("Could not initialize secondary user store manager.  "
-                                    + "Domain name is not defined");
+//                            log.warn("Could not initialize secondary user store manager.  "
+//                                    + "Domain name is not defined");
                             tmpRealmConfig = tmpRealmConfig.getSecondaryRealmConfig();
                             continue;
                         }
@@ -273,12 +272,12 @@ public class DefaultRealm implements UserRealm {
                         if (tmpRealmConfig.isPrimary()) {
                             String errorMessage = "Cannot create connection to the primary user store. Error message "
                                                   + e.getMessage();
-                            if (log.isDebugEnabled()) {
-                                log.debug(errorMessage, e);
-                            }
+//                            if (log.isDebugEnabled()) {
+//                                log.debug(errorMessage, e);
+//                            }
                             throw new UserStoreException(errorMessage, e);
                         } else {
-                            log.warn("Could not initialize secondary user store manager", e);
+//                            log.warn("Could not initialize secondary user store manager", e);
                             tmpRealmConfig = tmpRealmConfig.getSecondaryRealmConfig();
                             continue;
                         }
@@ -292,14 +291,14 @@ public class DefaultRealm implements UserRealm {
             value = realmConfig.getAuthorizationManagerClass();
             if (value == null) {
                 String message = "System cannot continue. Authorization writer is null";
-                log.error(message);
+//                log.error(message);
                 throw new UserStoreException(message);
             }
             this.authzManager = (AuthorizationManager) createObjectWithOptions(value, realmConfig,
                     properties);
 
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+//            log.error(e.getMessage(), e);
             throw new UserStoreException(e.getMessage(), e);
         }
 
@@ -327,9 +326,9 @@ public class DefaultRealm implements UserRealm {
             Constructor constructor = null;
             Object newObject = null;
 
-            if (log.isDebugEnabled()) {
-                log.debug("Start initializing class with the first option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("Start initializing class with the first option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt1);
@@ -337,14 +336,14 @@ public class DefaultRealm implements UserRealm {
                 return newObject;
             } catch (NoSuchMethodException e) {
                 // if not found try again.
-                if (log.isDebugEnabled()) {
-                    log.debug("Cannont initialize " + className + " using the option 1");
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Cannont initialize " + className + " using the option 1");
+//                }
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug("End initializing class with the first option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("End initializing class with the first option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt2);
@@ -352,14 +351,14 @@ public class DefaultRealm implements UserRealm {
                 return newObject;
             } catch (NoSuchMethodException e) {
                 // if not found try again.
-                if (log.isDebugEnabled()) {
-                    log.debug("Cannont initialize " + className + " using the option 2");
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Cannont initialize " + className + " using the option 2");
+//                }
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug("End initializing class with the second option");
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug("End initializing class with the second option");
+//            }
 
             try {
                 constructor = clazz.getConstructor(initClassOpt3);
@@ -368,17 +367,17 @@ public class DefaultRealm implements UserRealm {
             } catch (NoSuchMethodException e) {
                 // cannot initialize in any of the methods. Throw exception.
                 String message = "Cannot initialize " + className + ". Error " + e.getMessage();
-                if (log.isDebugEnabled()) {
-                    log.debug(message, e);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(message, e);
+//                }
                 throw new UserStoreException(message, e);
             }
 
         } catch (Throwable e) {
             String errorMessage = "Cannot create " + className;
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(e.getMessage() + "Type " + e.getClass(), e);
         }
 
@@ -398,9 +397,9 @@ public class DefaultRealm implements UserRealm {
             return claimMapping;
         } catch (ClaimBuilderException e) {
             String errorMessage = "Error occurred while loading default claim mapping";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
     }
@@ -414,9 +413,9 @@ public class DefaultRealm implements UserRealm {
             return profileConfig;
         } catch (ProfileBuilderException e) {
             String errorMessage = "Error occurred while loading default profile configuration";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
     }
@@ -432,7 +431,7 @@ public class DefaultRealm implements UserRealm {
                 claimMappings.putAll(claimBuilder.buildClaimMappingsFromConfigFile());
             } catch (ClaimBuilderException e) {
                 String msg = "Error in building claims.";
-                log.error(msg);
+//                log.error(msg);
                 throw new UserStoreException(msg, e);
             }
             claimDAO.addCliamMappings(claimMappings.values().toArray(
@@ -444,9 +443,9 @@ public class DefaultRealm implements UserRealm {
                         UserCoreConstants.INTERNAL_USERSTORE));
             } catch (ClaimBuilderException e) {
                 String msg = "Error in building claims.";
-                if (log.isDebugEnabled()) {
-                    log.debug(msg, e);
-                }
+//                if (log.isDebugEnabled()) {
+//                    log.debug(msg, e);
+//                }
                 throw new UserStoreException(msg, e);
             }
 
