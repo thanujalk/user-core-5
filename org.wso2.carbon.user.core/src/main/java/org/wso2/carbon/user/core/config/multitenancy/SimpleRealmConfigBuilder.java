@@ -17,9 +17,9 @@
 */
 package org.wso2.carbon.user.core.config.multitenancy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class SimpleRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
 
-    private static Log log = LogFactory.getLog(SimpleRealmConfigBuilder.class);
+//    private static Log log = LogFactory.getLog(SimpleRealmConfigBuilder.class);
 
     public RealmConfiguration getRealmConfigForTenantToCreateRealm(
             RealmConfiguration bootStrapConfig, RealmConfiguration persistedConfig, int tenantId)
@@ -45,15 +45,16 @@ public class SimpleRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
             realmConfig.setAdminRoleName(persistedConfig.getAdminRoleName());
             realmConfig.setEveryOneRoleName(persistedConfig.getEveryOneRoleName());
             Map<String, String> authz = realmConfig.getAuthzProperties();
-            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
-                    CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
+//            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
+//                    CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
+            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION, null);
             realmConfig.setSecondaryRealmConfig(persistedConfig.getSecondaryRealmConfig());
         } catch (Exception e) {
             String errorMessage = "Error while building tenant specific realm configuration" +
                     "when creating tenant's realm.";
-            if (log.isDebugEnabled()) {
-                log.debug(errorMessage, e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
         return realmConfig;
@@ -81,9 +82,9 @@ public class SimpleRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
 
             return realmConfig;
         } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
-            }
+//            if (log.isDebugEnabled()) {
+//                log.debug(e.getMessage(), e);
+//            }
             throw new UserStoreException(e.getMessage(), e);
         }
     }
