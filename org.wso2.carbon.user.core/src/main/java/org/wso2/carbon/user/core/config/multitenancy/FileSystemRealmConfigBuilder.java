@@ -17,9 +17,9 @@
 */
 package org.wso2.carbon.user.core.config.multitenancy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
+//import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.TenantMgtConfiguration;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class FileSystemRealmConfigBuilder implements MultiTenantRealmConfigBuilder {
 
-    private static Log logger = LogFactory.getLog(FileSystemRealmConfigBuilder.class);
+//    private static Log logger = LogFactory.getLog(FileSystemRealmConfigBuilder.class);
 
     public RealmConfiguration getRealmConfigForTenantToCreateRealm(
             RealmConfiguration bootStrapConfig, RealmConfiguration persistedConfig, int tenantId)
@@ -54,8 +54,8 @@ public class FileSystemRealmConfigBuilder implements MultiTenantRealmConfigBuild
             realmConfig.setTenantId(persistedConfig.getTenantId());
 
             Map<String, String> authz = realmConfig.getAuthzProperties();
-            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
-                    CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
+//            authz.put(UserCoreConstants.RealmConfig.PROPERTY_ADMINROLE_AUTHORIZATION,
+//                    CarbonConstants.UI_ADMIN_PERMISSION_COLLECTION);
 
             if (persistedConfig.getUserStoreProperties().get(LDAPConstants.USER_SEARCH_BASE) != null) {
                 realmConfig.getUserStoreProperties().put(
@@ -84,9 +84,9 @@ public class FileSystemRealmConfigBuilder implements MultiTenantRealmConfigBuild
         } catch (Exception e) {
             String errorMessage = "Error while building tenant specific realm configuration" +
                     "when creating tenant's realm.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
         return realmConfig;
@@ -168,9 +168,9 @@ public class FileSystemRealmConfigBuilder implements MultiTenantRealmConfigBuild
         } catch (Exception e) {
             String errorMessage = "Error while building tenant specific realm configuration " +
                     "to be persisted.";
-            if (logger.isDebugEnabled()) {
-                logger.debug(errorMessage, e);
-            }
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(errorMessage, e);
+//            }
             throw new UserStoreException(errorMessage, e);
         }
     }
