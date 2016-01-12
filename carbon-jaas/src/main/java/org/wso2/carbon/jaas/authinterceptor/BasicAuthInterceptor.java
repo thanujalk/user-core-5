@@ -88,7 +88,7 @@ public class BasicAuthInterceptor implements Interceptor {
         CallbackHandler callbackHandler = new BasicAuthCallbackHandler(username, password.toCharArray());
         LoginContext loginContext = null;
         try {
-            loginContext = new LoginContext("", callbackHandler);
+            loginContext = new LoginContext("CarbonBasicAuthLoginConfig", callbackHandler);
         } catch (LoginException e) {
             log.error("Failed to initiate login context", e);
             return false;

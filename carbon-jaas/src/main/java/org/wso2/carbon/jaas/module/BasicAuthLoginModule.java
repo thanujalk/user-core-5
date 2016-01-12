@@ -16,39 +16,70 @@
 
 package org.wso2.carbon.jaas.module;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+import java.io.IOException;
 import java.util.Map;
 
 
 /**
  * This  LoginModule authenticates users with a password.
- *
  */
 public class BasicAuthLoginModule implements LoginModule {
 
+
+    private CallbackHandler callbackHandler = null;
+    private static final String USERNAME = "admin";
+    public static final String PASSWORD = "admin";
+    private boolean isAuthenticated = false;
+
+    private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);
 
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
                            Map<String, ?> options) {
-
+        this.callbackHandler = callbackHandler;
     }
 
     @Override
     public boolean login() throws LoginException {
 
+        Callback[] callbacks = new Callback[2];
 
+        callbacks[0] = new NameCallback("Username");
+        callbacks[1] = new PasswordCallback("Password", false);
 
+        try {
+            callbackHandler.handle(callbacks);
+        } catch (IOException | UnsupportedCallbackException e) {
+            log.error("Error while handling callbacks.", e);
+            throw new LoginException("Error while handling callbacks.");
+        }
 
-        return false;
+        String username = ((NameCallback) callbacks[0]).getName();
+        char[] password = ((PasswordCallback) callbacks[1]).getPassword();
+
+        if (USERNAME.equals(username) && PASSWORD.equals(String.valueOf(password))) {
+            isAuthenticated = true;
+        } else {
+            isAuthenticated = false;
+        }
+        return isAuthenticated;
     }
 
     @Override
     public boolean commit() throws LoginException {
-        return false;
+        return isAuthenticated;
     }
 
     @Override
