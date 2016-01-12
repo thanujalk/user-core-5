@@ -29,11 +29,11 @@ import org.wso2.carbon.mss.HttpResponder;
 import org.wso2.carbon.mss.Interceptor;
 import org.wso2.carbon.mss.ServiceMethodInfo;
 
+import java.nio.charset.Charset;
+import java.util.Base64;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import java.nio.charset.Charset;
-import java.util.Base64;
 
 /**
  * Sample Interceptor which logs HTTP headers of the request.

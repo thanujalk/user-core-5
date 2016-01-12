@@ -16,13 +16,16 @@
 
 package org.wso2.carbon.jaas.callback;
 
+import java.io.IOException;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import java.io.IOException;
 
+/**
+ * Callback handler for Basic Auth login
+ */
 public class BasicAuthCallbackHandler implements CallbackHandler {
 
     private String username;
