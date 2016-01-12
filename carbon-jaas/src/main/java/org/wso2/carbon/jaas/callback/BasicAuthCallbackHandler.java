@@ -18,12 +18,40 @@ package org.wso2.carbon.jaas.callback;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
 
 public class BasicAuthCallbackHandler implements CallbackHandler {
+
+    private String username;
+    private char[] password;
+
+    public BasicAuthCallbackHandler() {
+
+    }
+
+    public BasicAuthCallbackHandler(String username, char[] password) {
+        this.username = username;
+        this.password = password;
+    }
+
     @Override
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
 
+        if (callbacks != null) {
+            for (Callback callback : callbacks) {
+                if (callback instanceof NameCallback) {
+                    ((NameCallback) callback).setName(username);
+
+                } else if (callback instanceof PasswordCallback) {
+                    ((PasswordCallback) callback).setPassword(password);
+
+                } else {
+                    throw new UnsupportedCallbackException(callback, "Unsupported Callback");
+                }
+            }
+        }
     }
 }
