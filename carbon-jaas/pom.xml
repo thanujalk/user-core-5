@@ -57,13 +57,14 @@
     </dependencies>
 
     <properties>
-        <private.package>org.wso2.carbon.jaas.authinterceptor.*</private.package>
+        <private.package>org.wso2.carbon.jaas.*</private.package>
         <import.package>
             org.osgi.framework.*;version="${osgi.framework.import.version.range}",
             org.wso2.carbon.mss.*,
             io.netty.handler.codec.http.*,
             org.slf4j.*,
-            com.google.common.collect.*
+            com.google.common.collect.*,
+            javax.security.auth.*,
         </import.package>
         <equinox.osgi.version>3.10.2.v20150203-1939</equinox.osgi.version>
         <carbon.mss.version>1.0.0-SNAPSHOT</carbon.mss.version>

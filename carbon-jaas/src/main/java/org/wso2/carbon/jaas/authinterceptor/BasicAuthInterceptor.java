@@ -36,7 +36,7 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 /**
- * Sample Interceptor which logs HTTP headers of the request.
+ * BasicAuthInterceptor
  */
 @Component(
         name = "org.wso2.carbon.jaas.authinterceptor.BasicAuthInterceptor",
@@ -64,8 +64,15 @@ public class BasicAuthInterceptor implements Interceptor {
                     byte[] decodedByte = authEncoded.getBytes(Charset.forName("UTF-8"));
                     String authDecoded = new String(Base64.getDecoder().decode(decodedByte), Charset.forName("UTF-8"));
                     String[] authParts = authDecoded.split(":");
+
                     String username = authParts[0];
-                    String password = authParts[1];
+                    char[] password;
+                    if (authParts[1] != null && !authParts[1].isEmpty()) {
+                        password = authParts[1].toCharArray();
+                    } else {
+                        password = new char[0];
+                    }
+
                     if (authenticate(username, password)) {
                         return true;
                     }
@@ -83,10 +90,10 @@ public class BasicAuthInterceptor implements Interceptor {
 
     }
 
-    private boolean authenticate(String username, String password) {
+    private boolean authenticate(String username, char[] password) {
 
-        CallbackHandler callbackHandler = new BasicAuthCallbackHandler(username, password.toCharArray());
-        LoginContext loginContext = null;
+        CallbackHandler callbackHandler = new BasicAuthCallbackHandler(username, password);
+        LoginContext loginContext;
         try {
             loginContext = new LoginContext("CarbonBasicAuthLoginConfig", callbackHandler);
         } catch (LoginException e) {
@@ -97,7 +104,7 @@ public class BasicAuthInterceptor implements Interceptor {
         try {
             loginContext.login();
         } catch (LoginException e) {
-            log.error("Login failed for user : " + username, e);
+            log.error("Login failed for user : " + username);
             return false;
         }
 

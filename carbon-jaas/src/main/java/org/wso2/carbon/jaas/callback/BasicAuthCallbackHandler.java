@@ -37,7 +37,7 @@ public class BasicAuthCallbackHandler implements CallbackHandler {
 
     public BasicAuthCallbackHandler(String username, char[] password) {
         this.username = username;
-        this.password = password;
+        this.password = password.clone();
     }
 
     @Override
@@ -49,10 +49,11 @@ public class BasicAuthCallbackHandler implements CallbackHandler {
                     ((NameCallback) callback).setName(username);
 
                 } else if (callback instanceof PasswordCallback) {
-                    ((PasswordCallback) callback).setPassword(password);
+                    ((PasswordCallback) callback).setPassword(password.clone());
 
                 } else {
                     throw new UnsupportedCallbackException(callback, "Unsupported Callback");
+
                 }
             }
         }
