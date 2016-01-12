@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -39,7 +40,7 @@ public class BasicAuthLoginModule implements LoginModule {
 
     private CallbackHandler callbackHandler = null;
     private static final String USERNAME = "admin";
-    public static final String PASSWORD = "admin";
+    public static final char[] PASSWORD = "admin".toCharArray();
     private boolean isAuthenticated = false;
 
     private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);
@@ -69,7 +70,7 @@ public class BasicAuthLoginModule implements LoginModule {
         String username = ((NameCallback) callbacks[0]).getName();
         char[] password = ((PasswordCallback) callbacks[1]).getPassword();
 
-        if (USERNAME.equals(username) && PASSWORD.equals(String.valueOf(password))) {
+        if (USERNAME.equals(username) && Arrays.equals(PASSWORD, password)) {
             isAuthenticated = true;
         } else {
             isAuthenticated = false;
