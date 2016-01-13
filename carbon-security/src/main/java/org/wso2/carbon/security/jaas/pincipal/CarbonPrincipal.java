@@ -32,9 +32,6 @@ public class CarbonPrincipal implements Principal, Serializable {
     private String tenantDomain;
     private String userStoreDomain;
     private String userName;
-    private String authenticatedSubjectIdentifier;
-    private String federatedIdPName;
-    private boolean isFederatedUser;
     private Map<String, String> userAttributes = new HashMap<>();
 
     @Override
@@ -83,30 +80,6 @@ public class CarbonPrincipal implements Principal, Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getAuthenticatedSubjectIdentifier() {
-        return authenticatedSubjectIdentifier;
-    }
-
-    public void setAuthenticatedSubjectIdentifier(String authenticatedSubjectIdentifier) {
-        this.authenticatedSubjectIdentifier = authenticatedSubjectIdentifier;
-    }
-
-    public String getFederatedIdPName() {
-        return federatedIdPName;
-    }
-
-    public void setFederatedIdPName(String federatedIdPName) {
-        this.federatedIdPName = federatedIdPName;
-    }
-
-    public boolean isFederatedUser() {
-        return isFederatedUser;
-    }
-
-    public void setFederatedUser(boolean isFederatedUser) {
-        this.isFederatedUser = isFederatedUser;
     }
 
     public Map<String, String> getUserAttributes() {
