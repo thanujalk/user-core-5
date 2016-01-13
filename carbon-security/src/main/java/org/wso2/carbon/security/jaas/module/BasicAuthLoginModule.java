@@ -42,7 +42,7 @@ public class BasicAuthLoginModule implements LoginModule {
     private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);
     private Subject subject;
     private String username;
-    private char [] password;
+    private char[] password;
     private CallbackHandler callbackHandler;
     private Map sharedState;
     private Map options;
@@ -98,8 +98,9 @@ public class BasicAuthLoginModule implements LoginModule {
             }
 
             username = null;
-            for (int i = 0; i < password.length; i++)
+            for (int i = 0; i < password.length; i++) {
                 password[i] = ' ';
+            }
             password = null;
 
             commitSucceeded = true;
@@ -112,13 +113,14 @@ public class BasicAuthLoginModule implements LoginModule {
 
         if (succeeded == false) {
             return false;
-        } else if (succeeded == true && commitSucceeded == false) {
+        } else if (commitSucceeded == false) {
             // login succeeded but overall authentication failed
             succeeded = false;
             username = null;
             if (password != null) {
-                for (int i = 0; i < password.length; i++)
+                for (int i = 0; i < password.length; i++) {
                     password[i] = ' ';
+                }
                 password = null;
             }
             carbonPrincipal = null;
@@ -134,12 +136,12 @@ public class BasicAuthLoginModule implements LoginModule {
     public boolean logout() throws LoginException {
 
         subject.getPrincipals().remove(carbonPrincipal);
-        succeeded = false;
         succeeded = commitSucceeded;
         username = null;
         if (password != null) {
-            for (int i = 0; i < password.length; i++)
+            for (int i = 0; i < password.length; i++) {
                 password[i] = ' ';
+            }
             password = null;
         }
         carbonPrincipal = null;

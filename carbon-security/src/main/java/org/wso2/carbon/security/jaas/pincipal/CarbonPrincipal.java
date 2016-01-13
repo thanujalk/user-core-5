@@ -28,7 +28,7 @@ import java.util.Map;
 public class CarbonPrincipal implements Principal, Serializable {
 
     private static final long serialVersionUID = 6056209529374720080L;
-    private static final String principalName ="CarbonPrincipal";
+    private static final String principalName = "CarbonPrincipal";
 
     private String tenantDomain;
     private String userStoreDomain;
