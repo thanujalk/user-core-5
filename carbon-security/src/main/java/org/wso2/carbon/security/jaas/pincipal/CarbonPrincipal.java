@@ -57,7 +57,6 @@ public class CarbonPrincipal implements Principal, Serializable {
         return null;
     }
 
-
     public String getTenantDomain() {
         return tenantDomain;
     }
