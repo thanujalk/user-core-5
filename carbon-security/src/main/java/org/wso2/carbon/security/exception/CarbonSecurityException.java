@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.security;
-
-import io.netty.handler.codec.http.HttpRequest;
+package org.wso2.carbon.security.exception;
 
 /**
  *
  */
-public class DefaultCarbonAuthenticator implements CarbonAuthenticator {
+public class CarbonSecurityException extends Exception {
 
-    @Override
-    public boolean authenticate(HttpRequest request) {
-        return false;
+    public CarbonSecurityException() {
+        super();
     }
+
+    public CarbonSecurityException(String message) {
+        super(message);
+    }
+
+    public CarbonSecurityException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
