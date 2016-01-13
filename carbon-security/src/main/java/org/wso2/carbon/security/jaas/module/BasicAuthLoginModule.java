@@ -19,6 +19,9 @@ package org.wso2.carbon.security.jaas.module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal;
+import org.wso2.carbon.user.core.UserStoreException;
+import org.wso2.carbon.user.core.UserStoreManager;
+import org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -77,10 +80,18 @@ public class BasicAuthLoginModule implements LoginModule {
         username = ((NameCallback) callbacks[0]).getName();
         password = ((PasswordCallback) callbacks[1]).getPassword();
 
-        if (USERNAME.equals(username) && Arrays.equals(PASSWORD, password)) {
-            succeeded = true;
-        } else {
+        UserStoreManager userStoreManager = new JDBCUserStoreManager();
+
+        try {
+            if (userStoreManager.authenticate(username, String.valueOf(password))) {
+                succeeded = true;
+            } else {
+                succeeded = false;
+            }
+
+        } catch (UserStoreException e) {
             succeeded = false;
+            log.error("Error while authenticating user.", e);
         }
         return succeeded;
     }

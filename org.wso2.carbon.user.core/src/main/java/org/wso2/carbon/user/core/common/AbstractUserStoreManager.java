@@ -428,10 +428,10 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
      * {@inheritDoc}
      */
     public final boolean authenticate(final String userName, final Object credential) throws UserStoreException {
-        try {
-            return AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
-                @Override
-                public Boolean run() throws Exception {
+//        try {
+//            return AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
+//                @Override
+//                public Boolean run() throws Exception {
                     if (userName == null || credential == null) {
 //                        log.error("Authentication failure. Either Username or Password is null");
                         return false;
@@ -439,26 +439,26 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
                     int index = userName != null ? userName.indexOf("") : -1;
                     boolean domainProvided = index > 0;
                     return authenticate(userName, credential, domainProvided);
-                }
-            });
-        } catch (PrivilegedActionException e) {
-            throw (UserStoreException) e.getException();
-        }
+//                }
+//            });
+//        } catch (PrivilegedActionException e) {
+//            throw (UserStoreException) e.getException();
+//        }
     }
 
     protected boolean authenticate(final String userName, final Object credential, final boolean domainProvided)
             throws UserStoreException {
 
-        try {
-            return AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
-                @Override
-                public Boolean run() throws Exception {
+//        try {
+//            return AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
+//                @Override
+//                public Boolean run() throws Exception {
                     return authenticateInternal(userName, credential, domainProvided);
-                }
-            });
-        } catch (PrivilegedActionException e) {
-            throw (UserStoreException) e.getException();
-        }
+//                }
+//            });
+//        } catch (PrivilegedActionException e) {
+//            throw (UserStoreException) e.getException();
+//        }
 
     }
 
@@ -474,46 +474,46 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
 
         boolean authenticated = false;
 
-        UserStore userStore = getUserStore(userName);
-        if (userStore.isRecurssive() && userStore.getUserStoreManager() instanceof AbstractUserStoreManager) {
-            return ((AbstractUserStoreManager) userStore.getUserStoreManager()).authenticate(userStore.getDomainFreeName(),
-                    credential, domainProvided);
-        }
+//        UserStore userStore = getUserStore(userName);
+//        if (userStore.isRecurssive() && userStore.getUserStoreManager() instanceof AbstractUserStoreManager) {
+//            return ((AbstractUserStoreManager) userStore.getUserStoreManager()).authenticate(userStore.getDomainFreeName(),
+//                    credential, domainProvided);
+//        }
 
         // #################### Domain Name Free Zone Starts Here ################################
 
         // #################### <Listeners> #####################################################
-        for (UserStoreManagerListener listener : UMListenerServiceComponent
-                .getUserStoreManagerListeners()) {
-            if (!listener.authenticate(userName, credential, this)) {
-                return true;
-            }
-        }
-
-        for (UserOperationEventListener listener : UMListenerServiceComponent
-                .getUserOperationEventListeners()) {
-            if (!listener.doPreAuthenticate(userName, credential, this)) {
-                return false;
-            }
-        }
-        // #################### </Listeners> #####################################################
-
-        int tenantId = getTenantId();
-
-        try {
-            RealmService realmService = UserCoreUtil.getRealmService();
-            if (realmService != null) {
-                boolean tenantActive = realmService.getTenantManager().isTenantActive(tenantId);
-
-                if (!tenantActive) {
-//                    log.warn("Tenant has been deactivated. TenantID : " + tenantId);
-                    return false;
-                }
-            }
-        } catch (org.wso2.carbon.user.api.UserStoreException e) {
-            throw new UserStoreException("Error while trying to check Tenant status for Tenant : "
-                    + tenantId, e);
-        }
+//        for (UserStoreManagerListener listener : UMListenerServiceComponent
+//                .getUserStoreManagerListeners()) {
+//            if (!listener.authenticate(userName, credential, this)) {
+//                return true;
+//            }
+//        }
+//
+//        for (UserOperationEventListener listener : UMListenerServiceComponent
+//                .getUserOperationEventListeners()) {
+//            if (!listener.doPreAuthenticate(userName, credential, this)) {
+//                return false;
+//            }
+//        }
+//        // #################### </Listeners> #####################################################
+//
+//        int tenantId = getTenantId();
+//
+//        try {
+//            RealmService realmService = UserCoreUtil.getRealmService();
+//            if (realmService != null) {
+//                boolean tenantActive = realmService.getTenantManager().isTenantActive(tenantId);
+//
+//                if (!tenantActive) {
+////                    log.warn("Tenant has been deactivated. TenantID : " + tenantId);
+//                    return false;
+//                }
+//            }
+//        } catch (org.wso2.carbon.user.api.UserStoreException e) {
+//            throw new UserStoreException("Error while trying to check Tenant status for Tenant : "
+//                    + tenantId, e);
+//        }
 
         // We are here due to two reason. Either there is no secondary UserStoreManager or no
         // domain name provided with user name.
@@ -527,34 +527,34 @@ public abstract class AbstractUserStoreManager implements UserStoreManager {
             authenticated = false;
         }
 
-        if (authenticated) {
-            // Set domain in thread local variable for subsequent operations
-            String domain = UserCoreUtil.getDomainName(this.realmConfig);
-            if (domain != null) {
-                UserCoreUtil.setDomainInThreadLocal(domain.toUpperCase());
-            }
-        }
-
-        // If authentication fails in the previous step and if the user has not specified a
-        // domain- then we need to execute chained UserStoreManagers recursively.
-        if (!authenticated && !domainProvided && this.getSecondaryUserStoreManager() != null) {
-            authenticated = ((AbstractUserStoreManager) this.getSecondaryUserStoreManager())
-                    .authenticate(userName, credential, domainProvided);
-        }
-
-        // You cannot change authentication decision in post handler to TRUE
-        for (UserOperationEventListener listener : UMListenerServiceComponent
-                .getUserOperationEventListeners()) {
-            if (!listener.doPostAuthenticate(userName, authenticated, this)) {
-                return false;
-            }
-        }
-
-//        if (log.isDebugEnabled()) {
-//            if (!authenticated) {
-//                log.debug("Authentication failure. Wrong username or password is provided.");
+//        if (authenticated) {
+//            // Set domain in thread local variable for subsequent operations
+//            String domain = UserCoreUtil.getDomainName(this.realmConfig);
+//            if (domain != null) {
+//                UserCoreUtil.setDomainInThreadLocal(domain.toUpperCase());
 //            }
 //        }
+//
+//        // If authentication fails in the previous step and if the user has not specified a
+//        // domain- then we need to execute chained UserStoreManagers recursively.
+//        if (!authenticated && !domainProvided && this.getSecondaryUserStoreManager() != null) {
+//            authenticated = ((AbstractUserStoreManager) this.getSecondaryUserStoreManager())
+//                    .authenticate(userName, credential, domainProvided);
+//        }
+//
+//        // You cannot change authentication decision in post handler to TRUE
+//        for (UserOperationEventListener listener : UMListenerServiceComponent
+//                .getUserOperationEventListeners()) {
+//            if (!listener.doPostAuthenticate(userName, authenticated, this)) {
+//                return false;
+//            }
+//        }
+//
+////        if (log.isDebugEnabled()) {
+////            if (!authenticated) {
+////                log.debug("Authentication failure. Wrong username or password is provided.");
+////            }
+////        }
 
         return authenticated;
     }

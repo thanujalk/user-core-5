@@ -1149,13 +1149,13 @@ public class JDBCUserStoreManager extends AbstractUserStoreManager {
      */
     public boolean doAuthenticate(String userName, Object credential) throws UserStoreException {
 
-        if (!checkUserNameValid(userName)) {
-            return false;
-        }
-
-        if (!checkUserPasswordValid(credential)) {
-            return false;
-        }
+//        if (!checkUserNameValid(userName)) {
+//            return false;
+//        }
+//
+//        if (!checkUserPasswordValid(credential)) {
+//            return false;
+//        }
 
 //        if (UserCoreUtil.isRegistryAnnonymousUser(userName)) {
 //            log.error("Anonnymous user trying to login");
@@ -1170,51 +1170,72 @@ public class JDBCUserStoreManager extends AbstractUserStoreManager {
         boolean isAuthed = false;
 
         try {
-            dbConnection = getDBConnection();
-            dbConnection.setAutoCommit(false);
+//            dbConnection = getDBConnection();
+//            dbConnection.setAutoCommit(false);
 
-            if (isCaseSensitiveUsername()) {
-                sqlstmt = realmConfig.getUserStoreProperty(JDBCRealmConstants.SELECT_USER);
-            } else {
-                sqlstmt = realmConfig.getUserStoreProperty(JDBCCaseInsensitiveConstants.SELECT_USER_CASE_INSENSITIVE);
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                dbConnection = DriverManager.getConnection("localhost:3306", "root", "123");
+            } catch (ClassNotFoundException e) {
+                return false;
             }
+
+//            if (isCaseSensitiveUsername()) {
+//                sqlstmt = realmConfig.getUserStoreProperty(JDBCRealmConstants.SELECT_USER);
+//            } else {
+//                sqlstmt = realmConfig.getUserStoreProperty(JDBCCaseInsensitiveConstants.SELECT_USER_CASE_INSENSITIVE);
+//            }
 
 //            if (log.isDebugEnabled()) {
 //                log.debug(sqlstmt);
 //            }
 
+            //*********
+            sqlstmt = "SELECT password FROM UM_USER WHERE username = ? ";
             prepStmt = dbConnection.prepareStatement(sqlstmt);
             prepStmt.setString(1, userName);
-            if (sqlstmt.contains(UserCoreConstants.UM_TENANT_COLUMN)) {
-                prepStmt.setInt(2, tenantId);
-            }
+            rs= prepStmt.executeQuery();
 
-            rs = prepStmt.executeQuery();
-
-            if (rs.next() == true) {
-                String storedPassword = rs.getString(3);
-                String saltValue = null;
-                if ("true".equalsIgnoreCase(realmConfig
-                        .getUserStoreProperty(JDBCRealmConstants.STORE_SALTED_PASSWORDS))) {
-                    saltValue = rs.getString(4);
-                }
-
-                boolean requireChange = rs.getBoolean(5);
-                Timestamp changedTime = rs.getTimestamp(6);
-
-                GregorianCalendar gc = new GregorianCalendar();
-                gc.add(GregorianCalendar.HOUR, -24);
-                Date date = gc.getTime();
-
-                if (requireChange == true && changedTime.before(date)) {
-                    isAuthed = false;
-                } else {
-                    password = this.preparePassword(password, saltValue);
-                    if ((storedPassword != null) && (storedPassword.equals(password))) {
-                        isAuthed = true;
-                    }
+            if (rs.next()) {
+                if (password.equals(rs.getString(1))) {
+                    isAuthed = true;
                 }
             }
+            //************
+
+
+//            prepStmt = dbConnection.prepareStatement(sqlstmt);
+//            prepStmt.setString(1, userName);
+//            if (sqlstmt.contains(UserCoreConstants.UM_TENANT_COLUMN)) {
+//                prepStmt.setInt(2, tenantId);
+//            }
+//
+//            rs = prepStmt.executeQuery();
+//
+//            if (rs.next() == true) {
+//                String storedPassword = rs.getString(3);
+//                String saltValue = null;
+//                if ("true".equalsIgnoreCase(realmConfig
+//                        .getUserStoreProperty(JDBCRealmConstants.STORE_SALTED_PASSWORDS))) {
+//                    saltValue = rs.getString(4);
+//                }
+//
+//                boolean requireChange = rs.getBoolean(5);
+//                Timestamp changedTime = rs.getTimestamp(6);
+//
+//                GregorianCalendar gc = new GregorianCalendar();
+//                gc.add(GregorianCalendar.HOUR, -24);
+//                Date date = gc.getTime();
+//
+//                if (requireChange == true && changedTime.before(date)) {
+//                    isAuthed = false;
+//                } else {
+//                    password = this.preparePassword(password, saltValue);
+//                    if ((storedPassword != null) && (storedPassword.equals(password))) {
+//                        isAuthed = true;
+//                    }
+//                }
+//            }
         } catch (SQLException e) {
             String msg = "Error occurred while retrieving user authentication info for user : " + userName;
 //            if (log.isDebugEnabled()) {
