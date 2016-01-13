@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.Map;
 import javax.security.auth.Subject;
@@ -40,18 +39,24 @@ import javax.security.auth.spi.LoginModule;
 public class BasicAuthLoginModule implements LoginModule {
 
 
-    private CallbackHandler callbackHandler = null;
     private static final String USERNAME = "admin";
-    private static final char[] PASSWORD = "admin".toCharArray();
-    private boolean isAuthenticated = false;
-
+    private static final char[] PASSWORD = new char[]{'a', 'd', 'm', 'i', 'n'};
     private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);
-
+    private Subject subject;
+    private CallbackHandler callbackHandler;
+    private Map sharedState;
+    private Map options;
+    private boolean succeeded = false;
+    private boolean commitSucceeded = false;
+    private CarbonPrincipal carbonPrincipal;
 
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
                            Map<String, ?> options) {
+        this.subject = subject;
         this.callbackHandler = callbackHandler;
+        this.sharedState = sharedState;
+        this.options = options;
     }
 
     @Override
@@ -73,16 +78,26 @@ public class BasicAuthLoginModule implements LoginModule {
         char[] password = ((PasswordCallback) callbacks[1]).getPassword();
 
         if (USERNAME.equals(username) && Arrays.equals(PASSWORD, password)) {
-            isAuthenticated = true;
+            succeeded = true;
         } else {
-            isAuthenticated = false;
+            succeeded = false;
         }
-        return isAuthenticated;
+        return succeeded;
     }
 
     @Override
     public boolean commit() throws LoginException {
-        return isAuthenticated;
+        if (succeeded == false) {
+            return false;
+        } else {
+            carbonPrincipal = new CarbonPrincipal();
+            if (!subject.getPrincipals().contains(carbonPrincipal)) {
+                subject.getPrincipals().add(carbonPrincipal);
+            }
+
+            commitSucceeded = true;
+            return commitSucceeded;
+        }
     }
 
     @Override
@@ -92,6 +107,6 @@ public class BasicAuthLoginModule implements LoginModule {
 
     @Override
     public boolean logout() throws LoginException {
-        return false;
+        return true;
     }
 }
