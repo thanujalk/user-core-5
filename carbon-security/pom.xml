@@ -10,7 +10,7 @@
 
     <artifactId>carbon-security-bundle</artifactId>
     <packaging>bundle</packaging>
-
+    <version>5.1.0-SNAPSHOT</version>
     <name>Carbon Security OSGi Bundle</name>
     <url>http://maven.apache.org</url>
     <dependencies>

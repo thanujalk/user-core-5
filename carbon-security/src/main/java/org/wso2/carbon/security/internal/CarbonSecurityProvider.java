@@ -25,7 +25,7 @@ import org.wso2.carbon.security.CarbonAuthenticator;
 import org.wso2.carbon.security.DefaultCarbonAuthenticator;
 
 /**
- * OSGi services component which handle authentication and authorization
+ * OSGi service component which handle authentication and authorization
  */
 @Component(
         name = "org.wso2.carbon.security.internal.CarbonSecurityProvider",
@@ -36,13 +36,13 @@ public class CarbonSecurityProvider {
     private ServiceRegistration<CarbonAuthenticator> serviceRegistration;
 
     @Activate
-    public void registerCommandProvider(BundleContext bundleContext) {
+    public void registerCarbonAuthenticator(BundleContext bundleContext) {
         serviceRegistration = bundleContext.registerService(CarbonAuthenticator.class,
                                                             new DefaultCarbonAuthenticator(), null);
     }
 
     @Deactivate
-    public void unregisterCommandProvider(BundleContext bundleContext) {
+    public void unregisterCarbonAuthenticator(BundleContext bundleContext) {
         if (serviceRegistration != null) {
             serviceRegistration.unregister();
         }
