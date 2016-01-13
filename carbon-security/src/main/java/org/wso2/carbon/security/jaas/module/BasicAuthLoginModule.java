@@ -18,8 +18,10 @@ package org.wso2.carbon.security.jaas.module;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Map;
 import javax.security.auth.Subject;

@@ -20,7 +20,6 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wso2.carbon.security.CarbonAuthenticator;
 import org.wso2.carbon.security.jaas.callback.BasicAuthCallbackHandler;
 
 import java.nio.charset.Charset;
@@ -29,7 +28,6 @@ import java.util.Base64;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-
 
 /**
  * Authentication using Basic HTTP header

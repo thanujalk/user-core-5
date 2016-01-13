@@ -21,8 +21,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.wso2.carbon.security.BasicAuthenticator;
 import org.wso2.carbon.security.CarbonAuthenticator;
-import org.wso2.carbon.security.DefaultCarbonAuthenticator;
 
 /**
  * OSGi service component which handle authentication and authorization
@@ -38,7 +38,7 @@ public class CarbonSecurityProvider {
     @Activate
     public void registerCarbonAuthenticator(BundleContext bundleContext) {
         serviceRegistration = bundleContext.registerService(CarbonAuthenticator.class,
-                                                            new DefaultCarbonAuthenticator(), null);
+                                                            new BasicAuthenticator(), null);
     }
 
     @Deactivate
