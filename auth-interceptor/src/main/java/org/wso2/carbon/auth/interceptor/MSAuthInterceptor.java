@@ -27,6 +27,12 @@ import org.wso2.carbon.mss.HttpResponder;
 import org.wso2.carbon.mss.Interceptor;
 import org.wso2.carbon.mss.ServiceMethodInfo;
 import org.wso2.carbon.security.CarbonAuthenticator;
+import org.wso2.carbon.security.jaas.callback.BasicAuthCallbackHandler;
+import org.wso2.carbon.security.jaas.callback.CarbonCallbackHandlerFactory;
+
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 /**
  *
@@ -41,26 +47,42 @@ public class MSAuthInterceptor implements Interceptor {
     @Override
     public boolean preCall(HttpRequest httpRequest, HttpResponder httpResponder, ServiceMethodInfo serviceMethodInfo) {
 
-        CarbonAuthenticator authenticator = AuthInterceptorDataHolder.getInstance().getCarbonAuthenticator();
 
-        if (authenticator != null) {
-            if (authenticator.authenticate(httpRequest)) {
-                return true;
-            } else {
-                Multimap<String, String> map = ArrayListMultimap.create();
-                map.put(HttpHeaders.Names.WWW_AUTHENTICATE, "Basic");
-                httpResponder.sendStatus(HttpResponseStatus.UNAUTHORIZED, map);
-                return false;
-            }
-        } else {
-            httpResponder.sendStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR, ArrayListMultimap.create());
+        CallbackHandler callbackHandler = CarbonCallbackHandlerFactory.getCallbackHandler(httpRequest);
+        LoginContext loginContext;
+        try {
+            loginContext = new LoginContext("CarbonSecurityConfig", callbackHandler);
+        } catch (LoginException e) {
+            sendInternalServerError(httpResponder);
             return false;
         }
+        try {
+            loginContext.login();
+
+            //TODO set LoginContext to CarbonContext
+        } catch (LoginException e) {
+            sendUnauthorized(httpResponder);
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public void postCall(HttpRequest httpRequest, HttpResponseStatus httpResponseStatus,
                          ServiceMethodInfo serviceMethodInfo) {
 
+    }
+
+
+    private void sendUnauthorized(HttpResponder httpResponder) {
+        Multimap<String, String> map = ArrayListMultimap.create();
+        map.put(HttpHeaders.Names.WWW_AUTHENTICATE, "Basic");
+        httpResponder.sendStatus(HttpResponseStatus.UNAUTHORIZED, map);
+    }
+
+
+    private void sendInternalServerError(HttpResponder httpResponder) {
+        httpResponder.sendStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR, ArrayListMultimap.create());
     }
 }

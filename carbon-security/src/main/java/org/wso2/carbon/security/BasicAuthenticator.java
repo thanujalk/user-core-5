@@ -102,8 +102,8 @@ public class BasicAuthenticator implements CarbonAuthenticator {
     /**
      *
      *
-     * @param username
-     * @param password
+     * @param username Username
+     * @param password Password
      * @return
      */
     private boolean authenticate(String username, char[] password) {
@@ -116,7 +116,6 @@ public class BasicAuthenticator implements CarbonAuthenticator {
             log.error("Failed to initiate login context", e);
             return false;
         }
-
         try {
             loginContext.login();
         } catch (LoginException e) {
