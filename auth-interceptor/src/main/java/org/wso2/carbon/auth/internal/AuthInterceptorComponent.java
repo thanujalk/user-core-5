@@ -20,11 +20,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.wso2.carbon.security.CarbonAuthenticator;
-
 
 /**
  * OSGi service component
@@ -43,21 +38,6 @@ public class AuthInterceptorComponent {
     @Deactivate
     public void unregisterCarbonSecurityProvider(BundleContext bundleContext) {
         //TODO
-    }
-
-    @Reference(
-            name = "org.wso2.carbon.security.internal.CarbonSecurityProvider",
-            service = CarbonAuthenticator.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetCarbonAuthenticator"
-    )
-    public void setCarbonAuthenticator(CarbonAuthenticator carbonAuthenticator) {
-        AuthInterceptorDataHolder.getInstance().setCarbonAuthenticator(carbonAuthenticator);
-    }
-
-    public void unsetCarbonAuthenticator(CarbonAuthenticator carbonAuthenticator) {
-        AuthInterceptorDataHolder.getInstance().setCarbonAuthenticator(null);
     }
 
 }

@@ -16,21 +16,78 @@
 
 package org.wso2.carbon.security.jaas.callback;
 
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
+import org.wso2.carbon.security.exception.CarbonSecurityException;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import javax.security.auth.callback.CallbackHandler;
 
+/**
+ *
+ */
 public class CarbonCallbackHandlerFactory {
 
-    public static CallbackHandler getCallbackHandler(Object type) {
+    private static final String AUTH_TYPE_BASIC = "Basic";
+    public static final String BASIC_AUTH_CREDENTIALS_SEPARATOR = ":";
+    private static final int AUTH_TYPE_BASIC_LENGTH = AUTH_TYPE_BASIC.length();
 
-        if (type == null) {
+    public static CallbackHandler getCallbackHandler(Object request) throws CarbonSecurityException {
+
+        try {
+            Class aClass = ClassLoader.getSystemClassLoader().loadClass("org.wso2.carbon.security.jaas.module" +
+                                                                        ".BasicAuthLoginModule");
+        } catch (ClassNotFoundException e) {
+            //TODO
+        }
+
+        if (request == null) {
             return null;
-        } else if (type instanceof HttpRequest) {
-            //Get username and password from request
-            return new BasicAuthCallbackHandler("admin", new char[]{'a', 'd', 'm', 'i', 'n'});
+
+        } else if (request instanceof HttpRequest) {
+            return buildBasicAuthCallbackHandler((HttpRequest) request);
+
         }
 
         return null;
     }
+
+    private static BasicAuthCallbackHandler buildBasicAuthCallbackHandler(HttpRequest request)
+            throws CarbonSecurityException {
+
+        HttpHeaders headers = request.headers();
+
+        if (headers != null) {
+            String authHeader = headers.get(HttpHeaders.Names.AUTHORIZATION);
+
+            if (authHeader != null) {
+                String authType = authHeader.substring(0, AUTH_TYPE_BASIC_LENGTH);
+                String authEncoded = authHeader.substring(AUTH_TYPE_BASIC_LENGTH).trim();
+
+                if (AUTH_TYPE_BASIC.equals(authType) && !authEncoded.isEmpty()) {
+                    byte[] decodedByte = authEncoded.getBytes(Charset.forName(StandardCharsets.UTF_8.name()));
+                    String authDecoded = new String(Base64.getDecoder().decode(decodedByte),
+                                                    Charset.forName(StandardCharsets.UTF_8.name()));
+                    String[] authParts = authDecoded.split(BASIC_AUTH_CREDENTIALS_SEPARATOR);
+
+                    String username = authParts[0];
+                    char[] password;
+
+                    if (authParts[1] != null && !authParts[1].isEmpty()) {
+                        password = authParts[1].toCharArray();
+                    } else {
+                        password = new char[0];
+                    }
+
+                    return new BasicAuthCallbackHandler(username, password);
+                }
+            }
+        }
+
+        throw new CarbonSecurityException("Unable to extract user credentials");
+    }
+
+
 }
