@@ -38,7 +38,7 @@ public class BasicAuthenticator implements CarbonAuthenticator {
     private static final Logger log = LoggerFactory.getLogger(CarbonAuthenticator.class);
 
     private static final String AUTH_TYPE_BASIC = "Basic";
-    public static final String BASIC_AUTH_CREDENTIALS_SEPERATOR = ":";
+    public static final String BASIC_AUTH_CREDENTIALS_SEPARATOR = ":";
     private static final int AUTH_TYPE_BASIC_LENGTH = AUTH_TYPE_BASIC.length();
 
 
@@ -51,7 +51,7 @@ public class BasicAuthenticator implements CarbonAuthenticator {
             return false;
         }
 
-        String[] authParts = credentials.split(BASIC_AUTH_CREDENTIALS_SEPERATOR);
+        String[] authParts = credentials.split(BASIC_AUTH_CREDENTIALS_SEPARATOR);
 
         String username = authParts[0];
         char[] password;
