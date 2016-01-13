@@ -32,17 +32,17 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
-
 /**
  * This  LoginModule authenticates users with a password.
  */
 public class BasicAuthLoginModule implements LoginModule {
 
-
     private static final String USERNAME = "admin";
     private static final char[] PASSWORD = new char[]{'a', 'd', 'm', 'i', 'n'};
     private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);
     private Subject subject;
+    private String username;
+    private char [] password;
     private CallbackHandler callbackHandler;
     private Map sharedState;
     private Map options;
@@ -74,8 +74,8 @@ public class BasicAuthLoginModule implements LoginModule {
             throw new LoginException("Error while handling callbacks.");
         }
 
-        String username = ((NameCallback) callbacks[0]).getName();
-        char[] password = ((PasswordCallback) callbacks[1]).getPassword();
+        username = ((NameCallback) callbacks[0]).getName();
+        password = ((PasswordCallback) callbacks[1]).getPassword();
 
         if (USERNAME.equals(username) && Arrays.equals(PASSWORD, password)) {
             succeeded = true;
@@ -87,13 +87,20 @@ public class BasicAuthLoginModule implements LoginModule {
 
     @Override
     public boolean commit() throws LoginException {
+
         if (succeeded == false) {
             return false;
         } else {
             carbonPrincipal = new CarbonPrincipal();
+            carbonPrincipal.setUserName(username);
             if (!subject.getPrincipals().contains(carbonPrincipal)) {
                 subject.getPrincipals().add(carbonPrincipal);
             }
+
+            username = null;
+            for (int i = 0; i < password.length; i++)
+                password[i] = ' ';
+            password = null;
 
             commitSucceeded = true;
             return commitSucceeded;
@@ -102,11 +109,40 @@ public class BasicAuthLoginModule implements LoginModule {
 
     @Override
     public boolean abort() throws LoginException {
-        return false;
+
+        if (succeeded == false) {
+            return false;
+        } else if (succeeded == true && commitSucceeded == false) {
+            // login succeeded but overall authentication failed
+            succeeded = false;
+            username = null;
+            if (password != null) {
+                for (int i = 0; i < password.length; i++)
+                    password[i] = ' ';
+                password = null;
+            }
+            carbonPrincipal = null;
+        } else {
+            // overall authentication succeeded and commit succeeded,
+            // but someone else's commit failed
+            logout();
+        }
+        return true;
     }
 
     @Override
     public boolean logout() throws LoginException {
+
+        subject.getPrincipals().remove(carbonPrincipal);
+        succeeded = false;
+        succeeded = commitSucceeded;
+        username = null;
+        if (password != null) {
+            for (int i = 0; i < password.length; i++)
+                password[i] = ' ';
+            password = null;
+        }
+        carbonPrincipal = null;
         return true;
     }
 }
