@@ -36,13 +36,6 @@ public class CarbonCallbackHandlerFactory {
 
     public static CallbackHandler getCallbackHandler(Object request) throws CarbonSecurityException {
 
-        try {
-            Class aClass = ClassLoader.getSystemClassLoader().loadClass("org.wso2.carbon.security.jaas.module" +
-                                                                        ".BasicAuthLoginModule");
-        } catch (ClassNotFoundException e) {
-            //TODO
-        }
-
         if (request == null) {
             return null;
 

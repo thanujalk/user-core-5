@@ -24,7 +24,6 @@ import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;

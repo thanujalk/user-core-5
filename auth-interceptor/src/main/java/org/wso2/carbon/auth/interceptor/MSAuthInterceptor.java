@@ -70,15 +70,6 @@ public class MSAuthInterceptor implements Interceptor {
         }
 
         try {
-           Class aClass = ClassLoader.getSystemClassLoader().loadClass("org.wso2.carbon.security.jaas.module" +
-                                                            ".BasicAuthLoginModule");
-           log.info(aClass.toString());
-        } catch (ClassNotFoundException e) {
-            //TODO
-        }
-
-
-        try {
             loginContext.login();
             //TODO set LoginContext to CarbonContext
 

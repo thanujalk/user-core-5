@@ -69,6 +69,7 @@
             org.slf4j.*,
             com.google.common.collect.*,
             javax.security.auth.*,
+            org.wso2.carbon.user.core.*,
         </import.package>
         <export.package>!org.wso2.carbon.security.internal, org.wso2.carbon.security.*</export.package>
         <dsannotations>*</dsannotations>

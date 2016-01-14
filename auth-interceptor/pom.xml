@@ -76,6 +76,7 @@
             javax.security.auth.*,
             org.wso2.carbon.mss.*,
             org.wso2.carbon.security.*,
+            org.osgi.service.*,
         </import.package>
         <export.package>!org.wso2.carbon.auth.internal, org.wso2.carbon.auth.*</export.package>
         <dynamic.import.package>*</dynamic.import.package>

@@ -1175,7 +1175,7 @@ public class JDBCUserStoreManager extends AbstractUserStoreManager {
 
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                dbConnection = DriverManager.getConnection("localhost:3306", "root", "123");
+                dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/WSO2UM_DB", "carbon", "carbon");
             } catch (ClassNotFoundException e) {
                 return false;
             }
@@ -1191,7 +1191,7 @@ public class JDBCUserStoreManager extends AbstractUserStoreManager {
 //            }
 
             //*********
-            sqlstmt = "SELECT password FROM UM_USER WHERE username = ? ";
+            sqlstmt = "SELECT UM_USER_PASSWORD FROM UM_USER WHERE UM_USER_NAME = ? ";
             prepStmt = dbConnection.prepareStatement(sqlstmt);
             prepStmt.setString(1, userName);
             rs= prepStmt.executeQuery();
