@@ -26,7 +26,7 @@ import java.util.Base64;
 import javax.security.auth.callback.CallbackHandler;
 
 /**
- *
+ * <p> CarbonCallbackHandlerFactory class can be used to obtain an application specific CallbackHandler.
  */
 public class CarbonCallbackHandlerFactory {
 
@@ -34,6 +34,13 @@ public class CarbonCallbackHandlerFactory {
     public static final String BASIC_AUTH_CREDENTIALS_SEPARATOR = ":";
     private static final int AUTH_TYPE_BASIC_LENGTH = AUTH_TYPE_BASIC.length();
 
+    /**
+     * Returns a CallbackHandler that can handle the request type.
+     *
+     * @param request Object
+     * @return callbackHandler
+     * @throws CarbonSecurityException
+     */
     public static CallbackHandler getCallbackHandler(Object request) throws CarbonSecurityException {
 
         if (request == null) {
@@ -47,6 +54,13 @@ public class CarbonCallbackHandlerFactory {
         return null;
     }
 
+    /**
+     * Returns a BasicAuthCallbackHandler including Basic credentials from the HttpRequest header.
+     *
+     * @param request HttpRequest with credentials.
+     * @return buildBasicAuthCallbackHandler
+     * @throws CarbonSecurityException
+     */
     private static BasicAuthCallbackHandler buildBasicAuthCallbackHandler(HttpRequest request)
             throws CarbonSecurityException {
 

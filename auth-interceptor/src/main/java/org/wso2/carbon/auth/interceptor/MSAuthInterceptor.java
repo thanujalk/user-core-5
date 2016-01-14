@@ -49,7 +49,6 @@ public class MSAuthInterceptor implements Interceptor {
     public boolean preCall(HttpRequest httpRequest, HttpResponder httpResponder, ServiceMethodInfo serviceMethodInfo) {
 
         CallbackHandler callbackHandler;
-        BasicAuthLoginModule authLoginModule;
         try {
             callbackHandler = CarbonCallbackHandlerFactory.getCallbackHandler(httpRequest);
 

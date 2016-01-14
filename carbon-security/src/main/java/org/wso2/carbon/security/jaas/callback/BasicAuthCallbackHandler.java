@@ -24,7 +24,7 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
 /**
- * Callback handler for Basic Auth login
+ * <p>Callback handler for Basic Auth login.
  */
 public class BasicAuthCallbackHandler implements CallbackHandler {
 

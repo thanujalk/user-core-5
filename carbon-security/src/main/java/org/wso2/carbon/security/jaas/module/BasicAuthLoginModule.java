@@ -35,7 +35,11 @@ import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
 /**
- * This  LoginModule authenticates users with a password.
+ * This LoginModule authenticates users against the underline UserStoreManager.
+ *
+ * <p>Upon successful authentication, <code>CarbonPrincipal</code> with user information is added to the subject.
+ *
+ * <p> This LoginModule does not recognize any options defined in the login configuration.
  */
 public class BasicAuthLoginModule implements LoginModule {
 
@@ -52,6 +56,14 @@ public class BasicAuthLoginModule implements LoginModule {
     private boolean commitSucceeded = false;
     private CarbonPrincipal carbonPrincipal;
 
+    /**
+     * This method initializes the login module.
+     *
+     * @param subject
+     * @param callbackHandler
+     * @param sharedState
+     * @param options
+     */
     @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState,
                            Map<String, ?> options) {
@@ -61,6 +73,13 @@ public class BasicAuthLoginModule implements LoginModule {
         this.options = options;
     }
 
+    /**
+     * This method authenticates a Subject (phase 1 )with the underlying <code>UserStoreManager</code>.
+     * The result of the authentication attempt as private state within the LoginModule.
+     *
+     * @return true if the authentication is success.
+     * @throws LoginException if the authentication fails.
+     */
     @Override
     public boolean login() throws LoginException {
 
@@ -95,6 +114,18 @@ public class BasicAuthLoginModule implements LoginModule {
         return succeeded;
     }
 
+    /**
+     * This method is called if the LoginContext's  overall authentication succeeded.
+     *
+     * <p> If this LoginModule's own authentication attempt
+     * succeeded (checked by retrieving the private state saved by the <code>login</code> method), then this method
+     * associates a <code>SamplePrincipal</code> with the <code>Subject</code> located in the
+     * <code>LoginModule</code>.  If this LoginModule's own authentication attempted failed, then this method removes
+     * any state that was originally saved.
+     *
+     * @return true if this LoginModule's own login and commit attempts succeeded, or false otherwise.
+     * @throws LoginException if the commit fails.
+     */
     @Override
     public boolean commit() throws LoginException {
 
@@ -118,6 +149,16 @@ public class BasicAuthLoginModule implements LoginModule {
         }
     }
 
+    /**
+     * This method is called if the LoginContext's overall authentication failed.
+     *
+     * <p> If this LoginModule's own authentication attempt succeeded (checked by retrieving the private state saved
+     * by the <code>login</code> and <code>commit</code> methods), then this method cleans up any state that was
+     * originally saved.
+     *
+     * @return if this LoginModule's own login and/or commit attempts failed, and true otherwise.
+     * @throws LoginException if the abort fails.
+     */
     @Override
     public boolean abort() throws LoginException {
 
@@ -142,6 +183,13 @@ public class BasicAuthLoginModule implements LoginModule {
         return true;
     }
 
+    /**
+     * This method performs the user logout.
+     * The principals set to the Subject and any state that was originally saved is cleared.
+     *
+     * @return true when the logout flow is success.
+     * @throws LoginException if logout fails.
+     */
     @Override
     public boolean logout() throws LoginException {
 
