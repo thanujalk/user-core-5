@@ -68,8 +68,10 @@
             io.netty.handler.codec.http.*,
             org.slf4j.*,
             com.google.common.collect.*,
-            javax.security.auth.*,
+            org.wso2.carbon.security.*,
             org.wso2.carbon.user.core.*,
+            java.lang.annotation.*,
+            javax.security.auth.*,
         </import.package>
         <export.package>!org.wso2.carbon.security.internal, org.wso2.carbon.security.*</export.package>
         <dsannotations>*</dsannotations>

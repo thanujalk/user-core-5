@@ -25,10 +25,15 @@ import org.slf4j.LoggerFactory;
 import org.wso2.carbon.mss.HttpResponder;
 import org.wso2.carbon.mss.Interceptor;
 import org.wso2.carbon.mss.ServiceMethodInfo;
+import org.wso2.carbon.security.annotation.RequirePermission;
 import org.wso2.carbon.security.exception.CarbonSecurityException;
 import org.wso2.carbon.security.jaas.callback.CarbonCallbackHandlerFactory;
-import org.wso2.carbon.security.jaas.module.BasicAuthLoginModule;
+import org.wso2.carbon.security.jaas.permission.CarbonPermission;
 
+import java.security.AccessControlException;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -49,7 +54,6 @@ public class MSAuthInterceptor implements Interceptor {
     public boolean preCall(HttpRequest httpRequest, HttpResponder httpResponder, ServiceMethodInfo serviceMethodInfo) {
 
         CallbackHandler callbackHandler;
-        BasicAuthLoginModule authLoginModule;
         try {
             callbackHandler = CarbonCallbackHandlerFactory.getCallbackHandler(httpRequest);
 
@@ -78,6 +82,21 @@ public class MSAuthInterceptor implements Interceptor {
             return false;
         }
 
+        // Authorization - File Based
+
+        RequirePermission requirePermission = serviceMethodInfo.getMethod().getAnnotation(RequirePermission.class);
+
+        if (requirePermission != null) {
+            CarbonPermission carbonPermission = new CarbonPermission(requirePermission.permission(),
+                                                                     getActionsString(requirePermission.actions()));
+            if (!this.isAuthorized(loginContext.getSubject(), carbonPermission)) {
+                sendUnauthorized(httpResponder);
+            }
+        } else {
+            //TODO
+            sendUnauthorized(httpResponder);
+        }
+
         return true;
     }
 
@@ -87,6 +106,28 @@ public class MSAuthInterceptor implements Interceptor {
 
     }
 
+    private boolean isAuthorized(Subject subject, final CarbonPermission permission) {
+
+        final SecurityManager securityManager;
+        if (System.getSecurityManager() == null) {
+            securityManager = new SecurityManager();
+        } else {
+            securityManager = System.getSecurityManager();
+        }
+
+        try {
+            Subject.doAsPrivileged(subject, (PrivilegedExceptionAction) () -> {
+                securityManager.checkPermission(permission);
+                return null;
+            }, null);
+            return true;
+        } catch (AccessControlException ace) {
+            return false;
+        } catch (PrivilegedActionException pae) {
+            return false;
+        }
+    }
+
     private void sendUnauthorized(HttpResponder httpResponder) {
         httpResponder.sendStatus(HttpResponseStatus.UNAUTHORIZED, ArrayListMultimap.create());
     }
@@ -94,4 +135,19 @@ public class MSAuthInterceptor implements Interceptor {
     private void sendInternalServerError(HttpResponder httpResponder) {
         httpResponder.sendStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR, ArrayListMultimap.create());
     }
+
+    private String getActionsString(RequirePermission.Action[] actions) {
+
+        if (actions.length > 0) {
+            StringBuilder actionsStr = new StringBuilder();
+            for (RequirePermission.Action action : actions) {
+                actionsStr.append(action).append("',");
+            }
+            actionsStr.deleteCharAt(actionsStr.length() - 1);
+            return actionsStr.toString();
+        } else {
+            throw new IllegalArgumentException("Actions cannot be empty");
+        }
+    }
+
 }

@@ -1,0 +1,13 @@
+grant {
+    permission java.security.AllPermission;
+    permission javax.security.auth.AuthPermission "createLoginContext.";
+    permission javax.security.auth.AuthPermission "doAsPrivileged";
+    permission javax.security.auth.AuthPermission "createLoginContext.MSAuthInterceptor";
+    permission javax.security.auth.AuthPermission "modifyPrincipals";
+    permission java.util.logging.LoggingPermission "control";
+};
+
+grant org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal "admin" {
+    permission java.security.AllPermission;
+    permission org.wso2.carbon.security.jaas.permission "/permission/stock/quote" "CREATE,READ";
+};
