@@ -5,9 +5,24 @@ grant {
     permission javax.security.auth.AuthPermission "createLoginContext.MSAuthInterceptor";
     permission javax.security.auth.AuthPermission "modifyPrincipals";
     permission java.util.logging.LoggingPermission "control";
+
+    permission java.util.PropertyPermission "carbon.home", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/logs", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/logs/carbon.log", "write";
+    permission java.util.PropertyPermission "carbon.start.time", "read,write";
+    permission java.util.PropertyPermission "profile", "read,write";
+    permission java.util.PropertyPermission "org.ops4j.pax.logging.DefaultServiceLog.level", "write";	
+    permission java.util.PropertyPermission "org.ops4j.pax.logging.ranking", "write";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/conf/osgi/launch.properties", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/plugins/org.eclipse.osgi_3.10.2.v20150203-1939.jar", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default/configuration", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default/workspace", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/p2", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/plugins/org.eclipse.osgi.services_3.4.0.v20140312-2051.jar", "read";
 };
 
-grant org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal "admin" {
-    permission java.security.AllPermission;
-    permission org.wso2.carbon.security.jaas.permission "/permission/stock/quote" "CREATE,READ";
+grant principal org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal "admin" {
+    permission org.wso2.carbon.security.jaas.permission.CarbonPermission "/permission/stock/quote", "CREATE,READ";
 };
