@@ -77,7 +77,6 @@
             javax.security.auth.callback.*,
             org.wso2.carbon.mss.*,
             org.osgi.service.*,
-            org.wso2.carbon.security.
             org.wso2.carbon.security.annotation.*,
             org.wso2.carbon.security.jaas.callback.*,
             org.wso2.carbon.security.jaas.module.*,

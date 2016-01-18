@@ -95,6 +95,7 @@ public class MSAuthInterceptor implements Interceptor {
         } else {
             //TODO
             sendUnauthorized(httpResponder);
+            return false;
         }
 
         return true;
