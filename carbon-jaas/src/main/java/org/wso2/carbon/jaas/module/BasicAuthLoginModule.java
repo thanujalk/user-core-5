@@ -40,7 +40,7 @@ public class BasicAuthLoginModule implements LoginModule {
 
     private CallbackHandler callbackHandler = null;
     private static final String USERNAME = "admin";
-    public static final char[] PASSWORD = "admin".toCharArray();
+    private static final char[] PASSWORD = "admin".toCharArray();
     private boolean isAuthenticated = false;
 
     private static final Logger log = LoggerFactory.getLogger(BasicAuthLoginModule.class);

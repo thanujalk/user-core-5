@@ -1,26 +1,29 @@
 grant {
-    permission java.security.AllPermission;
     permission javax.security.auth.AuthPermission "createLoginContext.";
     permission javax.security.auth.AuthPermission "doAsPrivileged";
-    permission javax.security.auth.AuthPermission "createLoginContext.MSAuthInterceptor";
     permission javax.security.auth.AuthPermission "modifyPrincipals";
     permission java.util.logging.LoggingPermission "control";
+    permission java.lang.management.ManagementPermission "control";
+    permission javax.security.auth.AuthPermission "createLoginContext.CarbonSecurityConfig";
 
-    permission java.util.PropertyPermission "carbon.home", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/logs", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/logs/carbon.log", "write";
-    permission java.util.PropertyPermission "carbon.start.time", "read,write";
-    permission java.util.PropertyPermission "profile", "read,write";
-    permission java.util.PropertyPermission "org.ops4j.pax.logging.DefaultServiceLog.level", "write";	
-    permission java.util.PropertyPermission "org.ops4j.pax.logging.ranking", "write";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/conf/osgi/launch.properties", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/plugins/org.eclipse.osgi_3.10.2.v20150203-1939.jar", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default/configuration", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/profiles/default/workspace", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/p2", "read";
-    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/osgi/plugins/org.eclipse.osgi.services_3.4.0.v20140312-2051.jar", "read";
+    permission java.io.FilePermission "/home/thanuja/products/mss/wso2mss-1.0.0/.", "read";
+    permission java.io.FilePermission "./-", "read,write,delete";
+    permission java.io.FilePermission "<<ALL FILES>>", "execute";
+    permission java.lang.RuntimePermission "*";
+    permission java.util.PropertyPermission "*", "read,write";
+    permission java.io.FilePermission "/home/thanuja/user", "read";
+    permission java.io.FilePermission "/usr/programs/java/jdk1.8.0_66/jre/release", "read";
+    permission org.osgi.framework.AdminPermission "*", "*";
+    permission org.osgi.framework.PackagePermission "*", "exportonly,import";
+    permission org.osgi.framework.ServicePermission "*", "get,register";
+    permission org.osgi.framework.BundlePermission "*", "host,provide,fragment";
+    permission org.osgi.framework.AdaptPermission "(adaptClass=org.osgi.framework.wiring.*)", "adapt";
+    permission java.net.NetPermission "specifyStreamHandler";
+    permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+    permission org.osgi.framework.AdaptPermission "(adaptClass=org.eclipse.osgi.container.Module)", "adapt";
+    permission javax.management.MBeanServerPermission "createMBeanServer";
+    permission javax.management.MBeanPermission "-#-[-]", "queryNames";
+    permission java.net.SocketPermission "*", "accept,connect,listen,resolve";
 };
 
 grant principal org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal "admin" {
