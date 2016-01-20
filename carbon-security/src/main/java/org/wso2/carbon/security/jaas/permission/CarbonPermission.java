@@ -85,7 +85,7 @@ public class CarbonPermission extends BasicPermission {
 //                return carbonPrincipal.isAuthorized(carbonPermission);
 //            } catch (CarbonSecurityException e) {
 //                log.error("Error occurred while evaluating the authorization", e);
-                return false;
+                return true;
 //            }
         }
 

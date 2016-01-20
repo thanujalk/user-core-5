@@ -35,6 +35,13 @@ public class CarbonPrincipal implements Principal, Serializable {
     private String userName;
     private Map<String, String> userAttributes = new HashMap<>();
 
+    public CarbonPrincipal() {
+    }
+
+    public CarbonPrincipal(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public boolean equals(Object another) {
 
