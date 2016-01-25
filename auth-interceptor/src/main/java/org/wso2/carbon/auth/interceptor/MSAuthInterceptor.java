@@ -137,11 +137,11 @@ public class MSAuthInterceptor implements Interceptor {
         httpResponder.sendStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR, ArrayListMultimap.create());
     }
 
-    private String getActionsString(RequirePermission.Action[] actions) {
+    private String getActionsString(String[] actions) {
 
         if (actions.length > 0) {
             StringBuilder actionsStr = new StringBuilder();
-            for (RequirePermission.Action action : actions) {
+            for (String action : actions) {
                 actionsStr.append(action).append("',");
             }
             actionsStr.deleteCharAt(actionsStr.length() - 1);

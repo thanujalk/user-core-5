@@ -19,6 +19,7 @@ package org.wso2.carbon.security.jaas.permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal;
+import org.wso2.carbon.security.util.AuthorizationManager;
 
 import java.security.AccessController;
 import java.security.BasicPermission;
@@ -50,14 +51,10 @@ public class CarbonPermission extends BasicPermission {
     @Override
     public boolean implies(Permission permission) {
 
-
         // we do not need to worry about - if it is not a CarbonPermission
         if (!(permission instanceof CarbonPermission)) {
             return super.implies(permission);
         }
-
-        CarbonPrincipal carbonPrincipal = null;
-        //CarbonPermission carbonPermission = (CarbonPermission) permission;
 
         // get the current subject.
         Subject subject = Subject.getSubject(AccessController.getContext());
@@ -65,29 +62,12 @@ public class CarbonPermission extends BasicPermission {
         // find the CarbonPrincipal
         for (Principal principal : subject.getPrincipals()) {
             if (principal instanceof CarbonPrincipal) {
-                carbonPrincipal = (CarbonPrincipal) principal;
-                // we only need CarbonPrincipal. break now.
-                break;
+                if (AuthorizationManager.getInstance().authorizePrincipal(principal.getName(),
+                                                                          (CarbonPermission) permission)) {
+                    return true;
+                }
             }
         }
-
-        if (carbonPrincipal == null) {
-            // no CarbonPrincipal found. we do not want to handle.
-            return super.implies(permission);
-        } else {
-//            try {
-//
-//                if (log.isDebugEnabled()) {
-//                    log.debug("Evaluating permissions for resource: " + carbonPermission.getName() + " and action: "
-//                              + carbonPermission.getActions() + " and subject: " + carbonPrincipal.getName());
-//                }
-//                // here we have CarbonPrincipal.
-//                return carbonPrincipal.isAuthorized(carbonPermission);
-//            } catch (CarbonSecurityException e) {
-//                log.error("Error occurred while evaluating the authorization", e);
-                return true;
-//            }
-        }
-
+        return false;
     }
 }

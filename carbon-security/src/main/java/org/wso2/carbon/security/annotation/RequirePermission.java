@@ -28,30 +28,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface RequirePermission {
 
-    /**
-     *
-     */
-    public enum Action {
-
-        CREATE("CREATE"),
-        READ("READ"),
-        UPDATE("UPDATE"),
-        DELETE("DELETE");
-
-        private final String action;
-
-        Action(String action) {
-            this.action = action;
-        }
-
-        @Override
-        public String toString() {
-            return action;
-        }
-    }
-
     String permission();
 
-    Action[] actions();
+    String[] actions();
 
 }

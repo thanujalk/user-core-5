@@ -19,8 +19,6 @@ package org.wso2.carbon.security.jaas.pincipal;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -28,18 +26,14 @@ import java.util.Map;
 public class CarbonPrincipal implements Principal, Serializable {
 
     private static final long serialVersionUID = 6056209529374720080L;
-    private static final String principalName = "CarbonPrincipal";
 
-    private String tenantDomain;
-    private String userStoreDomain;
-    private String userName;
-    private Map<String, String> userAttributes = new HashMap<>();
+    private String name;
 
     public CarbonPrincipal() {
     }
 
-    public CarbonPrincipal(String userName) {
-        this.userName = userName;
+    public CarbonPrincipal(String name) {
+        this.name = name;
     }
 
     @Override
@@ -50,50 +44,14 @@ public class CarbonPrincipal implements Principal, Serializable {
     }
 
     @Override
-    public String toString() {
-        //TODO
-        return userName;
-    }
-
-    @Override
     public int hashCode() {
         return 0;
     }
 
     @Override
     public String getName() {
-        return principalName;
+        return this.name;
     }
 
-    public String getTenantDomain() {
-        return tenantDomain;
-    }
 
-    public void setTenantDomain(String tenantDomain) {
-        this.tenantDomain = tenantDomain;
-    }
-
-    public String getUserStoreDomain() {
-        return userStoreDomain;
-    }
-
-    public void setUserStoreDomain(String userStoreDomain) {
-        this.userStoreDomain = userStoreDomain;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Map<String, String> getUserAttributes() {
-        return userAttributes;
-    }
-
-    public void setUserAttributes(Map<String, String> userAttributes) {
-        this.userAttributes = userAttributes;
-    }
 }

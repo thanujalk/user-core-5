@@ -19,9 +19,7 @@ package org.wso2.carbon.security.jaas.module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.security.jaas.pincipal.CarbonPrincipal;
-import org.wso2.carbon.user.core.UserStoreException;
-import org.wso2.carbon.user.core.UserStoreManager;
-import org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager;
+import org.wso2.carbon.security.util.UserStoreManager;
 
 import java.io.IOException;
 import java.util.Map;
@@ -98,19 +96,9 @@ public class BasicAuthLoginModule implements LoginModule {
         username = ((NameCallback) callbacks[0]).getName();
         password = ((PasswordCallback) callbacks[1]).getPassword();
 
-        UserStoreManager userStoreManager = new JDBCUserStoreManager();
+        UserStoreManager userStoreManager = UserStoreManager.getInstance();
+        succeeded = userStoreManager.authenticate(username, password);
 
-        try {
-            if (userStoreManager.authenticate(username, String.valueOf(password))) {
-                succeeded = true;
-            } else {
-                succeeded = false;
-            }
-
-        } catch (UserStoreException e) {
-            succeeded = false;
-            log.error("Error while authenticating user.", e);
-        }
         return succeeded;
     }
 
@@ -132,8 +120,8 @@ public class BasicAuthLoginModule implements LoginModule {
         if (succeeded == false) {
             return false;
         } else {
-            carbonPrincipal = new CarbonPrincipal();
-            carbonPrincipal.setUserName(username);
+            // TODO username is set as role name temporally
+            carbonPrincipal = new CarbonPrincipal(username);
             if (!subject.getPrincipals().contains(carbonPrincipal)) {
                 subject.getPrincipals().add(carbonPrincipal);
             }
